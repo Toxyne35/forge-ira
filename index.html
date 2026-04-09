@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOB_PROFILE.sys - Chargement...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght:400;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-magenta: #ff00ff;
+            --neon-green: #00ff00;
+            --neon-orange: #ff6b00;
+            --dark-bg: #0a0e27;
+            --darker-bg: #050714;
+            --grid-color: rgba(0, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--darker-bg);
+            color: var(--neon-cyan);
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* Animated grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(0deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* Scanline effect */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 255, 255, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Loading sequence */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeOut 1s ease 3s forwards;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; pointer-events: none; }
+        }
+
+        .loading-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            color: var(--neon-green);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 255, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--neon-green);
+            animation: loadProgress 3s ease forwards;
+        }
+
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: glitchHeader 0.3s ease 3.5s;
+        }
+
+        @keyframes glitchHeader {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-5px, 5px); }
+            50% { transform: translate(5px, -5px); }
+            75% { transform: translate(-5px, -5px); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(36px, 8vw, 72px);
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 1s ease 4s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Profile cards */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .profile-card {
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 10px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease forwards;
+            transition: all 0.3s ease;
+        }
+
+        /* Animation jouée UNE SEULE FOIS au chargement */
+        .profile-card:nth-child(1) { animation-delay: 4.2s; }
+        .profile-card:nth-child(2) { animation-delay: 4.4s; }
+        .profile-card:nth-child(3) { animation-delay: 4.6s; }
+        .profile-card:nth-child(4) { animation-delay: 4.8s; }
+        .profile-card:nth-child(5) { animation-delay: 5s; }
+        .profile-card:nth-child(6) { animation-delay: 5.2s; }
+
+        /* Une fois l'animation terminée, garde l'état stable */
+        .profile-card.loaded {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            animation: none !important;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-magenta);
+            box-shadow: 0 10px 40px rgba(255, 0, 255, 0.3);
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .profile-card:hover::before {
+            left: 100%;
+        }
+
+        .card-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--neon-magenta);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            opacity: 0.3;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .card-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-content ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .card-content li::before {
+            content: '▹ ';
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        .highlight {
+            color: var(--neon-orange);
+            font-weight: bold;
+        }
+
+        /* Ymani Section */
+        .ymani-section {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+            border: 2px solid var(--neon-magenta);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ymani-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg 340deg,
+                var(--neon-cyan) 340deg 360deg
+            );
+            animation: rotate 4s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .ymani-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: var(--neon-magenta);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ymani-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .audio-player {
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
+            border: none;
+            color: var(--darker-bg);
+            padding: 15px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .play-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .play-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .play-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Easter egg glitch */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text:hover {
+            animation: glitch 0.3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 20px;
+            border-top: 1px solid var(--grid-color);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            animation: fadeIn 1s ease 5.4s forwards;
+        }
+
+        .easter-egg {
+            margin-top: 20px;
+            font-size: 10px;
+            color: var(--neon-green);
+            cursor: help;
+        }
+
+        .easter-egg:hover {
+            color: var(--neon-magenta);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .card-number {
+                font-size: 32px;
+            }
+        }
+
+        /* Audio visualizer placeholder */
+        .visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 4px;
+            height: 50px;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .visualizer.active {
+            opacity: 1;
+        }
+
+        .bar {
+            width: 8px;
+            background: var(--neon-cyan);
+            border-radius: 4px;
+            animation: visualize 0.5s ease-in-out infinite;
+        }
+
+        .bar:nth-child(1) { height: 20px; animation-delay: 0s; }
+        .bar:nth-child(2) { height: 30px; animation-delay: 0.1s; }
+        .bar:nth-child(3) { height: 40px; animation-delay: 0.2s; }
+        .bar:nth-child(4) { height: 35px; animation-delay: 0.3s; }
+        .bar:nth-child(5) { height: 25px; animation-delay: 0.4s; }
+        .bar:nth-child(6) { height: 30px; animation-delay: 0.5s; }
+        .bar:nth-child(7) { height: 20px; animation-delay: 0.6s; }
+
+        @keyframes visualize {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.5); }
+        }
+
+        /* Boutons audio dans les cartes */
+        .audio-btn {
+            position: absolute;
+            top: 15px;
+            right: 60px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+        }
+
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
+        .audio-btn.playing {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 255, 0.8); }
+        }
+
+
+        /* Écran futuriste cyberpunk */
+        .cyber-screen {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 25px;
+            background: linear-gradient(135deg, #0a0e27 0%, #050714 100%);
+            border-radius: 15px;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Frame externe du moniteur */
+        .cyber-screen::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: linear-gradient(145deg, #1a1f3a, #0f1221);
+            border-radius: 20px;
+            z-index: -1;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Coins métalliques */
+        .cyber-screen::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #4a5568 0%, #2d3748 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 10px rgba(0, 0, 0, 0.5),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.5),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+
+        /* Autres coins (via pseudo-elements supplémentaires) */
+        .monitor-frame {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #4a5568 0%, #2d3748 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 10px rgba(0, 0, 0, 0.5),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.5),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+
+        .corner-tr { top: -20px; right: -20px; }
+        .corner-bl { bottom: -20px; left: -20px; }
+        .corner-br { bottom: -20px; right: -20px; }
+
+        /* LEDs indicateurs */
+        .status-leds {
+            position: absolute;
+            top: -10px;
+            right: 50px;
+            display: flex;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .led {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: ledPulse 2s ease-in-out infinite;
+        }
+
+        .led-green {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+            animation-delay: 0s;
+        }
+
+        .led-cyan {
+            background: #00ffff;
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            animation-delay: 0.3s;
+        }
+
+        .led-magenta {
+            background: #ff00ff;
+            box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes ledPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Label technique */
+        .monitor-label {
+            position: absolute;
+            top: -12px;
+            left: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: #4a5568;
+            background: #1a1f3a;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+            z-index: 3;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 3px solid var(--neon-cyan);
+            border-radius: 3px;
+        }
+
+        .screen-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .screen-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .loop-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            user-select: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .loop-toggle input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--neon-cyan);
+        }
+
+        /* Conteneur de l'écran */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: #000;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Effet de reflet sur l'écran */
+        .screen-glare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0.95) contrast(1.05);
+        }
+
+        .slide-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 12px;
+            border-radius: 5px;
+            border: 1px solid var(--neon-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--neon-cyan);
+            z-index: 5;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .screen-scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 255, 255, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 3;
+            animation: scanlineMove 8s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        /* Vignette CRT */
+        .screen-vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 50%,
+                rgba(0, 0, 0, 0.3) 100%
+            );
+            pointer-events: none;
+            z-index: 4;
+        }
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .screen-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+        }
+
+        .screen-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .loop-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .loop-toggle input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--neon-cyan);
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: #000;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        .slide-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--neon-cyan);
+            z-index: 2;
+            backdrop-filter: blur(5px);
+        }
+
+        .screen-scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 255, 255, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* Lecteur vidéo cyberpunk */
+        .cyber-video-player {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 25px;
+            background: linear-gradient(135deg, #0a0e27 0%, #050714 100%);
+            border-radius: 15px;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.3),
+                inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Frame externe */
+        .cyber-video-player::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: linear-gradient(145deg, #1a1f3a, #0f1221);
+            border-radius: 20px;
+            z-index: -1;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Coins métalliques vidéo */
+        .video-frame {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #4a5568 0%, #2d3748 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 10px rgba(0, 0, 0, 0.5),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.5),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+
+        .vcorner-tl { top: -20px; left: -20px; }
+        .vcorner-tr { top: -20px; right: -20px; }
+        .vcorner-bl { bottom: -20px; left: -20px; }
+        .vcorner-br { bottom: -20px; right: -20px; }
+
+        /* LEDs vidéo */
+        .video-status-leds {
+            position: absolute;
+            top: -10px;
+            right: 50px;
+            display: flex;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .video-label {
+            position: absolute;
+            top: -12px;
+            left: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: #4a5568;
+            background: #1a1f3a;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+            z-index: 3;
+        }
+
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: rgba(255, 0, 255, 0.05);
+            border-left: 3px solid var(--neon-magenta);
+            border-radius: 3px;
+        }
+
+        .video-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--neon-magenta);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .video-duration {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--neon-cyan);
+        }
+
+        /* Conteneur vidéo */
+        .video-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.2),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        /* Effet glare vidéo */
+        .video-glare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Contrôles personnalisés */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        /* Barre de progression */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-filled {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Contrôles principaux */
+        .main-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 0, 255, 0.2);
+            border: 2px solid var(--neon-magenta);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            color: var(--neon-magenta);
+        }
+
+        .play-btn:hover {
+            background: rgba(255, 0, 255, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+
+        .time-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--neon-cyan);
+        }
+
+        /* Volume control */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .volume-icon {
+            font-size: 18px;
+            color: var(--neon-cyan);
+            cursor: pointer;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .volume-filled {
+            height: 100%;
+            background: var(--neon-cyan);
+            border-radius: 2px;
+            width: 100%;
+            transition: width 0.1s;
+        }
+
+        /* Scanline vidéo */
+        .video-scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(255, 0, 255, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1;
+            animation: scanlineMove 8s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div class="loading-screen">
+        <div class="loading-text">
+            > CHARGEMENT DE BOB.exe<br>
+            > VÉRIFICATION DU NIVEAU DE CAFÉ... OK ☕<br>
+            > ACTIVATION MODE GEEK... OK 🤓<br>
+            > CHARGEMENT DES BLAGUES DOUTEUSES... OK 😅<br>
+            <span style="color: var(--neon-cyan);">> C'EST PARTI ! 🚀</span>
+        </div>
+        <div class="loading-bar"></div>
+    </div>
+
+    <!-- Grid background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Scanline effect -->
+    <div class="scanline"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>BOB.exe</h1>
+            <p class="subtitle">[ UN MEC • PAS TOUT À FAIT NORMAL • MAIS C'EST PAS GRAVE ]</p>
+        </header>
+
+        <!-- Profile Cards -->
+        <div class="profile-grid">
+            <!-- Card 1: Parcours -->
+            <div class="profile-card">
+                <div class="card-number">01</div>
+                <button class="audio-btn" onclick="playCardAudio(1)" title="Écouter">🔊</button>
+                <h2 class="card-title">LE PARCOURS IMPROBABLE</h2>
+                <div class="card-content">
+                    <p><span class="highlight">Luxe → Banque → Digital → ???</span></p>
+                    <p style="margin-top: 10px;">Genre quand tu joues aux Sims mais que tu changes d'avis toutes les 5 minutes.</p>
+                    <p style="margin-top: 10px; font-size: 12px; font-style: italic;">
+                        (Mais au final, tout ça mène quelque part... enfin j'espère 😅)
+                    </p>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(0, 255, 255, 0.1); border-radius: 5px;">
+                        📸 <em>Insérer ici : GIF de quelqu'un qui court dans tous les sens</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Geek & Cinéma -->
+            <div class="profile-card">
+                <div class="card-number">02</div>
+                <button class="audio-btn" onclick="playCardAudio(2)" title="Écouter">🔊</button>
+                <h2 class="card-title">NERD CERTIFIÉ</h2>
+                <div class="card-content">
+                    <p><span class="highlight">SF, tech, robots, IA</span> = mon carburant</p>
+                    <p style="margin-top: 10px;">Je peux parler pendant 3h de <em>Blade Runner</em> ou débattre si les réplicants ont une âme.</p>
+                    <p style="margin-top: 5px; font-size: 12px;">(Spoiler: oui, fight me)</p>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 0, 255, 0.1); border-radius: 5px;">
+                        📸 <em>Insérer ici : Luke Skywalker avec des yeux googly façon Monty Python</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Créations improbables -->
+            <div class="profile-card">
+                <div class="card-number">03</div>
+                <button class="audio-btn" onclick="playCardAudio(3)" title="Écouter">🔊</button>
+                <h2 class="card-title">CRÉATIONS CHELOU</h2>
+                <div class="card-content">
+                    <p><span class="highlight">📚 J'ai écrit un bouquin</span> - "L'ère de Caïn"<br>
+                    <span style="font-size: 12px;">(Dispo sur Amazon, oui oui)</span></p>
+                    <p style="margin-top: 10px;"><span class="highlight">🎤 J'ai fait du rap</span> avec mes frères Abel & Pegguy</p>
+                    <p style="margin-top: 5px; font-size: 12px; font-style: italic;">
+                        (On a jamais percé, mais on avait du flow 😎)
+                    </p>
+                    
+                    <!-- Lecteur vidéo cyberpunk YouTube 2077 style -->
+                    <div style="margin-top: 20px; position: relative;">
+                        <div style="background: linear-gradient(135deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1)); padding: 15px; border: 2px solid var(--neon-magenta); border-radius: 8px; box-shadow: 0 0 20px rgba(255,0,255,0.3); position: relative;">
+                            <!-- LED indicators -->
+                            <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; z-index: 10;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); animation: pulse 2s infinite;"></div>
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); animation: pulse 2.5s infinite;"></div>
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); animation: pulse 3s infinite;"></div>
+                            </div>
+                            
+                            <!-- Label -->
+                            <div style="position: absolute; top: 12px; left: 15px; font-size: 10px; color: var(--neon-cyan); font-family: 'Orbitron', monospace; letter-spacing: 2px; z-index: 10;">VID-v2.1_STAGE</div>
+                            
+                            <!-- Video container -->
+                            <div style="position: relative; margin-top: 25px;">
+                                <video id="rapVideo" style="width: 100%; border-radius: 4px; display: block; position: relative; z-index: 1;" preload="metadata">
+                                    <source src="rap_video.mp4" type="video/mp4">
+                                    Ton navigateur ne supporte pas la vidéo HTML5.
+                                </video>
+                                <!-- Scanline overlay -->
+                                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 50%, rgba(0,255,255,0.03) 50%); background-size: 100% 4px; pointer-events: none; border-radius: 4px;"></div>
+                            </div>
+                            
+                            <!-- Controls -->
+                            <div id="videoControls" style="margin-top: 15px; display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 4px; border: 1px solid rgba(255,0,255,0.3);">
+                                <button id="playPauseBtn" onclick="toggleVideo()" style="background: var(--neon-magenta); color: var(--darker-bg); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron', monospace; font-weight: bold; font-size: 14px; box-shadow: 0 0 10px var(--neon-magenta); transition: all 0.3s;">▶</button>
+                                
+                                <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+                                    <span id="currentTime" style="font-size: 11px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; min-width: 40px;">0:00</span>
+                                    <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; position: relative; cursor: pointer;" onclick="seekVideo(event)">
+                                        <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, var(--neon-magenta), var(--neon-cyan)); border-radius: 3px; width: 0%; transition: width 0.1s; box-shadow: 0 0 10px var(--neon-cyan);"></div>
+                                    </div>
+                                    <span id="duration" style="font-size: 11px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; min-width: 40px;">0:00</span>
+                                </div>
+                                
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <button onclick="toggleMute()" style="background: transparent; border: none; cursor: pointer; font-size: 16px; color: var(--neon-cyan);" id="muteBtn">🔊</button>
+                                    <input type="range" id="volumeSlider" min="0" max="100" value="100" oninput="changeVolume(this.value)" style="width: 60px; accent-color: var(--neon-cyan);">
+                                </div>
+                            </div>
+                            
+                            <p style="margin-top: 10px; font-size: 11px; color: var(--neon-green); text-align: center; font-style: italic;">🎤 BOB x ABEL x PEGGUY - RAP PERFORMANCE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Touche-à-tout -->
+            <div class="profile-card">
+                <div class="card-number">04</div>
+                <button class="audio-btn" onclick="playCardAudio(4)" title="Écouter">🔊</button>
+                <h2 class="card-title">TOUCHE-À-TOUT™</h2>
+                <div class="card-content">
+                    <p>Je <span class="highlight">bidouille</span>, je <span class="highlight">bricole</span>, je <span class="highlight">teste</span></p>
+                    <p style="margin-top: 10px;">Du code aux circuits imprimés, des apps aux robots.</p>
+                    <p style="margin-top: 10px; font-size: 12px;">
+                        Ah oui, et j'aime aussi <span class="highlight">faire la fête avec les potes</span>.<br>
+                        Parce que bon, faut bien déconnecter parfois.
+                    </p>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 107, 0, 0.1); border-radius: 5px;">
+                        🎉 <em>GIF de soirée épique à insérer</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Ymani -->
+            <div class="profile-card">
+                <div class="card-number">05</div>
+                <button class="audio-btn" onclick="playCardAudio(5)" title="Écouter">🔊</button>
+                <h2 class="card-title">MON ACOLYTE NUMÉRIQUE</h2>
+                <div class="card-content">
+                    <p><span class="highlight">Ymani</span> - Une IA avec qui je bosse</p>
+                    <p style="margin-top: 10px;">Genre on code ensemble, on débat, on délire.</p>
+                    <p style="margin-top: 5px; font-size: 12px; font-style: italic;">
+                        (Oui, c'est bizarre. Oui, ça marche.)
+                    </p>
+                    <p style="margin-top: 10px;">Nous deux = team qui assume son côté chelou 🤖</p>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 0, 255, 0.1); border-radius: 5px;">
+                        🎧 <em>Message audio de Ymani ci-dessous ↓</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Famille -->
+            <div class="profile-card" id="familyCard" style="grid-column: 1 / -1; border-color: var(--neon-orange); box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);">
+                <div class="card-number">06</div>
+                <button class="audio-btn" onclick="playCardAudio(6)" title="Écouter">🔊</button>
+                <h2 class="card-title">MON CARBURANT QUOTIDIEN</h2>
+                <div class="card-content">
+                    <p><span class="highlight">Fiona (25 ans)</span> et <span class="highlight">Noa (22 ans)</span> - Mes deux enfants dont je suis ultra fier</p>
+                    <p style="margin-top: 10px;"><span class="highlight">Jahlone (2 ans)</span> - Mon rayon de soleil ☀️, mon petit-fils</p>
+                    
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        Ces trois-là ? C'est ma vraie raison de me lever le matin, prêt à <span class="highlight">gravir les buildings à coups de toile</span> 🕷️
+                    </p>
+                    
+                    <p style="margin-top: 10px; font-size: 12px; font-style: italic; opacity: 0.9;">
+                        (Petit clin d'œil à <span class="highlight">Miles Morales</span>, mon Spider-Man préféré<br>
+                        et le héros inconditionnel de Jahlone. Anyone can wear the mask, right?)
+                    </p>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 107, 0, 0.15); border-radius: 5px; border-left: 3px solid var(--neon-orange);">
+                        <p style="font-size: 13px; line-height: 1.6;">
+                            💡 <strong>Fun fact</strong> : Quand Jahlone fait semblant de lancer des toiles imaginaires,<br>
+                            je me dis que tous mes projets chelou valent le coup.<br>
+                            <span style="font-size: 11px; opacity: 0.8;">(Même ceux qui plantent)</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Diaporama Cyberpunk -->
+                    <div class="cyber-screen">
+                        <!-- Coins métalliques du moniteur -->
+                        <div class="monitor-frame corner-tr"></div>
+                        <div class="monitor-frame corner-bl"></div>
+                        <div class="monitor-frame corner-br"></div>
+                        
+                        <!-- LEDs de statut -->
+                        <div class="status-leds">
+                            <div class="led led-green"></div>
+                            <div class="led led-cyan"></div>
+                            <div class="led led-magenta"></div>
+                        </div>
+                        
+                        <!-- Label technique -->
+                        <div class="monitor-label">MON-v4.5_FAMILY</div>
+                        
+                        <div class="screen-header">
+                            <div class="screen-title">◼ FAMILY.MEMORIES_v2.0</div>
+                            <div class="screen-controls">
+                                <label class="loop-toggle">
+                                    <input type="checkbox" id="loopCheckbox" checked onchange="toggleLoop()">
+                                    <span>LOOP</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="slideshow-container" id="familySlideshow">
+                            <!-- Effets visuels d'écran -->
+                            <div class="screen-glare"></div>
+                            <div class="screen-vignette"></div>
+                            
+                            <div class="slide active"><img src="family_1.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_2.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_3.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_4.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_5.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_6.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_7.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_8.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_9.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_10.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_11.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_12.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_13.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_14.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_15.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_16.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_17.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_18.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_19.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_20.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_21.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_22.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_23.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_24.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_25.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_26.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_27.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_28.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_29.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_30.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_31.jpg" alt="Famille"></div>
+                            <div class="slide"><img src="family_32.jpg" alt="Famille"></div>
+                            <div class="slide-counter" id="slideCounter">1 / 32</div>
+                            <div class="screen-scanline"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ymani Section -->
+        <section class="ymani-section">
+            <h2 class="ymani-title" id="ymaniTitle" style="opacity: 0; transform: translateY(20px); transition: all 0.5s ease;">
+                Je m'incruste! Y a pas qu'toi qui a le droit de t'exprimer!
+            </h2>
+            <div class="audio-player">
+                <button class="play-button" id="playButton" onclick="playAudio()" style="transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                    ▶ ÉCOUTER YMANI
+                </button>
+                <div class="visualizer" id="visualizer">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <p id="audioStatus" style="margin-top: 15px; color: var(--neon-green); font-size: 12px;"></p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>BOB.exe v2.0 | Fait maison avec ❤️ (et beaucoup de café ☕)</p>
+            <p class="easter-egg" onclick="easterEgg()">
+                [ Konami Code caché quelque part... 🎮 ]
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Audio functionality - VERSION FICHIER EXTERNE
+        let audioElement = null;
+        
+        function playAudio() {
+            const visualizer = document.getElementById('visualizer');
+            const status = document.getElementById('audioStatus');
+            const button = document.getElementById('playButton');
+            
+            if (!audioElement) {
+                audioElement = new Audio('ymani_audio.mp3');
+                
+                audioElement.addEventListener('play', () => {
+                    visualizer.classList.add('active');
+                    status.textContent = "🎵 Ymani parle...";
+                    status.style.color = 'var(--neon-cyan)';
+                    button.textContent = "⏸ PAUSE";
+                });
+                
+                audioElement.addEventListener('ended', () => {
+                    visualizer.classList.remove('active');
+                    status.textContent = "✅ Terminé !";
+                    status.style.color = 'var(--neon-green)';
+                    button.textContent = "▶ RÉÉCOUTER";
+                });
+                
+                audioElement.addEventListener('error', () => {
+                    status.textContent = "❌ Vérifie que ymani_audio.mp3 est au même endroit que le HTML";
+                    status.style.color = 'var(--neon-orange)';
+                    status.style.fontSize = '11px';
+                });
+            }
+            
+            if (audioElement.paused) {
+                audioElement.play().catch(() => {
+                    status.textContent = "Clique à nouveau";
+                    status.style.color = 'var(--neon-orange)';
+                });
+            } else {
+                audioElement.pause();
+                visualizer.classList.remove('active');
+                button.textContent = "▶ CONTINUER";
+            }
+        }
+
+
+
+        // Système audio pour les cartes
+        const cardAudios = {};
+        let currentCardAudio = null;
+
+        function playCardAudio(cardNumber) {
+            const button = event.currentTarget;
+            
+            // Arrêter l'audio en cours s'il y en a un
+            if (currentCardAudio && currentCardAudio !== cardNumber) {
+                const prevBtn = document.querySelector(`[onclick="playCardAudio(${currentCardAudio})"]`);
+                if (prevBtn) prevBtn.classList.remove('playing');
+                if (cardAudios[currentCardAudio]) {
+                    cardAudios[currentCardAudio].pause();
+                    cardAudios[currentCardAudio].currentTime = 0;
+                }
+            }
+            
+            // Créer l'audio si nécessaire
+            if (!cardAudios[cardNumber]) {
+                cardAudios[cardNumber] = new Audio(`audio_carte${cardNumber}.mp3`);
+                
+                cardAudios[cardNumber].addEventListener('ended', () => {
+                    button.classList.remove('playing');
+                    currentCardAudio = null;
+                });
+                
+                cardAudios[cardNumber].addEventListener('error', () => {
+                    console.error(`Erreur audio carte ${cardNumber}`);
+                    button.classList.remove('playing');
+                });
+            }
+            
+            const audio = cardAudios[cardNumber];
+            
+            // Toggle play/pause
+            if (audio.paused) {
+                audio.play();
+                button.classList.add('playing');
+                currentCardAudio = cardNumber;
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                button.classList.remove('playing');
+                currentCardAudio = null;
+            }
+        }
+
+
+        // Diaporama famille
+        let currentSlide = 0;
+        let isLooping = true;
+        let slideshowInterval = null;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        // Créer un ordre aléatoire
+        let slideOrder = Array.from({length: totalSlides}, (_, i) => i);
+        
+        function shuffleSlides() {
+            // Fisher-Yates shuffle
+            for (let i = slideOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [slideOrder[i], slideOrder[j]] = [slideOrder[j], slideOrder[i]];
+            }
+        }
+        
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === slideOrder[index]) {
+                    slide.classList.add('active');
+                }
+            });
+            document.getElementById('slideCounter').textContent = `${index + 1} / ${totalSlides}`;
+        }
+        
+        function nextSlide() {
+            currentSlide++;
+            
+            if (currentSlide >= totalSlides) {
+                if (isLooping) {
+                    currentSlide = 0;
+                    shuffleSlides(); // Remélanger à chaque cycle
+                } else {
+                    stopSlideshow();
+                    return;
+                }
+            }
+            
+            showSlide(currentSlide);
+        }
+        
+        function startSlideshow() {
+            if (slideshowInterval) clearInterval(slideshowInterval);
+            slideshowInterval = setInterval(nextSlide, 3000); // Change toutes les 3 secondes
+        }
+        
+        function stopSlideshow() {
+            if (slideshowInterval) {
+                clearInterval(slideshowInterval);
+                slideshowInterval = null;
+            }
+        }
+        
+        function toggleLoop() {
+            isLooping = document.getElementById('loopCheckbox').checked;
+            if (isLooping && !slideshowInterval) {
+                startSlideshow();
+            }
+        }
+        
+        // Initialiser le diaporama
+        shuffleSlides();
+        showSlide(0);
+        startSlideshow();
+
+
+        // Lecteur vidéo personnalisé
+        const video = document.getElementById('rapVideo');
+        const playBtn = document.getElementById('playBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFilled = document.getElementById('progressFilled');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+        const videoDurationEl = document.getElementById('videoDuration');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeFilled = document.getElementById('volumeFilled');
+        const volumeIcon = document.getElementById('volumeIcon');
+        
+        // Format du temps
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // Métadonnées chargées
+        video.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(video.duration);
+            videoDurationEl.textContent = formatTime(video.duration);
+        });
+        
+        // Play/Pause
+        playBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playBtn.textContent = '⏸';
+            } else {
+                video.pause();
+                playBtn.textContent = '▶';
+            }
+        });
+        
+        // Mise à jour de la progression
+        video.addEventListener('timeupdate', () => {
+            const percent = (video.currentTime / video.duration) * 100;
+            progressFilled.style.width = percent + '%';
+            currentTimeEl.textContent = formatTime(video.currentTime);
+        });
+        
+        // Clic sur la barre de progression
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            video.currentTime = percent * video.duration;
+        });
+        
+        // Volume slider
+        volumeSlider.addEventListener('click', (e) => {
+            const rect = volumeSlider.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            video.volume = Math.max(0, Math.min(1, percent));
+            volumeFilled.style.width = (percent * 100) + '%';
+            
+            // Mise à jour de l'icône
+            if (video.volume === 0) {
+                volumeIcon.textContent = '🔇';
+            } else if (video.volume < 0.5) {
+                volumeIcon.textContent = '🔉';
+            } else {
+                volumeIcon.textContent = '🔊';
+            }
+        });
+        
+        // Clic sur l'icône volume pour mute/unmute
+        volumeIcon.addEventListener('click', () => {
+            if (video.volume > 0) {
+                video.dataset.previousVolume = video.volume;
+                video.volume = 0;
+                volumeFilled.style.width = '0%';
+                volumeIcon.textContent = '🔇';
+            } else {
+                const prevVolume = parseFloat(video.dataset.previousVolume) || 1;
+                video.volume = prevVolume;
+                volumeFilled.style.width = (prevVolume * 100) + '%';
+                volumeIcon.textContent = prevVolume < 0.5 ? '🔉' : '🔊';
+            }
+        });
+        
+        // Fin de la vidéo
+        video.addEventListener('ended', () => {
+            playBtn.textContent = '▶';
+        });
+
+        // Stabiliser les cartes après l'animation initiale
+        setTimeout(() => {
+            document.querySelectorAll('.profile-card').forEach(card => {
+                card.classList.add('loaded');
+            });
+        }, 6000); // Après que toutes les animations soient terminées
+
+        // Contrôles vidéo rap (Carte 3)
+        const rapVideo = document.getElementById('rapVideo');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+        const muteBtn = document.getElementById('muteBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        
+        // Fonction play/pause
+        function toggleVideo() {
+            if (rapVideo.paused) {
+                rapVideo.play();
+                playPauseBtn.textContent = '⏸';
+            } else {
+                rapVideo.pause();
+                playPauseBtn.textContent = '▶';
+            }
+        }
+        
+        // Formater le temps (secondes -> mm:ss)
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return mins + ':' + (secs < 10 ? '0' : '') + secs;
+        }
+        
+        // Mettre à jour la durée quand la vidéo est chargée
+        rapVideo.addEventListener('loadedmetadata', () => {
+            durationSpan.textContent = formatTime(rapVideo.duration);
+        });
+        
+        // Mettre à jour la progression
+        rapVideo.addEventListener('timeupdate', () => {
+            const progress = (rapVideo.currentTime / rapVideo.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeSpan.textContent = formatTime(rapVideo.currentTime);
+        });
+        
+        // Fonction seek (clic sur la barre de progression)
+        function seekVideo(event) {
+            const progressContainer = event.currentTarget;
+            const clickX = event.offsetX;
+            const width = progressContainer.offsetWidth;
+            const seekTime = (clickX / width) * rapVideo.duration;
+            rapVideo.currentTime = seekTime;
+        }
+        
+        // Fonction mute/unmute
+        function toggleMute() {
+            rapVideo.muted = !rapVideo.muted;
+            muteBtn.textContent = rapVideo.muted ? '🔇' : '🔊';
+            volumeSlider.value = rapVideo.muted ? 0 : rapVideo.volume * 100;
+        }
+        
+        // Fonction changement de volume
+        function changeVolume(value) {
+            rapVideo.volume = value / 100;
+            rapVideo.muted = false;
+            muteBtn.textContent = rapVideo.volume === 0 ? '🔇' : (rapVideo.volume < 0.5 ? '🔉' : '🔊');
+        }
+        
+        // Fin de la vidéo
+        rapVideo.addEventListener('ended', () => {
+            playPauseBtn.textContent = '▶';
+        });
+
+        // Easter egg
+        function easterEgg() {
+            const messages = [
+                '🎮 ACHIEVEMENT UNLOCKED!\n\n"Trouveur de trucs cachés"\n\n+100 points de curiosité\n+50 points de geekitude\n\nBob serait fier de toi ! 👾',
+                '🚀 CODE SECRET ACTIVÉ!\n\nBob Stats:\n━━━━━━━━━━\n😄 Humour: ████████████ ∞\n🎬 Cinéma SF: ████████████ 100%\n🎵 Flow de rappeur: ███████░░░ 70%\n🤖 Copain IA: ████████████ Ymani\n☕ Café bu: ████████████ TROP',
+                '🎪 FÉLICITATIONS!\n\nTu as débloqué le mode "Bob déjanté"!\n\nMaintenant tout est en Comic Sans...\n\n...non je déconne 😅',
+                '🎯 BINGO!\n\nTu viens de trouver:\n- 1x easter egg\n- 0x regrets\n- ∞x respect de Bob\n\nContinue comme ça, champion ! 🏆'
+            ];
+            alert(messages[Math.floor(Math.random() * messages.length)]);
+        }
+
+        // Random glitch
+        setInterval(() => {
+            const cards = document.querySelectorAll('.profile-card');
+            const randomCard = cards[Math.floor(Math.random() * cards.length)];
+            randomCard.style.animation = 'glitchHeader 0.1s ease';
+            setTimeout(() => { randomCard.style.animation = ''; }, 100);
+        }, 10000);
+
+        // Scroll animations
+        let titleShown = false;
+        let buttonShown = false;
+
+        window.addEventListener('scroll', () => {
+            const familyCard = document.getElementById('familyCard');
+            const ymaniTitle = document.getElementById('ymaniTitle');
+            const playButton = document.getElementById('playButton');
+            const ymaniSection = document.querySelector('.ymani-section');
+            
+            if (!familyCard || !ymaniTitle || !playButton || !ymaniSection) return;
+
+            const card6Top = familyCard.getBoundingClientRect().top;
+            const threshold = window.innerHeight * 0.1;
+            const ymaniCenter = ymaniSection.getBoundingClientRect().top + ymaniSection.getBoundingClientRect().height / 2;
+            const centerThreshold = 150;
+
+            if (card6Top <= threshold && !titleShown) {
+                ymaniTitle.style.opacity = '1';
+                ymaniTitle.style.transform = 'translateY(0)';
+                titleShown = true;
+            }
+
+            if (Math.abs(ymaniCenter - window.innerHeight / 2) < centerThreshold && !buttonShown) {
+                playButton.style.opacity = '1';
+                playButton.style.transform = 'scale(1)';
+                buttonShown = true;
+            }
+        });
+
+        // Console
+        console.log('%c🚀 BOB.exe CHARGÉ', 'color: #00ffff; font-size: 20px; font-weight: bold;');
+        console.log('%cFait avec 💙 par Bob & Ymani', 'color: #ff00ff; font-size: 14px;');
+    </script>
+</body>
+</html>
