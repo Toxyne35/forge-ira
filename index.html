@@ -1,1803 +1,964 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOB_PROFILE.sys - Chargement...</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght:400;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --neon-cyan: #00ffff;
-            --neon-magenta: #ff00ff;
-            --neon-green: #00ff00;
-            --neon-orange: #ff6b00;
-            --dark-bg: #0a0e27;
-            --darker-bg: #050714;
-            --grid-color: rgba(0, 255, 255, 0.1);
-        }
-
-        body {
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--darker-bg);
-            color: var(--neon-cyan);
-            overflow-x: hidden;
-            cursor: crosshair;
-        }
-
-        /* Animated grid background */
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
-                linear-gradient(0deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
-        }
-
-        /* Scanline effect */
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(0, 255, 255, 0.03) 50%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 9999;
-            animation: scan 8s linear infinite;
-        }
-
-        @keyframes scan {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100%); }
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Loading sequence */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--darker-bg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            animation: fadeOut 1s ease 3s forwards;
-        }
-
-        @keyframes fadeOut {
-            to { opacity: 0; pointer-events: none; }
-        }
-
-        .loading-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 18px;
-            color: var(--neon-green);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .loading-bar {
-            width: 300px;
-            height: 4px;
-            background: rgba(0, 255, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background: var(--neon-green);
-            animation: loadProgress 3s ease forwards;
-        }
-
-        @keyframes loadProgress {
-            to { width: 100%; }
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: glitchHeader 0.3s ease 3.5s;
-        }
-
-        @keyframes glitchHeader {
-            0%, 100% { transform: translate(0); }
-            25% { transform: translate(-5px, 5px); }
-            50% { transform: translate(5px, -5px); }
-            75% { transform: translate(-5px, -5px); }
-        }
-
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(36px, 8vw, 72px);
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta), var(--neon-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-            margin-bottom: 10px;
-            letter-spacing: 4px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: var(--neon-green);
-            letter-spacing: 2px;
-            opacity: 0;
-            animation: fadeIn 1s ease 4s forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Profile cards */
-        .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .profile-card {
-            background: rgba(10, 14, 39, 0.8);
-            border: 2px solid var(--neon-cyan);
-            border-radius: 10px;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.6s ease forwards;
-            transition: all 0.3s ease;
-        }
-
-        /* Animation jouée UNE SEULE FOIS au chargement */
-        .profile-card:nth-child(1) { animation-delay: 4.2s; }
-        .profile-card:nth-child(2) { animation-delay: 4.4s; }
-        .profile-card:nth-child(3) { animation-delay: 4.6s; }
-        .profile-card:nth-child(4) { animation-delay: 4.8s; }
-        .profile-card:nth-child(5) { animation-delay: 5s; }
-        .profile-card:nth-child(6) { animation-delay: 5.2s; }
-
-        /* Une fois l'animation terminée, garde l'état stable */
-        .profile-card.loaded {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            animation: none !important;
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .profile-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--neon-magenta);
-            box-shadow: 0 10px 40px rgba(255, 0, 255, 0.3);
-        }
-
-        .profile-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .profile-card:hover::before {
-            left: 100%;
-        }
-
-        .card-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 48px;
-            font-weight: 900;
-            color: var(--neon-magenta);
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            opacity: 0.3;
-        }
-
-        .card-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            color: var(--neon-cyan);
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
-
-        .card-content {
-            font-size: 14px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .card-content ul {
-            list-style: none;
-            margin-top: 10px;
-        }
-
-        .card-content li::before {
-            content: '▹ ';
-            color: var(--neon-green);
-            font-weight: bold;
-        }
-
-        .highlight {
-            color: var(--neon-orange);
-            font-weight: bold;
-        }
-
-        /* Ymani Section */
-        .ymani-section {
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
-            border: 2px solid var(--neon-magenta);
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            margin-top: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ymani-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0deg 340deg,
-                var(--neon-cyan) 340deg 360deg
-            );
-            animation: rotate 4s linear infinite;
-            opacity: 0.1;
-        }
-
-        @keyframes rotate {
-            to { transform: rotate(360deg); }
-        }
-
-        .ymani-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
-            color: var(--neon-magenta);
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .ymani-description {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .audio-player {
-            position: relative;
-            z-index: 1;
-            margin-top: 20px;
-        }
-
-        .play-button {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
-            border: none;
-            color: var(--darker-bg);
-            padding: 15px 40px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .play-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .play-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .play-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-        }
-
-        .play-button:active {
-            transform: scale(0.95);
-        }
-
-        /* Easter egg glitch */
-        .glitch-text {
-            position: relative;
-            display: inline-block;
-        }
-
-        .glitch-text:hover {
-            animation: glitch 0.3s infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            margin-top: 80px;
-            padding: 40px 20px;
-            border-top: 1px solid var(--grid-color);
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            animation: fadeIn 1s ease 5.4s forwards;
-        }
-
-        .easter-egg {
-            margin-top: 20px;
-            font-size: 10px;
-            color: var(--neon-green);
-            cursor: help;
-        }
-
-        .easter-egg:hover {
-            color: var(--neon-magenta);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .profile-grid {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 36px;
-            }
-
-            .card-number {
-                font-size: 32px;
-            }
-        }
-
-        /* Audio visualizer placeholder */
-        .visualizer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 4px;
-            height: 50px;
-            margin-top: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .visualizer.active {
-            opacity: 1;
-        }
-
-        .bar {
-            width: 8px;
-            background: var(--neon-cyan);
-            border-radius: 4px;
-            animation: visualize 0.5s ease-in-out infinite;
-        }
-
-        .bar:nth-child(1) { height: 20px; animation-delay: 0s; }
-        .bar:nth-child(2) { height: 30px; animation-delay: 0.1s; }
-        .bar:nth-child(3) { height: 40px; animation-delay: 0.2s; }
-        .bar:nth-child(4) { height: 35px; animation-delay: 0.3s; }
-        .bar:nth-child(5) { height: 25px; animation-delay: 0.4s; }
-        .bar:nth-child(6) { height: 30px; animation-delay: 0.5s; }
-        .bar:nth-child(7) { height: 20px; animation-delay: 0.6s; }
-
-        @keyframes visualize {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(1.5); }
-        }
-
-        /* Boutons audio dans les cartes */
-        .audio-btn {
-            position: absolute;
-            top: 15px;
-            right: 60px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 10;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-        }
-
-        .audio-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
-        }
-
-        .audio-btn:active {
-            transform: scale(0.95);
-        }
-
-        .audio-btn.playing {
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(255, 0, 255, 0.8); }
-        }
-
-
-        /* Écran futuriste cyberpunk */
-        .cyber-screen {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 25px;
-            background: linear-gradient(135deg, #0a0e27 0%, #050714 100%);
-            border-radius: 15px;
-            box-shadow: 
-                0 0 30px rgba(0, 255, 255, 0.3),
-                inset 0 0 20px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Frame externe du moniteur */
-        .cyber-screen::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: -15px;
-            right: -15px;
-            bottom: -15px;
-            background: linear-gradient(145deg, #1a1f3a, #0f1221);
-            border-radius: 20px;
-            z-index: -1;
-            box-shadow: 
-                0 5px 15px rgba(0, 0, 0, 0.5),
-                inset 0 2px 5px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Coins métalliques */
-        .cyber-screen::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle, #4a5568 0%, #2d3748 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 10px rgba(0, 0, 0, 0.5),
-                inset -2px -2px 5px rgba(0, 0, 0, 0.5),
-                inset 2px 2px 5px rgba(255, 255, 255, 0.2);
-            z-index: 2;
-        }
-
-        /* Autres coins (via pseudo-elements supplémentaires) */
-        .monitor-frame {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle, #4a5568 0%, #2d3748 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 10px rgba(0, 0, 0, 0.5),
-                inset -2px -2px 5px rgba(0, 0, 0, 0.5),
-                inset 2px 2px 5px rgba(255, 255, 255, 0.2);
-            z-index: 2;
-        }
-
-        .corner-tr { top: -20px; right: -20px; }
-        .corner-bl { bottom: -20px; left: -20px; }
-        .corner-br { bottom: -20px; right: -20px; }
-
-        /* LEDs indicateurs */
-        .status-leds {
-            position: absolute;
-            top: -10px;
-            right: 50px;
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-
-        .led {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: ledPulse 2s ease-in-out infinite;
-        }
-
-        .led-green {
-            background: #00ff00;
-            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-            animation-delay: 0s;
-        }
-
-        .led-cyan {
-            background: #00ffff;
-            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-            animation-delay: 0.3s;
-        }
-
-        .led-magenta {
-            background: #ff00ff;
-            box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-            animation-delay: 0.6s;
-        }
-
-        @keyframes ledPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Label technique */
-        .monitor-label {
-            position: absolute;
-            top: -12px;
-            left: 50px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 9px;
-            color: #4a5568;
-            background: #1a1f3a;
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 1px;
-            z-index: 3;
-        }
-
-        .screen-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            background: rgba(0, 255, 255, 0.05);
-            border-left: 3px solid var(--neon-cyan);
-            border-radius: 3px;
-        }
-
-        .screen-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: var(--neon-green);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .screen-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .loop-toggle {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 10px;
-            color: var(--neon-cyan);
-            cursor: pointer;
-            user-select: none;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .loop-toggle input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            accent-color: var(--neon-cyan);
-        }
-
-        /* Conteneur de l'écran */
-        .slideshow-container {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            overflow: hidden;
-            border-radius: 5px;
-            background: #000;
-            border: 2px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 
-                0 0 20px rgba(0, 255, 255, 0.2),
-                inset 0 0 30px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Effet de reflet sur l'écran */
-        .screen-glare {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                transparent 30%,
-                transparent 70%,
-                rgba(255, 255, 255, 0.05) 100%
-            );
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .slide.active {
-            opacity: 1;
-            z-index: 1;
-        }
-
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: brightness(0.95) contrast(1.05);
-        }
-
-        .slide-counter {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 6px 12px;
-            border-radius: 5px;
-            border: 1px solid var(--neon-cyan);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: var(--neon-cyan);
-            z-index: 5;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-        }
-
-        .screen-scanline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(0, 255, 255, 0.02) 50%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 3;
-            animation: scanlineMove 8s linear infinite;
-        }
-
-        @keyframes scanlineMove {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(4px); }
-        }
-
-        /* Vignette CRT */
-        .screen-vignette {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                ellipse at center,
-                transparent 50%,
-                rgba(0, 0, 0, 0.3) 100%
-            );
-            pointer-events: none;
-            z-index: 4;
-        }
-        @keyframes borderPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-
-        .screen-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .screen-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            color: var(--neon-green);
-            letter-spacing: 2px;
-        }
-
-        .screen-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .loop-toggle {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 10px;
-            color: var(--neon-cyan);
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .loop-toggle input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            accent-color: var(--neon-cyan);
-        }
-
-        .slideshow-container {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-            border-radius: 5px;
-            background: #000;
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .slide.active {
-            opacity: 1;
-            z-index: 1;
-        }
-
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: brightness(0.9) contrast(1.1);
-        }
-
-        .slide-counter {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 255, 255, 0.2);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: var(--neon-cyan);
-            z-index: 2;
-            backdrop-filter: blur(5px);
-        }
-
-        .screen-scanline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(0, 255, 255, 0.02) 50%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        /* Lecteur vidéo cyberpunk */
-        .cyber-video-player {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 25px;
-            background: linear-gradient(135deg, #0a0e27 0%, #050714 100%);
-            border-radius: 15px;
-            box-shadow: 
-                0 0 30px rgba(255, 0, 255, 0.3),
-                inset 0 0 20px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Frame externe */
-        .cyber-video-player::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: -15px;
-            right: -15px;
-            bottom: -15px;
-            background: linear-gradient(145deg, #1a1f3a, #0f1221);
-            border-radius: 20px;
-            z-index: -1;
-            box-shadow: 
-                0 5px 15px rgba(0, 0, 0, 0.5),
-                inset 0 2px 5px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Coins métalliques vidéo */
-        .video-frame {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle, #4a5568 0%, #2d3748 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 10px rgba(0, 0, 0, 0.5),
-                inset -2px -2px 5px rgba(0, 0, 0, 0.5),
-                inset 2px 2px 5px rgba(255, 255, 255, 0.2);
-            z-index: 2;
-        }
-
-        .vcorner-tl { top: -20px; left: -20px; }
-        .vcorner-tr { top: -20px; right: -20px; }
-        .vcorner-bl { bottom: -20px; left: -20px; }
-        .vcorner-br { bottom: -20px; right: -20px; }
-
-        /* LEDs vidéo */
-        .video-status-leds {
-            position: absolute;
-            top: -10px;
-            right: 50px;
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-
-        .video-label {
-            position: absolute;
-            top: -12px;
-            left: 50px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 9px;
-            color: #4a5568;
-            background: #1a1f3a;
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 1px;
-            z-index: 3;
-        }
-
-        .video-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            background: rgba(255, 0, 255, 0.05);
-            border-left: 3px solid var(--neon-magenta);
-            border-radius: 3px;
-        }
-
-        .video-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: var(--neon-magenta);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .video-duration {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: var(--neon-cyan);
-        }
-
-        /* Conteneur vidéo */
-        .video-container {
-            position: relative;
-            width: 100%;
-            background: #000;
-            border-radius: 5px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 0, 255, 0.3);
-            box-shadow: 
-                0 0 20px rgba(255, 0, 255, 0.2),
-                inset 0 0 30px rgba(0, 0, 0, 0.8);
-        }
-
-        .video-container video {
-            width: 100%;
-            display: block;
-        }
-
-        /* Effet glare vidéo */
-        .video-glare {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                transparent 30%,
-                transparent 70%,
-                rgba(255, 255, 255, 0.05) 100%
-            );
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        /* Contrôles personnalisés */
-        .video-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 3;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .video-container:hover .video-controls {
-            opacity: 1;
-        }
-
-        /* Barre de progression */
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .progress-filled {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
-            border-radius: 2px;
-            width: 0%;
-            transition: width 0.1s;
-        }
-
-        /* Contrôles principaux */
-        .main-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .play-btn {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 0, 255, 0.2);
-            border: 2px solid var(--neon-magenta);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
-            color: var(--neon-magenta);
-        }
-
-        .play-btn:hover {
-            background: rgba(255, 0, 255, 0.4);
-            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-        }
-
-        .time-display {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: var(--neon-cyan);
-        }
-
-        /* Volume control */
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-left: auto;
-        }
-
-        .volume-icon {
-            font-size: 18px;
-            color: var(--neon-cyan);
-            cursor: pointer;
-        }
-
-        .volume-slider {
-            width: 80px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .volume-filled {
-            height: 100%;
-            background: var(--neon-cyan);
-            border-radius: 2px;
-            width: 100%;
-            transition: width 0.1s;
-        }
-
-        /* Scanline vidéo */
-        .video-scanline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(255, 0, 255, 0.02) 50%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 1;
-            animation: scanlineMove 8s linear infinite;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a2e">
+<title>🔥 Forge IRA 2026 - Final</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a;
+  --card: #1a1a2e;
+  --card2: #252540;
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.app { max-width: 500px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+
+.header { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--card); border-radius: 16px; margin-bottom: 16px; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon { font-size: 32px; }
+.logo-text { font-size: 18px; font-weight: 700; }
+.logo-sub { font-size: 11px; color: var(--muted); }
+.countdown { text-align: right; }
+.countdown-num { font-size: 24px; font-weight: 800; color: var(--accent2); }
+.countdown-label { font-size: 10px; color: var(--muted); }
+
+/* Timer flottant révision */
+.revision-timer-float { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #1e1e3f, #2d2d5a); padding: 12px 16px; z-index: 50; display: none; }
+.revision-timer-float.active { display: flex; align-items: center; justify-content: space-between; }
+.revision-timer-float.warning { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
+.rtf-time { font-size: 24px; font-weight: 700; font-family: 'SF Mono', monospace; }
+.rtf-label { font-size: 11px; color: var(--muted); }
+.rtf-btn { padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.rtf-pause { background: var(--warning); color: #000; }
+.rtf-resume { background: var(--success); color: #fff; }
+
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; margin-top: 60px; }
+.tabs.no-timer { margin-top: 0; }
+.tab { padding: 10px 12px; border: none; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.tab.active { background: var(--accent); color: #fff; }
+.tab:not(.active) { background: var(--card); color: var(--muted); }
+
+.card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.card-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+
+.progress-bar { height: 8px; background: var(--card2); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.3s; }
+.progress-text { font-size: 12px; color: var(--muted); text-align: right; }
+
+.link-list { display: flex; flex-direction: column; gap: 10px; }
+.link-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card2); border-radius: 12px; text-decoration: none; color: var(--text); transition: all 0.2s; }
+.link-item:hover { background: rgba(124, 58, 237, 0.2); }
+.link-icon { font-size: 24px; }
+.link-info { flex: 1; }
+.link-title { font-size: 13px; font-weight: 600; }
+.link-desc { font-size: 11px; color: var(--muted); }
+.link-arrow { color: var(--muted); }
+
+.fiche { background: var(--card); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
+.fiche-header { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-left: 4px solid var(--accent); }
+.fiche-icon { font-size: 28px; }
+.fiche-info { flex: 1; }
+.fiche-title { font-size: 15px; font-weight: 600; }
+.fiche-subtitle { font-size: 11px; color: var(--muted); }
+.fiche-time { font-size: 10px; color: var(--warning); margin-top: 2px; }
+.fiche-toggle { font-size: 18px; color: var(--muted); transition: transform 0.2s; }
+.fiche-toggle.open { transform: rotate(180deg); }
+.fiche-body { display: none; padding: 0 16px 16px; }
+.fiche-body.open { display: block; }
+.fiche-section { margin-bottom: 16px; }
+.fiche-section-title { font-size: 13px; font-weight: 600; color: var(--accent2); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.fiche-content { font-size: 12px; line-height: 1.7; color: var(--text); }
+.fiche-content ul { padding-left: 16px; margin: 8px 0; }
+.fiche-content li { margin-bottom: 6px; }
+.fiche-highlight { background: rgba(124, 58, 237, 0.2); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--accent); }
+.fiche-warning { background: rgba(239, 68, 68, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--danger); }
+.fiche-tip { background: rgba(16, 185, 129, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--success); }
+.fiche-number { display: inline-block; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; margin-right: 6px; }
+
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.quiz-progress { font-size: 13px; color: var(--muted); }
+.quiz-theme { font-size: 11px; padding: 4px 10px; background: var(--accent); border-radius: 20px; }
+.quiz-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+.quiz-opt { padding: 14px 16px; background: var(--card2); border: 2px solid transparent; border-radius: 12px; font-size: 13px; cursor: pointer; transition: all 0.2s; text-align: left; color: var(--text); }
+.quiz-opt:hover { border-color: var(--accent); }
+.quiz-opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.2); }
+.quiz-opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); }
+.quiz-feedback { margin-top: 16px; padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+.quiz-feedback.correct { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
+.quiz-feedback.wrong { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
+
+.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-warning { background: var(--warning); color: #000; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn + .btn { margin-top: 10px; }
+
+.timer-box { background: linear-gradient(135deg, #1e1e3f, #2d2d5a); border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 16px; }
+.timer-display { font-size: 56px; font-weight: 200; font-family: 'SF Mono', 'Consolas', monospace; letter-spacing: 2px; margin: 12px 0; }
+.timer-label { font-size: 13px; color: var(--muted); }
+.timer-progress { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 16px; overflow: hidden; }
+.timer-fill { height: 100%; background: var(--success); transition: width 1s linear; }
+.timer-controls { display: flex; gap: 10px; margin-top: 16px; }
+.timer-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.timer-start { background: var(--success); color: #fff; }
+.timer-pause { background: var(--warning); color: #000; }
+.timer-reset { background: rgba(255,255,255,0.1); color: var(--text); }
+
+.criteria-grid { display: flex; flex-direction: column; gap: 12px; }
+.criteria-item { background: var(--card2); border-radius: 12px; padding: 14px; }
+.criteria-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.criteria-name { font-size: 13px; font-weight: 600; flex: 1; }
+.criteria-score { display: flex; gap: 6px; }
+.score-btn { width: 32px; height: 32px; border-radius: 8px; border: 2px solid var(--card); background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; }
+.score-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+.criteria-desc { font-size: 11px; color: var(--muted); }
+
+.result-card { text-align: center; padding: 24px; }
+.result-score { font-size: 64px; font-weight: 800; }
+.result-score.pass { color: var(--success); }
+.result-score.fail { color: var(--danger); }
+.result-label { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.result-detail { margin-top: 20px; text-align: left; }
+.result-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--card2); font-size: 13px; }
+
+.phase-list { display: flex; flex-direction: column; gap: 10px; }
+.phase-item { background: var(--card2); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+.phase-item:hover { border-color: var(--accent); }
+.phase-item.locked { opacity: 0.5; pointer-events: none; }
+.phase-item.done { border-color: var(--success); }
+.phase-icon { font-size: 24px; }
+.phase-info { flex: 1; }
+.phase-name { font-size: 14px; font-weight: 600; }
+.phase-desc { font-size: 11px; color: var(--muted); }
+.phase-status { font-size: 20px; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+.modal.open { display: flex; }
+.modal-content { background: var(--card); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.check-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--card2); border-radius: 10px; cursor: pointer; }
+.check-box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-size: 14px; color: transparent; }
+.check-item.done .check-box { background: var(--success); border-color: var(--success); color: #fff; }
+.check-label { font-size: 13px; flex: 1; }
+.check-item.done .check-label { color: var(--success); }
+
+.alert { padding: 12px 16px; border-radius: 10px; font-size: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.alert-warning { background: rgba(245, 158, 11, 0.15); border-left: 4px solid var(--warning); }
+.alert-success { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
+.alert-danger { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
+.alert-info { background: rgba(59, 130, 246, 0.15); border-left: 4px solid var(--info); }
+
+.tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-right: 4px; }
+.tag-danger { background: rgba(239, 68, 68, 0.3); color: var(--danger); }
+.tag-warning { background: rgba(245, 158, 11, 0.3); color: var(--warning); }
+.tag-success { background: rgba(16, 185, 129, 0.3); color: var(--success); }
+
+/* Mode selector */
+.mode-selector { display: flex; gap: 8px; margin-bottom: 16px; }
+.mode-btn { flex: 1; padding: 16px 12px; border: 2px solid var(--card2); border-radius: 12px; background: var(--card); cursor: pointer; text-align: center; transition: all 0.2s; }
+.mode-btn:hover { border-color: var(--accent); }
+.mode-btn.active { border-color: var(--accent); background: rgba(124, 58, 237, 0.2); }
+.mode-btn.jour-j { border-color: var(--danger); }
+.mode-btn.jour-j.active { background: rgba(239, 68, 68, 0.2); }
+.mode-icon { font-size: 24px; margin-bottom: 4px; }
+.mode-title { font-size: 13px; font-weight: 600; }
+.mode-desc { font-size: 10px; color: var(--muted); }
+
+/* Time stats */
+.time-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.time-stat { background: var(--card2); padding: 10px; border-radius: 8px; text-align: center; }
+.time-stat-value { font-size: 18px; font-weight: 700; color: var(--accent2); }
+.time-stat-label { font-size: 10px; color: var(--muted); }
+</style>
 </head>
 <body>
-    <!-- Loading screen -->
-    <div class="loading-screen">
-        <div class="loading-text">
-            > CHARGEMENT DE BOB.exe<br>
-            > VÉRIFICATION DU NIVEAU DE CAFÉ... OK ☕<br>
-            > ACTIVATION MODE GEEK... OK 🤓<br>
-            > CHARGEMENT DES BLAGUES DOUTEUSES... OK 😅<br>
-            <span style="color: var(--neon-cyan);">> C'EST PARTI ! 🚀</span>
-        </div>
-        <div class="loading-bar"></div>
-    </div>
 
-    <!-- Grid background -->
-    <div class="grid-bg"></div>
+<!-- Timer flottant révision -->
+<div class="revision-timer-float" id="revisionTimerFloat">
+  <div>
+    <div class="rtf-time" id="rtfTime">02:00:00</div>
+    <div class="rtf-label">⏱️ Temps de lecture restant</div>
+  </div>
+  <button class="rtf-btn rtf-pause" id="rtfBtn" onclick="toggleRevisionTimer()">⏸</button>
+</div>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">
+      <span class="logo-icon">🔥</span>
+      <div>
+        <div class="logo-text">Forge IRA</div>
+        <div class="logo-sub">Final Edition 2026</div>
+      </div>
+    </div>
+    <div class="countdown">
+      <div class="countdown-num" id="daysLeft">--</div>
+      <div class="countdown-label">jours restants</div>
+    </div>
+  </div>
+
+  <div class="tabs" id="mainTabs">
+    <button class="tab active" onclick="showView('revisions')">📚 Révisions</button>
+    <button class="tab" onclick="showView('quiz')">🎯 Quiz</button>
+    <button class="tab" onclick="showView('exam')">⏱️ Épreuve</button>
+    <button class="tab" onclick="showView('ressources')">🔗 Liens</button>
+  </div>
+
+  <div id="revisionsView" class="view active"></div>
+  <div id="quizView" class="view"></div>
+  <div id="examView" class="view"></div>
+  <div id="ressourcesView" class="view"></div>
+</div>
+
+<div class="modal" id="quizModal">
+  <div class="modal-content" id="quizContent"></div>
+</div>
+
+<div class="modal" id="correctionModal">
+  <div class="modal-content" id="correctionContent"></div>
+</div>
+
+<div class="modal" id="timeUpModal">
+  <div class="modal-content">
+    <div style="text-align:center">
+      <div style="font-size:48px">⏰</div>
+      <div style="font-size:20px;font-weight:700;margin:12px 0">Temps écoulé !</div>
+      <p style="color:var(--muted);margin-bottom:20px">Tes 2h de lecture sont terminées. Le jour J, tu passerais maintenant à la rédaction.</p>
+      <div id="timeUpStats"></div>
+      <button class="btn btn-primary" onclick="closeTimeUpModal()">Voir mes statistiques</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ FICHES DE RÉVISION ============
+const FICHES = [
+  {
+    id: "methodo",
+    icon: "📝",
+    title: "Méthodologie du cas pratique",
+    subtitle: "Structure imposée, critères du jury",
+    color: "#7c3aed",
+    sections: [
+      { title: "📌 Format imposé", content: `<div class="fiche-highlight"><strong>RENDU OBLIGATOIRE :</strong><br>1️⃣ Note argumentée (3-4 pages)<br>2️⃣ Annexe opérationnelle n°1<br>3️⃣ Annexe opérationnelle n°2</div><ul><li><strong>Durée :</strong> 4 heures</li><li><strong>Coefficient :</strong> 5</li><li><strong>Note éliminatoire :</strong> < 5/20</li><li><strong>Dossier :</strong> 30 pages max</li></ul>` },
+      { title: "🏗️ Structure de la note", content: `<div class="fiche-tip"><strong>PLAN TYPE :</strong><br>Introduction → Diagnostic → Propositions</div><p><strong>Introduction (½ page) :</strong> Accroche, définitions, problématique, plan</p><p><strong>Partie 1 - Diagnostic (1-1,5 pages) :</strong> État des lieux, enjeux, acteurs</p><p><strong>Partie 2 - Propositions (1,5-2 pages) :</strong> Solutions concrètes, moyens, calendrier</p>` },
+      { title: "📎 Annexes opérationnelles", content: `<p><strong>Types possibles :</strong> Courrier, note de service, fiche procédure, rétroplanning, organigramme, tableau de bord, courriel</p><div class="fiche-warning"><strong>⚠️</strong> OPÉRATIONNELLE = directement utilisable. Pas un résumé !</div>` },
+      { title: "⚖️ 10 critères du jury", content: `<ol><li>Utilisation du dossier</li><li>Connaissances hors dossier</li><li>Réponse à la commande (opérationnel > savoir)</li><li>Problématique identifiée</li><li>Esprit de décision</li><li>Qualité des annexes</li><li>Qualités rédactionnelles</li><li>Méthode et organisation</li><li>Prise en compte destinataire</li><li>Présentation</li></ol>` },
+      { title: "⏱️ Gestion du temps", content: `<div class="fiche-highlight"><strong>RÉPARTITION :</strong><br>🔍 1h30 — Lecture active<br>✍️ 2h00 — Rédaction note<br>📎 30min — Annexes + relecture</div>` }
+    ]
+  },
+  {
+    id: "finances",
+    icon: "💰",
+    title: "Finances publiques",
+    subtitle: "LOLF, budget, dette — Proba: 90%",
+    color: "#10b981",
+    sections: [
+      { title: "🔊 Mnémotechnique", content: `<div class="fiche-highlight"><strong>Son :</strong> "LO-LO-F" (eau qui fuit)<br><strong>Acronyme :</strong> B.D.R.F = Budget → Dette → Réforme → Fiscalité</div>` },
+      { title: "📊 Chiffres clés", content: `<ul><li><span class="tag tag-danger">CRITIQUE</span> <strong>Déficit :</strong> 5-6% du PIB (objectif UE : 3%)</li><li><span class="tag tag-danger">CRITIQUE</span> <strong>Dette :</strong> >3000 Mds€ (>110% PIB)</li><li><strong>PIB France :</strong> ~2800 Mds€</li><li><strong>Dépenses publiques :</strong> ~57% du PIB</li></ul>` },
+      { title: "📜 LOLF 2001", content: `<p><strong>= Constitution financière</strong></p><div class="fiche-highlight">Structure : MISSIONS → PROGRAMMES → ACTIONS</div><p><strong>Principes :</strong> Annualité, Unité, Universalité, Spécialité, Sincérité</p>` },
+      { title: "🏛️ Acteurs", content: `<ul><li><strong>Parlement :</strong> Vote (PLF 1er mardi octobre)</li><li><strong>Cour des comptes :</strong> Contrôle + Certification</li><li><strong>Direction du Budget :</strong> Pilotage (Bercy)</li></ul>` },
+      { title: "🇪🇺 Contraintes UE", content: `<ul><li><strong>Pacte stabilité :</strong> Déficit < 3%</li><li><strong>Dette :</strong> < 60% (objectif)</li><li><strong>Règle d'or :</strong> Déficit structurel < 0,5%</li></ul><div class="fiche-warning">⚠️ France en procédure pour déficit excessif</div>` }
+    ]
+  },
+  {
+    id: "europe",
+    icon: "⭐",
+    title: "Enjeux européens",
+    subtitle: "Institutions, droit UE — Proba: 90%",
+    color: "#3b82f6",
+    sections: [
+      { title: "🔊 Mnémotechnique", content: `<div class="fiche-highlight"><strong>Son :</strong> "CO-PA-CO"<br><strong>Acronyme :</strong> F.O.N.D.S = FEDER → OMbudsman → NextGen → Directives → Subsidiarité</div>` },
+      { title: "🏛️ Triangle institutionnel", content: `<p><strong>CO-PA-CO :</strong></p><ul><li><strong>COnseil UE :</strong> États (ministres)</li><li><strong>PArlement :</strong> Citoyens (705 députés)</li><li><strong>COmmission :</strong> Gardienne traités + Initiative</li></ul>` },
+      { title: "📜 Droit européen", content: `<div class="fiche-highlight"><strong>PRIMAUTÉ :</strong> Droit UE > droit national (Costa c/ ENEL 1964)</div><p><strong>Actes :</strong> Règlement (direct) / Directive (transposition) / Décision</p><p><strong>Principes :</strong> Subsidiarité, Proportionnalité</p>` },
+      { title: "💶 Politiques", content: `<ul><li><span class="tag tag-success">GREEN DEAL</span> Neutralité carbone 2050</li><li><span class="tag tag-warning">NEXTGEN EU</span> 750 Mds€ (relance)</li><li><strong>FEDER, FSE+, PAC, PESC</strong></li></ul>` },
+      { title: "🌍 Actualité 2026", content: `<div class="fiche-warning"><strong>Contexte :</strong> Guerre Ukraine, Trump 2.0, élargissement potentiel, réforme Pacte stabilité</div>` }
+    ]
+  },
+  {
+    id: "education",
+    icon: "📚",
+    title: "Système éducatif",
+    subtitle: "Réformes, Parcoursup — Proba: 65%",
+    color: "#f59e0b",
+    sections: [
+      { title: "🔊 Mnémotechnique", content: `<div class="fiche-highlight"><strong>Son :</strong> "CHOC !" (Choc des savoirs)<br><strong>Acronyme :</strong> P.A.R.E = Parcoursup → Académies → Réformes → Égalité</div>` },
+      { title: "📊 Chiffres", content: `<ul><li><strong>30 académies</strong></li><li><strong>660 000 bacheliers</strong> Parcoursup/an</li><li><strong>4 000 postes</strong> non pourvus/an</li><li><strong>Instruction :</strong> 3 à 18 ans</li></ul><div class="fiche-warning">⚠️ PISA 2023 : Recul France</div>` },
+      { title: "🏗️ Organisation", content: `<ul><li><strong>Recteur :</strong> Académie (nommé PR)</li><li><strong>DASEN :</strong> Département</li><li><strong>1er degré :</strong> Maternelle + Élémentaire</li><li><strong>2nd degré :</strong> Collège + Lycée</li></ul>` },
+      { title: "📜 Réformes récentes", content: `<ul><li><span class="tag tag-danger">2024</span> Choc des savoirs (groupes niveau)</li><li><span class="tag tag-warning">2024</span> DNB obligatoire pour seconde</li><li><span class="tag tag-success">2023</span> Lycée pro (+ stages)</li></ul>` },
+      { title: "🎯 Enjeux", content: `<ul><li>Attractivité métier enseignant</li><li>Mixité sociale</li><li>Inclusion handicap</li><li>Harcèlement scolaire (plan 2023)</li></ul>` }
+    ]
+  }
+];
+
+// ============ RESSOURCES ============
+const RESSOURCES = [
+  { category: "📄 Annales", links: [
+    { icon: "📋", title: "Toutes les annales", desc: "Sujets précédents", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-annales-des-concours" },
+    { icon: "📝", title: "Cas pratique 2024", desc: "Harcèlement scolaire", url: "https://www.fonction-publique.gouv.fr/files/files/devenir-agent-public/cas_pratique_ira_2024.pdf" }
+  ]},
+  { category: "✅ Corrigés", links: [
+    { icon: "🏆", title: "Meilleures copies", desc: "Exemples bien notés", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-meilleures-copies-et-corriges" },
+    { icon: "📊", title: "Rapports jury", desc: "Conseils officiels", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-rapports-de-jury" }
+  ]},
+  { category: "📚 Docs officiels", links: [
+    { icon: "📖", title: "Note de cadrage", desc: "Attendus épreuve", url: "https://ira-gestion.fonction-publique.gouv.fr/userfiles/promotion/12/note-de-cadrage-cas-pratique.pdf" },
+    { icon: "📋", title: "Grille jury", desc: "Critères notation", url: "https://www.ira-lille.gouv.fr/wp-content/uploads/2025/07/2025_grille_evaluation_differenciee_cas_pratique.pdf" }
+  ]},
+  { category: "🎓 Préparation", links: [
+    { icon: "🖥️", title: "Mentor", desc: "Formation gratuite", url: "https://mentor.gouv.fr" },
+    { icon: "📰", title: "Vie Publique", desc: "Fiches thématiques", url: "https://www.vie-publique.fr" }
+  ]}
+];
+
+// ============ QUIZ ============
+const QUIZ_DATA = {
+  methodo: { name: "Méthodologie", icon: "📝", color: "#7c3aed", questions: [
+    { q: "Structure imposée du rendu ?", opts: ["1 note + 1 annexe", "1 note + 2 annexes opérationnelles", "2 notes", "1 dissertation"], ans: 1, tip: "Note argumentée + 2 annexes" },
+    { q: "Le jury sanctionne une copie qui...", opts: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], ans: 1, tip: "Pas juste une synthèse !" },
+    { q: "La rédaction doit montrer...", opts: ["Son savoir", "Une préoccupation opérationnelle", "Une culture générale", "Un style littéraire"], ans: 1, tip: "Se faire comprendre > montrer son savoir" },
+    { q: "Note éliminatoire ?", opts: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], ans: 1, tip: "Toute note < 5/20 élimine" },
+    { q: "Durée de l'épreuve ?", opts: ["3h", "4h", "5h", "2h"], ans: 1, tip: "4 heures, coefficient 5" },
+    { q: "Dossier documentaire max ?", opts: ["20 pages", "30 pages", "40 pages", "25 pages"], ans: 1, tip: "30 pages maximum" },
+    { q: "Temps lecture recommandé ?", opts: ["30min", "1h", "1h30", "2h30"], ans: 2, tip: "1h30 lecture active" },
+    { q: "L'annexe doit être...", opts: ["Un résumé", "Opérationnelle", "Académique", "Longue"], ans: 1, tip: "Directement utilisable" }
+  ]},
+  finances: { name: "Finances publiques", icon: "💰", color: "#10b981", questions: [
+    { q: "LOLF signifie ?", opts: ["Loi Ordinaire...", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation...", "Loi d'Orientation..."], ans: 1, tip: "Constitution financière 2001" },
+    { q: "Déficit public français ?", opts: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], ans: 1, tip: "Objectif UE : 3%" },
+    { q: "Dette publique dépasse ?", opts: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], ans: 2, tip: ">110% du PIB" },
+    { q: "Qui contrôle le budget ?", opts: ["Sénat", "AN", "Cour des comptes", "Conseil d'État"], ans: 2, tip: "Juridiction financière" },
+    { q: "PLF présenté au plus tard ?", opts: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], ans: 1, tip: "Premier mardi d'octobre" },
+    { q: "Pacte stabilité limite déficit à ?", opts: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], ans: 1, tip: "Critère Maastricht" },
+    { q: "Structure LOLF ?", opts: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], ans: 1, tip: "Organisation par politique" },
+    { q: "Règle d'or = déficit structurel < ?", opts: ["0,5%", "1%", "2%", "3%"], ans: 0, tip: "Contrainte européenne" }
+  ]},
+  europe: { name: "Enjeux européens", icon: "⭐", color: "#3b82f6", questions: [
+    { q: "3 institutions principales ?", opts: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], ans: 1, tip: "CO-PA-CO" },
+    { q: "Green Deal vise ?", opts: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], ans: 1, tip: "Europe neutre en carbone" },
+    { q: "NextGen EU = ?", opts: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], ans: 2, tip: "Plan relance post-Covid" },
+    { q: "Subsidiarité signifie ?", opts: ["UE décide tout", "UE intervient si États ne peuvent pas", "États décident seuls", "Régions prioritaires"], ans: 1, tip: "Action plus efficace au niveau UE" },
+    { q: "Primauté droit UE ?", opts: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], ans: 0, tip: "Costa c/ ENEL 1964" },
+    { q: "Directive européenne ?", opts: ["Directement applicable", "Doit être transposée", "Pas de valeur", "Commission seulement"], ans: 1, tip: "Objectif contraignant, moyens libres" },
+    { q: "PESC désigne ?", opts: ["Politique Économique...", "Politique Étrangère et Sécurité Commune", "Pacte Européen...", "Programme Européen..."], ans: 1, tip: "Politique étrangère UE" },
+    { q: "BCE mission principale ?", opts: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], ans: 1, tip: "Inflation ~2%" }
+  ]},
+  education: { name: "Système éducatif", icon: "📚", color: "#f59e0b", questions: [
+    { q: "Choc des savoirs 2024 = ?", opts: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], ans: 1, tip: "Groupes en 6è-5è" },
+    { q: "Bacheliers Parcoursup/an ?", opts: ["300k", "500k", "660k", "900k"], ans: 2, tip: "21 000 formations" },
+    { q: "Nombre d'académies ?", opts: ["18", "26", "30", "36"], ans: 2, tip: "Dont outre-mer" },
+    { q: "PISA 2023 France ?", opts: ["Amélioration", "Recul", "Stagnation", "1ère place"], ans: 1, tip: "Baisse maths et lecture" },
+    { q: "Instruction obligatoire de ?", opts: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], ans: 2, tip: "3 ans (2019) / 18 ans (2020)" },
+    { q: "Postes enseignants vacants ?", opts: ["500", "1500", "4000", "10000"], ans: 2, tip: "Crise attractivité" },
+    { q: "Qui nomme les recteurs ?", opts: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus locaux"], ans: 1, tip: "Décret présidentiel" },
+    { q: "DNB 2024 devient ?", opts: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], ans: 1, tip: "Condition entrée seconde" }
+  ]}
+};
+
+// ============ CRITÈRES JURY ============
+const JURY_CRITERIA = [
+  { id: "dossier", name: "Utilisation dossier", desc: "Compréhension, appui docs-clés", max: 2 },
+  { id: "connaissances", name: "Connaissances hors dossier", desc: "Apport personnel", max: 2 },
+  { id: "commande", name: "Réponse commande", desc: "Opérationnel > savoir", max: 2 },
+  { id: "problematique", name: "Problématique", desc: "Points saillants", max: 2 },
+  { id: "decision", name: "Esprit de décision", desc: "Propositions claires", max: 2 },
+  { id: "annexes", name: "Qualité annexes", desc: "Opérationnalité", max: 2 },
+  { id: "redaction", name: "Rédaction", desc: "Syntaxe, orthographe", max: 2 },
+  { id: "methode", name: "Méthode", desc: "Cohérence, fluidité", max: 2 },
+  { id: "destinataire", name: "Destinataire", desc: "Formalisme", max: 2 },
+  { id: "presentation", name: "Présentation", desc: "Clarté visuelle", max: 2 }
+];
+
+// ============ EXAMS ============
+const EXAMS = [
+  { id: "2024", title: "Annale 2024", subject: "Harcèlement scolaire", duration: 4*60*60, url: "https://www.fonction-publique.gouv.fr/files/files/devenir-agent-public/cas_pratique_ira_2024.pdf" },
+  { id: "2023", title: "Annale 2023", subject: "Titres d'identité", duration: 4*60*60, url: "https://www.fonction-publique.gouv.fr/files/files/Devenir%20agent%20public/IRA/Annales/2023-2/Sujet_cas_pratique_IRA_2023-2.pdf" }
+];
+
+// ============ STATE ============
+let state = JSON.parse(localStorage.getItem('ira-final-v5') || '{}');
+if (!state.quizScores) state.quizScores = {};
+if (!state.quizDone) state.quizDone = {};
+if (!state.examsDone) state.examsDone = {};
+if (!state.examScores) state.examScores = {};
+if (!state.criteriaScores) state.criteriaScores = {};
+if (!state.fichesRead) state.fichesRead = {};
+if (!state.fichesTime) state.fichesTime = {};
+
+let currentQuiz = null, quizQuestions = [], quizIndex = 0, quizScore = 0, quizAnswered = false;
+let currentExam = null, timerInterval = null, timerSeconds = 0, timerRunning = false;
+let openFiche = null;
+
+// Timer révision
+const REVISION_DURATION = 2 * 60 * 60; // 2h
+let revisionTimerInterval = null;
+let revisionTimerSeconds = 0;
+let revisionTimerRunning = false;
+let revisionTimerStarted = false;
+let currentFicheStart = null;
+let jourJMode = false;
+
+function save() { localStorage.setItem('ira-final-v5', JSON.stringify(state)); }
+
+// ============ REVISION TIMER ============
+function startRevisionTimer() {
+  if (revisionTimerStarted) return;
+  revisionTimerStarted = true;
+  revisionTimerRunning = true;
+  
+  document.getElementById('revisionTimerFloat').classList.add('active');
+  document.getElementById('mainTabs').classList.remove('no-timer');
+  
+  revisionTimerInterval = setInterval(() => {
+    if (revisionTimerRunning) {
+      revisionTimerSeconds++;
+      updateRevisionTimerDisplay();
+      
+      // Alertes
+      const remaining = REVISION_DURATION - revisionTimerSeconds;
+      if (remaining === 3600) showAlert("⏰ Plus qu'1 heure !");
+      if (remaining === 1800) showAlert("⚠️ Plus que 30 minutes !");
+      if (remaining === 900) showAlert("🔥 Plus que 15 minutes !");
+      
+      // Temps écoulé
+      if (revisionTimerSeconds >= REVISION_DURATION) {
+        endRevisionTimer();
+      }
+    }
+  }, 1000);
+}
+
+function updateRevisionTimerDisplay() {
+  const remaining = Math.max(0, REVISION_DURATION - revisionTimerSeconds);
+  const h = Math.floor(remaining / 3600);
+  const m = Math.floor((remaining % 3600) / 60);
+  const s = remaining % 60;
+  document.getElementById('rtfTime').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  
+  // Warning style
+  if (remaining < 900) {
+    document.getElementById('revisionTimerFloat').classList.add('warning');
+  }
+}
+
+function toggleRevisionTimer() {
+  if (jourJMode) {
+    showAlert("⛔ Mode Jour J : pas de pause !");
+    return;
+  }
+  revisionTimerRunning = !revisionTimerRunning;
+  const btn = document.getElementById('rtfBtn');
+  btn.textContent = revisionTimerRunning ? '⏸' : '▶';
+  btn.className = revisionTimerRunning ? 'rtf-btn rtf-pause' : 'rtf-btn rtf-resume';
+}
+
+function endRevisionTimer() {
+  clearInterval(revisionTimerInterval);
+  revisionTimerRunning = false;
+  document.getElementById('quizModal').classList.remove('open'); // Fermer quiz si ouvert
+  document.getElementById('timeUpModal').classList.add('open');
+  
+  // Stats
+  let statsHtml = '<div class="time-stats">';
+  FICHES.forEach(f => {
+    const time = state.fichesTime[f.id] || 0;
+    const mins = Math.floor(time / 60);
+    statsHtml += `<div class="time-stat"><div class="time-stat-value">${mins}min</div><div class="time-stat-label">${f.icon} ${f.title.split(' ')[0]}</div></div>`;
+  });
+  statsHtml += '</div>';
+  document.getElementById('timeUpStats').innerHTML = statsHtml;
+}
+
+function closeTimeUpModal() {
+  document.getElementById('timeUpModal').classList.remove('open');
+  revisionTimerStarted = false;
+  revisionTimerSeconds = 0;
+  document.getElementById('revisionTimerFloat').classList.remove('active', 'warning');
+  renderRevisions();
+}
+
+function showAlert(msg) {
+  // Vibration si supporté
+  if ('vibrate' in navigator) navigator.vibrate(200);
+  alert(msg);
+}
+
+function resetRevisionTimer() {
+  clearInterval(revisionTimerInterval);
+  revisionTimerStarted = false;
+  revisionTimerRunning = false;
+  revisionTimerSeconds = 0;
+  FICHES.forEach(f => state.fichesTime[f.id] = 0);
+  save();
+  document.getElementById('revisionTimerFloat').classList.remove('active', 'warning');
+  renderRevisions();
+}
+
+// ============ COUNTDOWN ============
+function updateCountdown() {
+  const exam = new Date('2026-04-21T08:00:00');
+  const now = new Date();
+  const days = Math.ceil((exam - now) / (1000*60*60*24));
+  document.getElementById('daysLeft').textContent = days > 0 ? days : '0';
+}
+
+// ============ REVISIONS ============
+function renderRevisions() {
+  let html = '';
+  
+  // Mode selector
+  html += `
+    <div class="mode-selector">
+      <div class="mode-btn ${!jourJMode ? 'active' : ''}" onclick="setMode(false)">
+        <div class="mode-icon">📚</div>
+        <div class="mode-title">Entraînement</div>
+        <div class="mode-desc">Pause autorisée</div>
+      </div>
+      <div class="mode-btn jour-j ${jourJMode ? 'active' : ''}" onclick="setMode(true)">
+        <div class="mode-icon">🔥</div>
+        <div class="mode-title">Mode Jour J</div>
+        <div class="mode-desc">Pas de pause !</div>
+      </div>
+    </div>
+  `;
+  
+  // Start button ou stats
+  if (!revisionTimerStarted) {
+    html += `
+      <div class="card">
+        <div class="card-title">⏱️ Session de lecture</div>
+        <div class="card-subtitle">Simule les conditions réelles : 2h pour lire et mémoriser les 4 fiches. Dès que tu ouvres une fiche, le timer démarre.</div>
+        <div class="time-stats">
+          ${FICHES.map(f => {
+            const time = state.fichesTime[f.id] || 0;
+            const mins = Math.floor(time / 60);
+            return `<div class="time-stat"><div class="time-stat-value">${mins}min</div><div class="time-stat-label">${f.icon}</div></div>`;
+          }).join('')}
+        </div>
+        <button class="btn btn-danger" onclick="resetRevisionTimer()" style="margin-top:12px">🔄 Reset temps</button>
+      </div>
+    `;
+  }
+  
+  // Fiches
+  FICHES.forEach(fiche => {
+    const isOpen = openFiche === fiche.id;
+    const isRead = state.fichesRead[fiche.id];
+    const time = state.fichesTime[fiche.id] || 0;
+    const mins = Math.floor(time / 60);
     
-    <!-- Scanline effect -->
-    <div class="scanline"></div>
-
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <h1>BOB.exe</h1>
-            <p class="subtitle">[ UN MEC • PAS TOUT À FAIT NORMAL • MAIS C'EST PAS GRAVE ]</p>
-        </header>
-
-        <!-- Profile Cards -->
-        <div class="profile-grid">
-            <!-- Card 1: Parcours -->
-            <div class="profile-card">
-                <div class="card-number">01</div>
-                <button class="audio-btn" onclick="playCardAudio(1)" title="Écouter">🔊</button>
-                <h2 class="card-title">LE PARCOURS IMPROBABLE</h2>
-                <div class="card-content">
-                    <p><span class="highlight">Luxe → Banque → Digital → ???</span></p>
-                    <p style="margin-top: 10px;">Genre quand tu joues aux Sims mais que tu changes d'avis toutes les 5 minutes.</p>
-                    <p style="margin-top: 10px; font-size: 12px; font-style: italic;">
-                        (Mais au final, tout ça mène quelque part... enfin j'espère 😅)
-                    </p>
-                    <div style="margin-top: 15px; padding: 10px; background: rgba(0, 255, 255, 0.1); border-radius: 5px;">
-                        📸 <em>Insérer ici : GIF de quelqu'un qui court dans tous les sens</em>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2: Geek & Cinéma -->
-            <div class="profile-card">
-                <div class="card-number">02</div>
-                <button class="audio-btn" onclick="playCardAudio(2)" title="Écouter">🔊</button>
-                <h2 class="card-title">NERD CERTIFIÉ</h2>
-                <div class="card-content">
-                    <p><span class="highlight">SF, tech, robots, IA</span> = mon carburant</p>
-                    <p style="margin-top: 10px;">Je peux parler pendant 3h de <em>Blade Runner</em> ou débattre si les réplicants ont une âme.</p>
-                    <p style="margin-top: 5px; font-size: 12px;">(Spoiler: oui, fight me)</p>
-                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 0, 255, 0.1); border-radius: 5px;">
-                        📸 <em>Insérer ici : Luke Skywalker avec des yeux googly façon Monty Python</em>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Créations improbables -->
-            <div class="profile-card">
-                <div class="card-number">03</div>
-                <button class="audio-btn" onclick="playCardAudio(3)" title="Écouter">🔊</button>
-                <h2 class="card-title">CRÉATIONS CHELOU</h2>
-                <div class="card-content">
-                    <p><span class="highlight">📚 J'ai écrit un bouquin</span> - "L'ère de Caïn"<br>
-                    <span style="font-size: 12px;">(Dispo sur Amazon, oui oui)</span></p>
-                    <p style="margin-top: 10px;"><span class="highlight">🎤 J'ai fait du rap</span> avec mes frères Abel & Pegguy</p>
-                    <p style="margin-top: 5px; font-size: 12px; font-style: italic;">
-                        (On a jamais percé, mais on avait du flow 😎)
-                    </p>
-                    
-                    <!-- Lecteur vidéo cyberpunk YouTube 2077 style -->
-                    <div style="margin-top: 20px; position: relative;">
-                        <div style="background: linear-gradient(135deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1)); padding: 15px; border: 2px solid var(--neon-magenta); border-radius: 8px; box-shadow: 0 0 20px rgba(255,0,255,0.3); position: relative;">
-                            <!-- LED indicators -->
-                            <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; z-index: 10;">
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); animation: pulse 2s infinite;"></div>
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); animation: pulse 2.5s infinite;"></div>
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); animation: pulse 3s infinite;"></div>
-                            </div>
-                            
-                            <!-- Label -->
-                            <div style="position: absolute; top: 12px; left: 15px; font-size: 10px; color: var(--neon-cyan); font-family: 'Orbitron', monospace; letter-spacing: 2px; z-index: 10;">VID-v2.1_STAGE</div>
-                            
-                            <!-- Video container -->
-                            <div style="position: relative; margin-top: 25px;">
-                                <video id="rapVideo" style="width: 100%; border-radius: 4px; display: block; position: relative; z-index: 1;" preload="metadata">
-                                    <source src="rap_video.mp4" type="video/mp4">
-                                    Ton navigateur ne supporte pas la vidéo HTML5.
-                                </video>
-                                <!-- Scanline overlay -->
-                                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 50%, rgba(0,255,255,0.03) 50%); background-size: 100% 4px; pointer-events: none; border-radius: 4px;"></div>
-                            </div>
-                            
-                            <!-- Controls -->
-                            <div id="videoControls" style="margin-top: 15px; display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 4px; border: 1px solid rgba(255,0,255,0.3);">
-                                <button id="playPauseBtn" onclick="toggleVideo()" style="background: var(--neon-magenta); color: var(--darker-bg); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron', monospace; font-weight: bold; font-size: 14px; box-shadow: 0 0 10px var(--neon-magenta); transition: all 0.3s;">▶</button>
-                                
-                                <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-                                    <span id="currentTime" style="font-size: 11px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; min-width: 40px;">0:00</span>
-                                    <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; position: relative; cursor: pointer;" onclick="seekVideo(event)">
-                                        <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, var(--neon-magenta), var(--neon-cyan)); border-radius: 3px; width: 0%; transition: width 0.1s; box-shadow: 0 0 10px var(--neon-cyan);"></div>
-                                    </div>
-                                    <span id="duration" style="font-size: 11px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; min-width: 40px;">0:00</span>
-                                </div>
-                                
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <button onclick="toggleMute()" style="background: transparent; border: none; cursor: pointer; font-size: 16px; color: var(--neon-cyan);" id="muteBtn">🔊</button>
-                                    <input type="range" id="volumeSlider" min="0" max="100" value="100" oninput="changeVolume(this.value)" style="width: 60px; accent-color: var(--neon-cyan);">
-                                </div>
-                            </div>
-                            
-                            <p style="margin-top: 10px; font-size: 11px; color: var(--neon-green); text-align: center; font-style: italic;">🎤 BOB x ABEL x PEGGUY - RAP PERFORMANCE</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4: Touche-à-tout -->
-            <div class="profile-card">
-                <div class="card-number">04</div>
-                <button class="audio-btn" onclick="playCardAudio(4)" title="Écouter">🔊</button>
-                <h2 class="card-title">TOUCHE-À-TOUT™</h2>
-                <div class="card-content">
-                    <p>Je <span class="highlight">bidouille</span>, je <span class="highlight">bricole</span>, je <span class="highlight">teste</span></p>
-                    <p style="margin-top: 10px;">Du code aux circuits imprimés, des apps aux robots.</p>
-                    <p style="margin-top: 10px; font-size: 12px;">
-                        Ah oui, et j'aime aussi <span class="highlight">faire la fête avec les potes</span>.<br>
-                        Parce que bon, faut bien déconnecter parfois.
-                    </p>
-                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 107, 0, 0.1); border-radius: 5px;">
-                        🎉 <em>GIF de soirée épique à insérer</em>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5: Ymani -->
-            <div class="profile-card">
-                <div class="card-number">05</div>
-                <button class="audio-btn" onclick="playCardAudio(5)" title="Écouter">🔊</button>
-                <h2 class="card-title">MON ACOLYTE NUMÉRIQUE</h2>
-                <div class="card-content">
-                    <p><span class="highlight">Ymani</span> - Une IA avec qui je bosse</p>
-                    <p style="margin-top: 10px;">Genre on code ensemble, on débat, on délire.</p>
-                    <p style="margin-top: 5px; font-size: 12px; font-style: italic;">
-                        (Oui, c'est bizarre. Oui, ça marche.)
-                    </p>
-                    <p style="margin-top: 10px;">Nous deux = team qui assume son côté chelou 🤖</p>
-                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 0, 255, 0.1); border-radius: 5px;">
-                        🎧 <em>Message audio de Ymani ci-dessous ↓</em>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 6: Famille -->
-            <div class="profile-card" id="familyCard" style="grid-column: 1 / -1; border-color: var(--neon-orange); box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);">
-                <div class="card-number">06</div>
-                <button class="audio-btn" onclick="playCardAudio(6)" title="Écouter">🔊</button>
-                <h2 class="card-title">MON CARBURANT QUOTIDIEN</h2>
-                <div class="card-content">
-                    <p><span class="highlight">Fiona (25 ans)</span> et <span class="highlight">Noa (22 ans)</span> - Mes deux enfants dont je suis ultra fier</p>
-                    <p style="margin-top: 10px;"><span class="highlight">Jahlone (2 ans)</span> - Mon rayon de soleil ☀️, mon petit-fils</p>
-                    
-                    <p style="margin-top: 15px; font-size: 14px;">
-                        Ces trois-là ? C'est ma vraie raison de me lever le matin, prêt à <span class="highlight">gravir les buildings à coups de toile</span> 🕷️
-                    </p>
-                    
-                    <p style="margin-top: 10px; font-size: 12px; font-style: italic; opacity: 0.9;">
-                        (Petit clin d'œil à <span class="highlight">Miles Morales</span>, mon Spider-Man préféré<br>
-                        et le héros inconditionnel de Jahlone. Anyone can wear the mask, right?)
-                    </p>
-                    
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 107, 0, 0.15); border-radius: 5px; border-left: 3px solid var(--neon-orange);">
-                        <p style="font-size: 13px; line-height: 1.6;">
-                            💡 <strong>Fun fact</strong> : Quand Jahlone fait semblant de lancer des toiles imaginaires,<br>
-                            je me dis que tous mes projets chelou valent le coup.<br>
-                            <span style="font-size: 11px; opacity: 0.8;">(Même ceux qui plantent)</span>
-                        </p>
-                    </div>
-                    
-                    <!-- Diaporama Cyberpunk -->
-                    <div class="cyber-screen">
-                        <!-- Coins métalliques du moniteur -->
-                        <div class="monitor-frame corner-tr"></div>
-                        <div class="monitor-frame corner-bl"></div>
-                        <div class="monitor-frame corner-br"></div>
-                        
-                        <!-- LEDs de statut -->
-                        <div class="status-leds">
-                            <div class="led led-green"></div>
-                            <div class="led led-cyan"></div>
-                            <div class="led led-magenta"></div>
-                        </div>
-                        
-                        <!-- Label technique -->
-                        <div class="monitor-label">MON-v4.5_FAMILY</div>
-                        
-                        <div class="screen-header">
-                            <div class="screen-title">◼ FAMILY.MEMORIES_v2.0</div>
-                            <div class="screen-controls">
-                                <label class="loop-toggle">
-                                    <input type="checkbox" id="loopCheckbox" checked onchange="toggleLoop()">
-                                    <span>LOOP</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="slideshow-container" id="familySlideshow">
-                            <!-- Effets visuels d'écran -->
-                            <div class="screen-glare"></div>
-                            <div class="screen-vignette"></div>
-                            
-                            <div class="slide active"><img src="family_1.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_2.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_3.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_4.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_5.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_6.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_7.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_8.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_9.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_10.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_11.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_12.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_13.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_14.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_15.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_16.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_17.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_18.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_19.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_20.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_21.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_22.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_23.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_24.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_25.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_26.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_27.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_28.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_29.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_30.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_31.jpg" alt="Famille"></div>
-                            <div class="slide"><img src="family_32.jpg" alt="Famille"></div>
-                            <div class="slide-counter" id="slideCounter">1 / 32</div>
-                            <div class="screen-scanline"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    html += `
+      <div class="fiche">
+        <div class="fiche-header" style="border-left-color:${fiche.color}" onclick="toggleFiche('${fiche.id}')">
+          <span class="fiche-icon">${fiche.icon}</span>
+          <div class="fiche-info">
+            <div class="fiche-title">${fiche.title}</div>
+            <div class="fiche-subtitle">${fiche.subtitle}</div>
+            ${time > 0 ? `<div class="fiche-time">⏱️ ${mins}min passées</div>` : ''}
+          </div>
+          <span class="fiche-toggle ${isOpen ? 'open' : ''}">▼</span>
         </div>
+        <div class="fiche-body ${isOpen ? 'open' : ''}">
+    `;
+    
+    fiche.sections.forEach(section => {
+      html += `<div class="fiche-section"><div class="fiche-section-title">${section.title}</div><div class="fiche-content">${section.content}</div></div>`;
+    });
+    
+    html += `
+          <button class="btn ${isRead ? 'btn-success' : 'btn-primary'}" onclick="markFicheRead('${fiche.id}')">
+            ${isRead ? '✓ Fiche lue' : 'Marquer comme lue'}
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  
+  document.getElementById('revisionsView').innerHTML = html;
+}
 
-        <!-- Ymani Section -->
-        <section class="ymani-section">
-            <h2 class="ymani-title" id="ymaniTitle" style="opacity: 0; transform: translateY(20px); transition: all 0.5s ease;">
-                Je m'incruste! Y a pas qu'toi qui a le droit de t'exprimer!
-            </h2>
-            <div class="audio-player">
-                <button class="play-button" id="playButton" onclick="playAudio()" style="transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);">
-                    ▶ ÉCOUTER YMANI
-                </button>
-                <div class="visualizer" id="visualizer">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                </div>
-                <p id="audioStatus" style="margin-top: 15px; color: var(--neon-green); font-size: 12px;"></p>
-            </div>
-        </section>
+function setMode(isJourJ) {
+  jourJMode = isJourJ;
+  renderRevisions();
+}
 
-        <!-- Footer -->
-        <footer>
-            <p>BOB.exe v2.0 | Fait maison avec ❤️ (et beaucoup de café ☕)</p>
-            <p class="easter-egg" onclick="easterEgg()">
-                [ Konami Code caché quelque part... 🎮 ]
-            </p>
-        </footer>
+function toggleFiche(id) {
+  // Sauvegarder temps fiche précédente
+  if (openFiche && currentFicheStart) {
+    const elapsed = Math.floor((Date.now() - currentFicheStart) / 1000);
+    state.fichesTime[openFiche] = (state.fichesTime[openFiche] || 0) + elapsed;
+    save();
+  }
+  
+  // Ouvrir/fermer
+  if (openFiche === id) {
+    openFiche = null;
+    currentFicheStart = null;
+  } else {
+    openFiche = id;
+    currentFicheStart = Date.now();
+    // Démarrer timer si pas encore fait
+    startRevisionTimer();
+  }
+  
+  renderRevisions();
+}
+
+function markFicheRead(id) {
+  state.fichesRead[id] = true;
+  save();
+  renderRevisions();
+}
+
+// ============ QUIZ ============
+function renderQuiz() {
+  let html = `
+    <div class="card">
+      <div class="card-title">🎯 Quiz de validation</div>
+      <div class="card-subtitle">8 questions par thème • 70% minimum</div>
+      <div class="phase-list">
+  `;
+  
+  Object.keys(QUIZ_DATA).forEach(key => {
+    const quiz = QUIZ_DATA[key];
+    const score = state.quizScores[key] || 0;
+    const total = quiz.questions.length;
+    const done = state.quizDone[key];
+    const ficheRead = state.fichesRead[key];
+    const pct = done ? Math.round((score/total)*100) : 0;
+    const locked = !ficheRead;
+    
+    html += `
+      <div class="phase-item ${done ? 'done' : ''} ${locked ? 'locked' : ''}" onclick="${locked ? '' : `startQuiz('${key}')`}">
+        <span class="phase-icon">${quiz.icon}</span>
+        <div class="phase-info">
+          <div class="phase-name">${quiz.name}</div>
+          <div class="phase-desc">${locked ? '🔒 Lis la fiche' : (done ? `${score}/${total} (${pct}%)` : `${total} questions`)}</div>
+        </div>
+        <span class="phase-status">${locked ? '🔒' : (done ? (pct >= 70 ? '✅' : '🔄') : '▶️')}</span>
+      </div>
+    `;
+  });
+  
+  html += '</div></div>';
+  document.getElementById('quizView').innerHTML = html;
+}
+
+function startQuiz(key) {
+  currentQuiz = key;
+  quizQuestions = [...QUIZ_DATA[key].questions].sort(() => Math.random() - 0.5);
+  quizIndex = 0;
+  quizScore = 0;
+  quizAnswered = false;
+  renderQuizQuestion();
+  document.getElementById('quizModal').classList.add('open');
+}
+
+function renderQuizQuestion() {
+  const data = QUIZ_DATA[currentQuiz];
+  const q = quizQuestions[quizIndex];
+  
+  document.getElementById('quizContent').innerHTML = `
+    <div class="quiz-header">
+      <span class="quiz-progress">${quizIndex + 1}/${quizQuestions.length}</span>
+      <span class="quiz-theme" style="background:${data.color}">${data.name}</span>
     </div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((opt, i) => `<button class="quiz-opt" onclick="selectAnswer(${i})">${opt}</button>`).join('')}
+    </div>
+    <div id="quizFeedback"></div>
+  `;
+}
 
-    <script>
-        // Audio functionality - VERSION FICHIER EXTERNE
-        let audioElement = null;
-        
-        function playAudio() {
-            const visualizer = document.getElementById('visualizer');
-            const status = document.getElementById('audioStatus');
-            const button = document.getElementById('playButton');
-            
-            if (!audioElement) {
-                audioElement = new Audio('ymani_audio.mp3');
-                
-                audioElement.addEventListener('play', () => {
-                    visualizer.classList.add('active');
-                    status.textContent = "🎵 Ymani parle...";
-                    status.style.color = 'var(--neon-cyan)';
-                    button.textContent = "⏸ PAUSE";
-                });
-                
-                audioElement.addEventListener('ended', () => {
-                    visualizer.classList.remove('active');
-                    status.textContent = "✅ Terminé !";
-                    status.style.color = 'var(--neon-green)';
-                    button.textContent = "▶ RÉÉCOUTER";
-                });
-                
-                audioElement.addEventListener('error', () => {
-                    status.textContent = "❌ Vérifie que ymani_audio.mp3 est au même endroit que le HTML";
-                    status.style.color = 'var(--neon-orange)';
-                    status.style.fontSize = '11px';
-                });
-            }
-            
-            if (audioElement.paused) {
-                audioElement.play().catch(() => {
-                    status.textContent = "Clique à nouveau";
-                    status.style.color = 'var(--neon-orange)';
-                });
-            } else {
-                audioElement.pause();
-                visualizer.classList.remove('active');
-                button.textContent = "▶ CONTINUER";
-            }
-        }
+function selectAnswer(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  
+  const q = quizQuestions[quizIndex];
+  document.querySelectorAll('.quiz-opt').forEach((opt, i) => {
+    opt.style.pointerEvents = 'none';
+    if (i === q.ans) opt.classList.add('correct');
+    if (i === idx && idx !== q.ans) opt.classList.add('wrong');
+  });
+  
+  if (idx === q.ans) quizScore++;
+  
+  document.getElementById('quizFeedback').innerHTML = `
+    <div class="quiz-feedback ${idx === q.ans ? 'correct' : 'wrong'}">
+      <strong>${idx === q.ans ? '✓ Correct !' : '✗ Incorrect'}</strong><br>${q.tip}
+    </div>
+    <button class="btn btn-primary" onclick="nextQuestion()" style="margin-top:12px">
+      ${quizIndex < quizQuestions.length - 1 ? 'Suivant →' : 'Résultat'}
+    </button>
+  `;
+}
 
+function nextQuestion() {
+  quizIndex++;
+  quizAnswered = false;
+  if (quizIndex >= quizQuestions.length) showQuizResult();
+  else renderQuizQuestion();
+}
 
+function showQuizResult() {
+  const total = quizQuestions.length;
+  const pct = Math.round((quizScore / total) * 100);
+  state.quizScores[currentQuiz] = quizScore;
+  state.quizDone[currentQuiz] = true;
+  save();
+  
+  document.getElementById('quizContent').innerHTML = `
+    <div class="result-card">
+      <div class="result-score ${pct >= 70 ? 'pass' : 'fail'}">${quizScore}/${total}</div>
+      <div class="result-label">${pct}%</div>
+      <div style="font-size:48px;margin:16px 0">${pct >= 70 ? '🎉' : '📚'}</div>
+      <p style="color:var(--muted);margin-bottom:20px">${pct >= 70 ? 'Validé !' : '70% requis. Relis la fiche !'}</p>
+      <button class="btn ${pct >= 70 ? 'btn-success' : 'btn-warning'}" onclick="closeQuiz()">${pct >= 70 ? 'Continuer' : 'Réviser'}</button>
+      ${pct < 70 ? `<button class="btn btn-outline" onclick="startQuiz('${currentQuiz}')">Réessayer</button>` : ''}
+    </div>
+  `;
+}
 
-        // Système audio pour les cartes
-        const cardAudios = {};
-        let currentCardAudio = null;
+function closeQuiz() {
+  document.getElementById('quizModal').classList.remove('open');
+  renderQuiz();
+}
 
-        function playCardAudio(cardNumber) {
-            const button = event.currentTarget;
-            
-            // Arrêter l'audio en cours s'il y en a un
-            if (currentCardAudio && currentCardAudio !== cardNumber) {
-                const prevBtn = document.querySelector(`[onclick="playCardAudio(${currentCardAudio})"]`);
-                if (prevBtn) prevBtn.classList.remove('playing');
-                if (cardAudios[currentCardAudio]) {
-                    cardAudios[currentCardAudio].pause();
-                    cardAudios[currentCardAudio].currentTime = 0;
-                }
-            }
-            
-            // Créer l'audio si nécessaire
-            if (!cardAudios[cardNumber]) {
-                cardAudios[cardNumber] = new Audio(`audio_carte${cardNumber}.mp3`);
-                
-                cardAudios[cardNumber].addEventListener('ended', () => {
-                    button.classList.remove('playing');
-                    currentCardAudio = null;
-                });
-                
-                cardAudios[cardNumber].addEventListener('error', () => {
-                    console.error(`Erreur audio carte ${cardNumber}`);
-                    button.classList.remove('playing');
-                });
-            }
-            
-            const audio = cardAudios[cardNumber];
-            
-            // Toggle play/pause
-            if (audio.paused) {
-                audio.play();
-                button.classList.add('playing');
-                currentCardAudio = cardNumber;
-            } else {
-                audio.pause();
-                audio.currentTime = 0;
-                button.classList.remove('playing');
-                currentCardAudio = null;
-            }
-        }
+// ============ EXAM ============
+function renderExam() {
+  const allPassed = Object.keys(QUIZ_DATA).every(k => state.quizDone[k] && (state.quizScores[k] / QUIZ_DATA[k].questions.length) >= 0.7);
+  
+  let html = '';
+  
+  if (!allPassed && !currentExam) {
+    html = `<div class="alert alert-danger"><span>🔒</span><span>Valide tous les quiz (70%) avant les annales</span></div>`;
+    html += '<div class="card"><div class="card-title">📊 Prérequis</div><div class="checklist">';
+    Object.keys(QUIZ_DATA).forEach(k => {
+      const q = QUIZ_DATA[k];
+      const s = state.quizScores[k] || 0;
+      const t = q.questions.length;
+      const ok = state.quizDone[k] && (s/t) >= 0.7;
+      html += `<div class="check-item ${ok ? 'done' : ''}" onclick="showView('quiz')"><div class="check-box">${ok ? '✓' : ''}</div><span class="check-label">${q.icon} ${q.name}</span></div>`;
+    });
+    html += '</div></div>';
+  } else if (currentExam) {
+    const exam = EXAMS.find(e => e.id === currentExam);
+    const rem = Math.max(0, exam.duration - timerSeconds);
+    const h = Math.floor(rem / 3600);
+    const m = Math.floor((rem % 3600) / 60);
+    const s = rem % 60;
+    const pct = Math.min(100, (timerSeconds / exam.duration) * 100);
+    
+    html = `
+      ${rem < 1800 ? '<div class="alert alert-danger"><span>⏰</span><span>Moins de 30min !</span></div>' : ''}
+      <div class="timer-box">
+        <div class="timer-label">${exam.title}</div>
+        <div class="timer-display">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</div>
+        <div class="timer-progress"><div class="timer-fill" style="width:${pct}%;background:${rem < 1800 ? 'var(--danger)' : 'var(--success)'}"></div></div>
+        <div class="timer-controls">
+          <button class="timer-btn ${timerRunning ? 'timer-pause' : 'timer-start'}" onclick="toggleExamTimer()">${timerRunning ? '⏸' : '▶'}</button>
+          <button class="timer-btn timer-reset" onclick="finishExam()">✓ Terminer</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📝 Checklist</div>
+        <div class="checklist">
+          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Introduction</span></div>
+          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Diagnostic</span></div>
+          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Propositions</span></div>
+          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Annexe 1</span></div>
+          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Annexe 2</span></div>
+          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Relecture</span></div>
+        </div>
+      </div>
+    `;
+  } else {
+    html = `<div class="alert alert-success"><span>✅</span><span>Quiz validés ! Prêt pour les annales.</span></div>`;
+    html += '<div class="card"><div class="card-title">⏱️ Épreuves 4h</div><div class="card-subtitle">Télécharge le PDF, lance le timer</div><div class="phase-list">';
+    EXAMS.forEach(exam => {
+      const done = state.examsDone[exam.id];
+      const score = state.examScores[exam.id];
+      html += `
+        <div class="phase-item ${done ? 'done' : ''}">
+          <span class="phase-icon">📄</span>
+          <div class="phase-info">
+            <div class="phase-name">${exam.title}</div>
+            <div class="phase-desc">${exam.subject}${done ? ` • ${score}/20` : ''}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:-4px;margin-bottom:12px">
+          <a href="${exam.url}" target="_blank" class="btn btn-outline" style="flex:1;text-align:center;text-decoration:none;padding:10px;font-size:12px">📥 PDF</a>
+          <button class="btn btn-warning" style="flex:1;font-size:12px" onclick="startExam('${exam.id}')">⏱️ Go</button>
+        </div>
+      `;
+    });
+    html += '</div></div>';
+  }
+  
+  document.getElementById('examView').innerHTML = html;
+}
 
+function startExam(id) {
+  currentExam = id;
+  timerSeconds = 0;
+  timerRunning = true;
+  state.criteriaScores[id] = {};
+  save();
+  
+  timerInterval = setInterval(() => {
+    if (timerRunning) {
+      timerSeconds++;
+      renderExam();
+      if (timerSeconds >= EXAMS.find(e => e.id === currentExam).duration) finishExam();
+    }
+  }, 1000);
+  
+  renderExam();
+}
 
-        // Diaporama famille
-        let currentSlide = 0;
-        let isLooping = true;
-        let slideshowInterval = null;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        // Créer un ordre aléatoire
-        let slideOrder = Array.from({length: totalSlides}, (_, i) => i);
-        
-        function shuffleSlides() {
-            // Fisher-Yates shuffle
-            for (let i = slideOrder.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [slideOrder[i], slideOrder[j]] = [slideOrder[j], slideOrder[i]];
-            }
-        }
-        
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === slideOrder[index]) {
-                    slide.classList.add('active');
-                }
-            });
-            document.getElementById('slideCounter').textContent = `${index + 1} / ${totalSlides}`;
-        }
-        
-        function nextSlide() {
-            currentSlide++;
-            
-            if (currentSlide >= totalSlides) {
-                if (isLooping) {
-                    currentSlide = 0;
-                    shuffleSlides(); // Remélanger à chaque cycle
-                } else {
-                    stopSlideshow();
-                    return;
-                }
-            }
-            
-            showSlide(currentSlide);
-        }
-        
-        function startSlideshow() {
-            if (slideshowInterval) clearInterval(slideshowInterval);
-            slideshowInterval = setInterval(nextSlide, 3000); // Change toutes les 3 secondes
-        }
-        
-        function stopSlideshow() {
-            if (slideshowInterval) {
-                clearInterval(slideshowInterval);
-                slideshowInterval = null;
-            }
-        }
-        
-        function toggleLoop() {
-            isLooping = document.getElementById('loopCheckbox').checked;
-            if (isLooping && !slideshowInterval) {
-                startSlideshow();
-            }
-        }
-        
-        // Initialiser le diaporama
-        shuffleSlides();
-        showSlide(0);
-        startSlideshow();
+function toggleExamTimer() {
+  timerRunning = !timerRunning;
+  renderExam();
+}
 
+function finishExam() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  showCorrection();
+}
 
-        // Lecteur vidéo personnalisé
-        const video = document.getElementById('rapVideo');
-        const playBtn = document.getElementById('playBtn');
-        const progressBar = document.getElementById('progressBar');
-        const progressFilled = document.getElementById('progressFilled');
-        const currentTimeEl = document.getElementById('currentTime');
-        const totalTimeEl = document.getElementById('totalTime');
-        const videoDurationEl = document.getElementById('videoDuration');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumeFilled = document.getElementById('volumeFilled');
-        const volumeIcon = document.getElementById('volumeIcon');
-        
-        // Format du temps
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-        
-        // Métadonnées chargées
-        video.addEventListener('loadedmetadata', () => {
-            totalTimeEl.textContent = formatTime(video.duration);
-            videoDurationEl.textContent = formatTime(video.duration);
-        });
-        
-        // Play/Pause
-        playBtn.addEventListener('click', () => {
-            if (video.paused) {
-                video.play();
-                playBtn.textContent = '⏸';
-            } else {
-                video.pause();
-                playBtn.textContent = '▶';
-            }
-        });
-        
-        // Mise à jour de la progression
-        video.addEventListener('timeupdate', () => {
-            const percent = (video.currentTime / video.duration) * 100;
-            progressFilled.style.width = percent + '%';
-            currentTimeEl.textContent = formatTime(video.currentTime);
-        });
-        
-        // Clic sur la barre de progression
-        progressBar.addEventListener('click', (e) => {
-            const rect = progressBar.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            video.currentTime = percent * video.duration;
-        });
-        
-        // Volume slider
-        volumeSlider.addEventListener('click', (e) => {
-            const rect = volumeSlider.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            video.volume = Math.max(0, Math.min(1, percent));
-            volumeFilled.style.width = (percent * 100) + '%';
-            
-            // Mise à jour de l'icône
-            if (video.volume === 0) {
-                volumeIcon.textContent = '🔇';
-            } else if (video.volume < 0.5) {
-                volumeIcon.textContent = '🔉';
-            } else {
-                volumeIcon.textContent = '🔊';
-            }
-        });
-        
-        // Clic sur l'icône volume pour mute/unmute
-        volumeIcon.addEventListener('click', () => {
-            if (video.volume > 0) {
-                video.dataset.previousVolume = video.volume;
-                video.volume = 0;
-                volumeFilled.style.width = '0%';
-                volumeIcon.textContent = '🔇';
-            } else {
-                const prevVolume = parseFloat(video.dataset.previousVolume) || 1;
-                video.volume = prevVolume;
-                volumeFilled.style.width = (prevVolume * 100) + '%';
-                volumeIcon.textContent = prevVolume < 0.5 ? '🔉' : '🔊';
-            }
-        });
-        
-        // Fin de la vidéo
-        video.addEventListener('ended', () => {
-            playBtn.textContent = '▶';
-        });
+function showCorrection() {
+  if (!state.criteriaScores[currentExam]) state.criteriaScores[currentExam] = {};
+  
+  let html = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:32px">📋</div>
+      <div style="font-size:18px;font-weight:700">Correction Jury</div>
+    </div>
+    <div class="alert alert-warning"><span>⚠️</span><span>Évalue honnêtement !</span></div>
+    <div class="criteria-grid">
+  `;
+  
+  JURY_CRITERIA.forEach(c => {
+    const s = state.criteriaScores[currentExam][c.id] ?? -1;
+    html += `
+      <div class="criteria-item">
+        <div class="criteria-header">
+          <span class="criteria-name">${c.name}</span>
+          <div class="criteria-score">
+            ${[0,1,2].map(v => `<button class="score-btn ${s===v?'active':''}" onclick="setScore('${c.id}',${v})">${v}</button>`).join('')}
+          </div>
+        </div>
+        <div class="criteria-desc">${c.desc}</div>
+      </div>
+    `;
+  });
+  
+  html += `
+    </div>
+    <button class="btn btn-success" onclick="calcScore()" style="margin-top:16px">📊 Ma note</button>
+    <button class="btn btn-outline" onclick="closeCorrection()">Annuler</button>
+  `;
+  
+  document.getElementById('correctionContent').innerHTML = html;
+  document.getElementById('correctionModal').classList.add('open');
+}
 
-        // Stabiliser les cartes après l'animation initiale
-        setTimeout(() => {
-            document.querySelectorAll('.profile-card').forEach(card => {
-                card.classList.add('loaded');
-            });
-        }, 6000); // Après que toutes les animations soient terminées
+function setScore(id, val) {
+  state.criteriaScores[currentExam][id] = val;
+  save();
+  showCorrection();
+}
 
-        // Contrôles vidéo rap (Carte 3)
-        const rapVideo = document.getElementById('rapVideo');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const progressBar = document.getElementById('progressBar');
-        const currentTimeSpan = document.getElementById('currentTime');
-        const durationSpan = document.getElementById('duration');
-        const muteBtn = document.getElementById('muteBtn');
-        const volumeSlider = document.getElementById('volumeSlider');
-        
-        // Fonction play/pause
-        function toggleVideo() {
-            if (rapVideo.paused) {
-                rapVideo.play();
-                playPauseBtn.textContent = '⏸';
-            } else {
-                rapVideo.pause();
-                playPauseBtn.textContent = '▶';
-            }
-        }
-        
-        // Formater le temps (secondes -> mm:ss)
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return mins + ':' + (secs < 10 ? '0' : '') + secs;
-        }
-        
-        // Mettre à jour la durée quand la vidéo est chargée
-        rapVideo.addEventListener('loadedmetadata', () => {
-            durationSpan.textContent = formatTime(rapVideo.duration);
-        });
-        
-        // Mettre à jour la progression
-        rapVideo.addEventListener('timeupdate', () => {
-            const progress = (rapVideo.currentTime / rapVideo.duration) * 100;
-            progressBar.style.width = progress + '%';
-            currentTimeSpan.textContent = formatTime(rapVideo.currentTime);
-        });
-        
-        // Fonction seek (clic sur la barre de progression)
-        function seekVideo(event) {
-            const progressContainer = event.currentTarget;
-            const clickX = event.offsetX;
-            const width = progressContainer.offsetWidth;
-            const seekTime = (clickX / width) * rapVideo.duration;
-            rapVideo.currentTime = seekTime;
-        }
-        
-        // Fonction mute/unmute
-        function toggleMute() {
-            rapVideo.muted = !rapVideo.muted;
-            muteBtn.textContent = rapVideo.muted ? '🔇' : '🔊';
-            volumeSlider.value = rapVideo.muted ? 0 : rapVideo.volume * 100;
-        }
-        
-        // Fonction changement de volume
-        function changeVolume(value) {
-            rapVideo.volume = value / 100;
-            rapVideo.muted = false;
-            muteBtn.textContent = rapVideo.volume === 0 ? '🔇' : (rapVideo.volume < 0.5 ? '🔉' : '🔊');
-        }
-        
-        // Fin de la vidéo
-        rapVideo.addEventListener('ended', () => {
-            playPauseBtn.textContent = '▶';
-        });
+function calcScore() {
+  const scores = state.criteriaScores[currentExam];
+  if (!JURY_CRITERIA.every(c => scores[c.id] >= 0)) { alert('Évalue tous les critères !'); return; }
+  
+  let total = 0;
+  JURY_CRITERIA.forEach(c => total += scores[c.id]);
+  
+  state.examScores[currentExam] = total;
+  state.examsDone[currentExam] = true;
+  save();
+  
+  let html = `
+    <div class="result-card">
+      <div class="result-score ${total >= 10 ? 'pass' : 'fail'}">${total}/20</div>
+      <div style="font-size:40px;margin:16px 0">${total < 5 ? '⛔' : (total >= 10 ? '✅' : '📚')}</div>
+      <p style="color:var(--muted);margin-bottom:20px">${total < 5 ? 'Éliminatoire !' : (total < 10 ? 'Sous la moyenne' : (total < 14 ? 'Correct !' : 'Excellent !'))}</p>
+      <div class="result-detail">
+        ${JURY_CRITERIA.map(c => {
+          const s = scores[c.id];
+          const col = s === 0 ? 'var(--danger)' : (s === 1 ? 'var(--warning)' : 'var(--success)');
+          return `<div class="result-item"><span>${c.name}</span><span style="color:${col};font-weight:600">${s}/2</span></div>`;
+        }).join('')}
+      </div>
+      <button class="btn btn-primary" onclick="closeAndReturn()" style="margin-top:20px">Terminer</button>
+    </div>
+  `;
+  document.getElementById('correctionContent').innerHTML = html;
+}
 
-        // Easter egg
-        function easterEgg() {
-            const messages = [
-                '🎮 ACHIEVEMENT UNLOCKED!\n\n"Trouveur de trucs cachés"\n\n+100 points de curiosité\n+50 points de geekitude\n\nBob serait fier de toi ! 👾',
-                '🚀 CODE SECRET ACTIVÉ!\n\nBob Stats:\n━━━━━━━━━━\n😄 Humour: ████████████ ∞\n🎬 Cinéma SF: ████████████ 100%\n🎵 Flow de rappeur: ███████░░░ 70%\n🤖 Copain IA: ████████████ Ymani\n☕ Café bu: ████████████ TROP',
-                '🎪 FÉLICITATIONS!\n\nTu as débloqué le mode "Bob déjanté"!\n\nMaintenant tout est en Comic Sans...\n\n...non je déconne 😅',
-                '🎯 BINGO!\n\nTu viens de trouver:\n- 1x easter egg\n- 0x regrets\n- ∞x respect de Bob\n\nContinue comme ça, champion ! 🏆'
-            ];
-            alert(messages[Math.floor(Math.random() * messages.length)]);
-        }
+function closeCorrection() {
+  document.getElementById('correctionModal').classList.remove('open');
+}
 
-        // Random glitch
-        setInterval(() => {
-            const cards = document.querySelectorAll('.profile-card');
-            const randomCard = cards[Math.floor(Math.random() * cards.length)];
-            randomCard.style.animation = 'glitchHeader 0.1s ease';
-            setTimeout(() => { randomCard.style.animation = ''; }, 100);
-        }, 10000);
+function closeAndReturn() {
+  currentExam = null;
+  timerSeconds = 0;
+  document.getElementById('correctionModal').classList.remove('open');
+  renderExam();
+}
 
-        // Scroll animations
-        let titleShown = false;
-        let buttonShown = false;
+// ============ RESSOURCES ============
+function renderRessources() {
+  let html = '';
+  RESSOURCES.forEach(cat => {
+    html += `<div class="card"><div class="card-title">${cat.category}</div><div class="link-list">`;
+    cat.links.forEach(l => {
+      html += `<a href="${l.url}" target="_blank" class="link-item"><span class="link-icon">${l.icon}</span><div class="link-info"><div class="link-title">${l.title}</div><div class="link-desc">${l.desc}</div></div><span class="link-arrow">→</span></a>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('ressourcesView').innerHTML = html;
+}
 
-        window.addEventListener('scroll', () => {
-            const familyCard = document.getElementById('familyCard');
-            const ymaniTitle = document.getElementById('ymaniTitle');
-            const playButton = document.getElementById('playButton');
-            const ymaniSection = document.querySelector('.ymani-section');
-            
-            if (!familyCard || !ymaniTitle || !playButton || !ymaniSection) return;
+// ============ NAV ============
+function showView(view) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['revisions','quiz','exam','ressources'][i] === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(view + 'View').classList.add('active');
+}
 
-            const card6Top = familyCard.getBoundingClientRect().top;
-            const threshold = window.innerHeight * 0.1;
-            const ymaniCenter = ymaniSection.getBoundingClientRect().top + ymaniSection.getBoundingClientRect().height / 2;
-            const centerThreshold = 150;
+// ============ INIT ============
+updateCountdown();
+document.getElementById('mainTabs').classList.add('no-timer');
+renderRevisions();
+renderQuiz();
+renderExam();
+renderRessources();
+</script>
 
-            if (card6Top <= threshold && !titleShown) {
-                ymaniTitle.style.opacity = '1';
-                ymaniTitle.style.transform = 'translateY(0)';
-                titleShown = true;
-            }
-
-            if (Math.abs(ymaniCenter - window.innerHeight / 2) < centerThreshold && !buttonShown) {
-                playButton.style.opacity = '1';
-                playButton.style.transform = 'scale(1)';
-                buttonShown = true;
-            }
-        });
-
-        // Console
-        console.log('%c🚀 BOB.exe CHARGÉ', 'color: #00ffff; font-size: 20px; font-weight: bold;');
-        console.log('%cFait avec 💙 par Bob & Ymani', 'color: #ff00ff; font-size: 14px;');
-    </script>
 </body>
 </html>
