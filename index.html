@@ -33,7 +33,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .countdown-num { font-size: 24px; font-weight: 800; color: var(--accent2); }
 .countdown-label { font-size: 10px; color: var(--muted); }
 
-/* Timer flottant révision */
 .revision-timer-float { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #1e1e3f, #2d2d5a); padding: 12px 16px; z-index: 50; display: none; }
 .revision-timer-float.active { display: flex; align-items: center; justify-content: space-between; }
 .revision-timer-float.warning { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
@@ -96,9 +95,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .quiz-opt:hover { border-color: var(--accent); }
 .quiz-opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.2); }
 .quiz-opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); }
-.quiz-feedback { margin-top: 16px; padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+.quiz-feedback { margin-top: 16px; padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; }
 .quiz-feedback.correct { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
 .quiz-feedback.wrong { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
+.quiz-feedback strong { display: block; margin-bottom: 8px; }
+.quiz-feedback .detail { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: var(--muted); }
 
 .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .btn-primary { background: var(--accent); color: #fff; }
@@ -173,7 +174,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .tag-warning { background: rgba(245, 158, 11, 0.3); color: var(--warning); }
 .tag-success { background: rgba(16, 185, 129, 0.3); color: var(--success); }
 
-/* Mode selector */
 .mode-selector { display: flex; gap: 8px; margin-bottom: 16px; }
 .mode-btn { flex: 1; padding: 16px 12px; border: 2px solid var(--card2); border-radius: 12px; background: var(--card); cursor: pointer; text-align: center; transition: all 0.2s; }
 .mode-btn:hover { border-color: var(--accent); }
@@ -184,7 +184,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .mode-title { font-size: 13px; font-weight: 600; }
 .mode-desc { font-size: 10px; color: var(--muted); }
 
-/* Time stats */
 .time-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
 .time-stat { background: var(--card2); padding: 10px; border-radius: 8px; text-align: center; }
 .time-stat-value { font-size: 18px; font-weight: 700; color: var(--accent2); }
@@ -193,7 +192,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </head>
 <body>
 
-<!-- Timer flottant révision -->
 <div class="revision-timer-float" id="revisionTimerFloat">
   <div>
     <div class="rtf-time" id="rtfTime">02:00:00</div>
@@ -331,47 +329,242 @@ const RESSOURCES = [
   ]}
 ];
 
-// ============ QUIZ ============
+// ============ QUIZ AVEC EXPLICATIONS DÉTAILLÉES ============
 const QUIZ_DATA = {
   methodo: { name: "Méthodologie", icon: "📝", color: "#7c3aed", questions: [
-    { q: "Structure imposée du rendu ?", opts: ["1 note + 1 annexe", "1 note + 2 annexes opérationnelles", "2 notes", "1 dissertation"], ans: 1, tip: "Note argumentée + 2 annexes" },
-    { q: "Le jury sanctionne une copie qui...", opts: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], ans: 1, tip: "Pas juste une synthèse !" },
-    { q: "La rédaction doit montrer...", opts: ["Son savoir", "Une préoccupation opérationnelle", "Une culture générale", "Un style littéraire"], ans: 1, tip: "Se faire comprendre > montrer son savoir" },
-    { q: "Note éliminatoire ?", opts: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], ans: 1, tip: "Toute note < 5/20 élimine" },
-    { q: "Durée de l'épreuve ?", opts: ["3h", "4h", "5h", "2h"], ans: 1, tip: "4 heures, coefficient 5" },
-    { q: "Dossier documentaire max ?", opts: ["20 pages", "30 pages", "40 pages", "25 pages"], ans: 1, tip: "30 pages maximum" },
-    { q: "Temps lecture recommandé ?", opts: ["30min", "1h", "1h30", "2h30"], ans: 2, tip: "1h30 lecture active" },
-    { q: "L'annexe doit être...", opts: ["Un résumé", "Opérationnelle", "Académique", "Longue"], ans: 1, tip: "Directement utilisable" }
+    { 
+      q: "Structure imposée du rendu ?", 
+      opts: ["1 note + 1 annexe", "1 note + 2 annexes opérationnelles", "2 notes", "1 dissertation"], 
+      ans: 1, 
+      tip: "Le cas pratique IRA impose une structure précise : une note argumentée (3-4 pages) qui expose ton diagnostic et tes propositions, accompagnée de 2 documents annexes opérationnels choisis parmi une liste (courrier, rétroplanning, fiche procédure, etc.). Cette structure reflète le travail réel d'un attaché d'administration.",
+      detail: "📌 À retenir : Note + Annexe 1 + Annexe 2 = les 3 livrables obligatoires"
+    },
+    { 
+      q: "Le jury sanctionne une copie qui...", 
+      opts: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], 
+      ans: 1, 
+      tip: "Le piège classique ! Beaucoup de candidats font une synthèse des documents du dossier. Or le jury attend une ANALYSE avec des propositions concrètes. La synthèse montre que tu sais lire, mais pas que tu sais réfléchir et décider. Le cas pratique évalue ta capacité à te projeter dans un rôle d'encadrant.",
+      detail: "⚠️ Erreur fatale : restituer le dossier au lieu de l'exploiter"
+    },
+    { 
+      q: "La rédaction doit montrer...", 
+      opts: ["Son savoir", "Une préoccupation opérationnelle", "Une culture générale", "Un style littéraire"], 
+      ans: 1, 
+      tip: "Citation exacte de la grille du jury : la copie doit montrer 'une préoccupation opérationnelle (se faire comprendre)' et NON 'une préoccupation personnelle (montrer son savoir)'. Autrement dit, écris pour ton destinataire (le directeur, le préfet...), pas pour impressionner le jury avec tes connaissances.",
+      detail: "🎯 Objectif : être utile au destinataire, pas briller"
+    },
+    { 
+      q: "Note éliminatoire ?", 
+      opts: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], 
+      ans: 1, 
+      tip: "Toute note strictement inférieure à 5/20 au cas pratique est éliminatoire. Cela signifie qu'une copie hors-sujet, incomplète (sans annexes) ou montrant une incompréhension totale de la commande peut te disqualifier immédiatement, même si tu excelles à l'oral. C'est le filet de sécurité du jury.",
+      detail: "🚨 Même avec 20/20 à l'oral, un 4/20 ici = élimination"
+    },
+    { 
+      q: "Durée de l'épreuve ?", 
+      opts: ["3h", "4h", "5h", "2h"], 
+      ans: 1, 
+      tip: "L'épreuve dure 4 heures avec un coefficient 5 (le plus élevé de l'admissibilité). C'est un marathon qui demande une vraie gestion du temps : ~1h30 pour lire et analyser les 30 pages du dossier, ~2h pour rédiger la note, ~30min pour les annexes et la relecture.",
+      detail: "⏱️ 4h coefficient 5 = l'épreuve reine de l'admissibilité"
+    },
+    { 
+      q: "Dossier documentaire max ?", 
+      opts: ["20 pages", "30 pages", "40 pages", "25 pages"], 
+      ans: 1, 
+      tip: "Le dossier documentaire contient au maximum 30 pages. Il regroupe des textes variés : extraits de lois, circulaires, articles de presse, rapports, statistiques... Tu dois les exploiter pour construire ton argumentation, mais attention : le jury vérifie que tu apportes aussi des connaissances HORS dossier.",
+      detail: "📚 30 pages à lire, analyser et exploiter en 1h30 max"
+    },
+    { 
+      q: "Temps lecture recommandé ?", 
+      opts: ["30min", "1h", "1h30", "2h30"], 
+      ans: 2, 
+      tip: "La lecture active du dossier devrait prendre environ 1h30. 'Active' signifie : surligner les passages clés, noter les idées dans la marge, identifier les documents utiles pour chaque partie de ta note. Une lecture passive te fera perdre du temps ensuite. Les 2h30 restantes sont pour la rédaction.",
+      detail: "📖 1h30 lecture → 2h rédaction → 30min annexes/relecture"
+    },
+    { 
+      q: "L'annexe doit être...", 
+      opts: ["Un résumé", "Opérationnelle", "Académique", "Longue"], 
+      ans: 1, 
+      tip: "Une annexe 'opérationnelle' signifie qu'elle doit être DIRECTEMENT UTILISABLE par le destinataire. Si tu fais un rétroplanning, il doit contenir de vraies dates et actions. Si tu fais un courrier, il doit avoir l'en-tête, la formule de politesse, tout. Le jury vérifie que tu sais produire des documents administratifs professionnels.",
+      detail: "✅ Test : ton annexe peut-elle être envoyée telle quelle ?"
+    }
   ]},
+  
   finances: { name: "Finances publiques", icon: "💰", color: "#10b981", questions: [
-    { q: "LOLF signifie ?", opts: ["Loi Ordinaire...", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation...", "Loi d'Orientation..."], ans: 1, tip: "Constitution financière 2001" },
-    { q: "Déficit public français ?", opts: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], ans: 1, tip: "Objectif UE : 3%" },
-    { q: "Dette publique dépasse ?", opts: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], ans: 2, tip: ">110% du PIB" },
-    { q: "Qui contrôle le budget ?", opts: ["Sénat", "AN", "Cour des comptes", "Conseil d'État"], ans: 2, tip: "Juridiction financière" },
-    { q: "PLF présenté au plus tard ?", opts: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], ans: 1, tip: "Premier mardi d'octobre" },
-    { q: "Pacte stabilité limite déficit à ?", opts: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], ans: 1, tip: "Critère Maastricht" },
-    { q: "Structure LOLF ?", opts: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], ans: 1, tip: "Organisation par politique" },
-    { q: "Règle d'or = déficit structurel < ?", opts: ["0,5%", "1%", "2%", "3%"], ans: 0, tip: "Contrainte européenne" }
+    { 
+      q: "LOLF signifie ?", 
+      opts: ["Loi Ordinaire...", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation...", "Loi d'Orientation..."], 
+      ans: 1, 
+      tip: "La LOLF (2001, appliquée en 2006) est surnommée 'constitution financière de l'État'. Elle a révolutionné la gestion publique en passant d'une logique de MOYENS à une logique de RÉSULTATS. Avant, on votait des crédits par ministère. Maintenant, on vote par MISSIONS → PROGRAMMES → ACTIONS avec des objectifs et indicateurs de performance.",
+      detail: "🏛️ LOLF 2001 = passage de 'combien on dépense' à 'pour quoi on dépense'"
+    },
+    { 
+      q: "Déficit public français ?", 
+      opts: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], 
+      ans: 1, 
+      tip: "Le déficit public français tourne autour de 5-6% du PIB, soit près du DOUBLE de la limite européenne (3% fixée par Maastricht). Cette situation a conduit l'UE à ouvrir une procédure pour déficit excessif contre la France. C'est un sujet brûlant d'actualité qui peut facilement tomber au concours.",
+      detail: "📊 France ~5-6% vs limite UE 3% = procédure déficit excessif"
+    },
+    { 
+      q: "Dette publique dépasse ?", 
+      opts: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], 
+      ans: 2, 
+      tip: "La dette publique française dépasse désormais les 3000 milliards d'euros, soit plus de 110% du PIB (le critère de Maastricht fixait 60%). Pour donner un ordre d'idée : chaque Français 'doit' environ 45 000€. Les intérêts de la dette représentent le 2ème poste budgétaire de l'État, devant la Défense.",
+      detail: "💸 3000 Mds€ = 110% PIB. Intérêts = 2ème budget de l'État"
+    },
+    { 
+      q: "Qui contrôle le budget ?", 
+      opts: ["Sénat", "AN", "Cour des comptes", "Conseil d'État"], 
+      ans: 2, 
+      tip: "La Cour des comptes est la juridiction financière suprême. Elle remplit 3 missions : 1) Juger les comptes des comptables publics, 2) Contrôler la gestion des administrations, 3) Certifier les comptes de l'État et de la Sécu. Elle publie chaque année un rapport très médiatisé qui épingle les gaspillages.",
+      detail: "⚖️ Cour des comptes : juge + contrôle + certifie les comptes publics"
+    },
+    { 
+      q: "PLF présenté au plus tard ?", 
+      opts: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], 
+      ans: 1, 
+      tip: "Le Projet de Loi de Finances (PLF) doit être déposé au Parlement au plus tard le 1er MARDI d'octobre (article 39 LOLF). Le Parlement a ensuite 70 jours pour l'examiner et le voter. Si le délai n'est pas respecté, le gouvernement peut mettre en œuvre le projet par ordonnance.",
+      detail: "📅 1er mardi octobre → vote avant le 31 décembre (70 jours)"
+    },
+    { 
+      q: "Pacte stabilité limite déficit à ?", 
+      opts: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], 
+      ans: 1, 
+      tip: "Le Pacte de Stabilité et de Croissance (PSC) fixe deux limites issues du Traité de Maastricht : déficit < 3% du PIB et dette < 60% du PIB. Ces règles ont été assouplies puis suspendues pendant le Covid, mais sont revenues en vigueur. La France ne les respecte pas, d'où la procédure pour déficit excessif.",
+      detail: "🇪🇺 Maastricht : déficit < 3% + dette < 60% → France hors clous"
+    },
+    { 
+      q: "Structure LOLF ?", 
+      opts: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], 
+      ans: 1, 
+      tip: "La LOLF organise le budget en 3 niveaux : les MISSIONS (grandes politiques publiques, votées par le Parlement), les PROGRAMMES (enveloppes confiées à un responsable avec objectifs), et les ACTIONS (déclinaison opérationnelle). Exemple : Mission 'Sécurités' → Programme 'Police nationale' → Action 'Ordre public'.",
+      detail: "🏗️ Mission (politique) → Programme (objectifs) → Action (terrain)"
+    },
+    { 
+      q: "Règle d'or = déficit structurel < ?", 
+      opts: ["0,5%", "1%", "2%", "3%"], 
+      ans: 0, 
+      tip: "La 'règle d'or' européenne (TSCG 2012) impose un déficit STRUCTUREL inférieur à 0,5% du PIB. Le déficit structurel est le déficit corrigé des effets de la conjoncture économique. C'est plus strict que la règle des 3% car même en période de croissance, tu dois être quasi à l'équilibre.",
+      detail: "🎯 Déficit structurel < 0,5% = quasi-équilibre hors conjoncture"
+    }
   ]},
+  
   europe: { name: "Enjeux européens", icon: "⭐", color: "#3b82f6", questions: [
-    { q: "3 institutions principales ?", opts: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], ans: 1, tip: "CO-PA-CO" },
-    { q: "Green Deal vise ?", opts: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], ans: 1, tip: "Europe neutre en carbone" },
-    { q: "NextGen EU = ?", opts: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], ans: 2, tip: "Plan relance post-Covid" },
-    { q: "Subsidiarité signifie ?", opts: ["UE décide tout", "UE intervient si États ne peuvent pas", "États décident seuls", "Régions prioritaires"], ans: 1, tip: "Action plus efficace au niveau UE" },
-    { q: "Primauté droit UE ?", opts: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], ans: 0, tip: "Costa c/ ENEL 1964" },
-    { q: "Directive européenne ?", opts: ["Directement applicable", "Doit être transposée", "Pas de valeur", "Commission seulement"], ans: 1, tip: "Objectif contraignant, moyens libres" },
-    { q: "PESC désigne ?", opts: ["Politique Économique...", "Politique Étrangère et Sécurité Commune", "Pacte Européen...", "Programme Européen..."], ans: 1, tip: "Politique étrangère UE" },
-    { q: "BCE mission principale ?", opts: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], ans: 1, tip: "Inflation ~2%" }
+    { 
+      q: "3 institutions principales ?", 
+      opts: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], 
+      ans: 1, 
+      tip: "Le 'triangle institutionnel' de l'UE : le CONSEIL de l'UE (ministres des États, défend les intérêts nationaux), le PARLEMENT européen (705 députés élus, représente les citoyens), et la COMMISSION européenne (27 commissaires, propose les lois et veille à leur application). Mnémotechnique : CO-PA-CO.",
+      detail: "🔺 Triangle : Conseil (États) + Parlement (citoyens) + Commission (gardienne)"
+    },
+    { 
+      q: "Green Deal vise ?", 
+      opts: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], 
+      ans: 1, 
+      tip: "Le Pacte Vert (Green Deal) européen, lancé en 2019 par Ursula von der Leyen, vise la NEUTRALITÉ CARBONE de l'Europe d'ici 2050. Objectif intermédiaire : -55% d'émissions en 2030. Il couvre tous les secteurs : énergie, transports, agriculture, industrie, bâtiment. C'est LA priorité stratégique de l'UE.",
+      detail: "🌍 Green Deal : Europe neutre en carbone 2050, -55% en 2030"
+    },
+    { 
+      q: "NextGen EU = ?", 
+      opts: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], 
+      ans: 2, 
+      tip: "NextGeneration EU est le plan de relance post-Covid de 750 milliards d'euros, dont 390 Mds de subventions et 360 Mds de prêts. C'est historique : pour la première fois, l'UE emprunte en commun sur les marchés. La France reçoit environ 40 Mds€ pour financer son plan 'France Relance', notamment la transition écologique.",
+      detail: "💶 750 Mds€ = 1er emprunt commun de l'UE (révolution !)"
+    },
+    { 
+      q: "Subsidiarité signifie ?", 
+      opts: ["UE décide tout", "UE n'intervient que si États ne peuvent pas", "États décident seuls", "Régions prioritaires"], 
+      ans: 1, 
+      tip: "Le principe de subsidiarité (article 5 TUE) signifie que l'UE n'agit que si l'objectif ne peut pas être atteint de manière suffisante par les États membres. Autrement dit : on traite au niveau européen uniquement ce qui est PLUS EFFICACE à ce niveau (environnement, marché unique...). Les Parlements nationaux peuvent lever un 'carton jaune' si ce principe n'est pas respecté.",
+      detail: "⚖️ UE intervient SEULEMENT si plus efficace que les États seuls"
+    },
+    { 
+      q: "Primauté droit UE ?", 
+      opts: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], 
+      ans: 0, 
+      tip: "L'arrêt Costa c/ ENEL (CJCE, 1964) a posé le principe de PRIMAUTÉ : le droit européen l'emporte sur le droit national, y compris les constitutions. C'est le pilier de l'intégration européenne. Sans ce principe, chaque État pourrait ignorer les règles communes. Attention : ce n'est pas absolu, les cours constitutionnelles nationales gardent un 'contrôle d'identité'.",
+      detail: "👑 Costa c/ ENEL 1964 : droit UE prime sur TOUT droit national"
+    },
+    { 
+      q: "Directive européenne ?", 
+      opts: ["Directement applicable", "Doit être transposée", "Pas de valeur", "Commission seulement"], 
+      ans: 1, 
+      tip: "Contrairement au RÈGLEMENT (directement applicable), la DIRECTIVE fixe un objectif mais laisse aux États le choix des moyens pour l'atteindre. Elle doit être 'transposée' en droit national dans un délai fixé. Si un État ne transpose pas ou mal, la Commission peut lancer une procédure d'infraction (amende possible).",
+      detail: "📜 Règlement = direct / Directive = objectif → transposition nationale"
+    },
+    { 
+      q: "PESC désigne ?", 
+      opts: ["Politique Économique...", "Politique Étrangère et de Sécurité Commune", "Pacte Européen...", "Programme Européen..."], 
+      ans: 1, 
+      tip: "La PESC (Politique Étrangère et de Sécurité Commune) est le volet diplomatique et militaire de l'UE. Elle fonctionne à l'UNANIMITÉ (chaque État a un droit de veto), ce qui la rend souvent paralysée. Le Haut Représentant (actuellement Kaja Kallas) coordonne cette politique. La guerre en Ukraine a relancé le débat sur une défense européenne.",
+      detail: "🌐 PESC = diplomatie/défense UE, mais unanimité → blocages"
+    },
+    { 
+      q: "BCE mission principale ?", 
+      opts: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], 
+      ans: 1, 
+      tip: "La BCE (Banque Centrale Européenne, Francfort) a pour mission PRINCIPALE la stabilité des prix, avec un objectif d'inflation proche de 2%. Elle est INDÉPENDANTE des gouvernements. Elle fixe les taux directeurs et peut acheter des obligations. Attention : elle ne finance PAS directement les États (interdiction du traité).",
+      detail: "🏦 BCE : inflation ~2%, indépendante, ne finance pas les États"
+    }
   ]},
+  
   education: { name: "Système éducatif", icon: "📚", color: "#f59e0b", questions: [
-    { q: "Choc des savoirs 2024 = ?", opts: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], ans: 1, tip: "Groupes en 6è-5è" },
-    { q: "Bacheliers Parcoursup/an ?", opts: ["300k", "500k", "660k", "900k"], ans: 2, tip: "21 000 formations" },
-    { q: "Nombre d'académies ?", opts: ["18", "26", "30", "36"], ans: 2, tip: "Dont outre-mer" },
-    { q: "PISA 2023 France ?", opts: ["Amélioration", "Recul", "Stagnation", "1ère place"], ans: 1, tip: "Baisse maths et lecture" },
-    { q: "Instruction obligatoire de ?", opts: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], ans: 2, tip: "3 ans (2019) / 18 ans (2020)" },
-    { q: "Postes enseignants vacants ?", opts: ["500", "1500", "4000", "10000"], ans: 2, tip: "Crise attractivité" },
-    { q: "Qui nomme les recteurs ?", opts: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus locaux"], ans: 1, tip: "Décret présidentiel" },
-    { q: "DNB 2024 devient ?", opts: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], ans: 1, tip: "Condition entrée seconde" }
+    { 
+      q: "Choc des savoirs 2024 = ?", 
+      opts: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], 
+      ans: 1, 
+      tip: "Le 'Choc des savoirs' (décembre 2023, appliqué rentrée 2024) introduit des GROUPES DE NIVEAU en français et mathématiques en 6ème et 5ème. Les élèves sont répartis selon leur niveau, avec des effectifs réduits pour les plus en difficulté. Objectif : mieux accompagner chaque élève. Mesure controversée, accusée de 'tri social'.",
+      detail: "📊 Groupes de niveau 6è-5è en français/maths = mesure phare 2024"
+    },
+    { 
+      q: "Bacheliers Parcoursup/an ?", 
+      opts: ["300k", "500k", "660k", "900k"], 
+      ans: 2, 
+      tip: "Environ 660 000 bacheliers utilisent Parcoursup chaque année pour accéder à plus de 21 000 formations. La plateforme a remplacé APB en 2018 après un scandale de tirage au sort. Chaque candidat peut faire 10 vœux (+ sous-vœux). Les formations classent les dossiers selon leurs propres critères, souvent opaques.",
+      detail: "🎓 660k bacheliers × 10 vœux → 21 000 formations"
+    },
+    { 
+      q: "Nombre d'académies ?", 
+      opts: ["18", "26", "30", "36"], 
+      ans: 2, 
+      tip: "La France compte 30 académies : 26 en métropole (dont 3 en Île-de-France : Paris, Créteil, Versailles) et 4 en outre-mer (Guadeloupe, Martinique, Guyane, Réunion/Mayotte). Chaque académie est dirigée par un RECTEUR, nommé en Conseil des ministres par le Président de la République.",
+      detail: "🗺️ 30 académies : 26 métropole + 4 outre-mer, 1 recteur chacune"
+    },
+    { 
+      q: "PISA 2023 France ?", 
+      opts: ["Amélioration", "Recul", "Stagnation", "1ère place"], 
+      ans: 1, 
+      tip: "PISA 2023 confirme le RECUL de la France, notamment en mathématiques (-21 points depuis 2018) et en lecture. La France se situe dans la moyenne OCDE, mais ses résultats sont très marqués par les INÉGALITÉS SOCIALES : l'écart entre élèves favorisés et défavorisés est l'un des plus élevés de l'OCDE.",
+      detail: "📉 PISA 2023 : France recule, inégalités record parmi OCDE"
+    },
+    { 
+      q: "Instruction obligatoire de ?", 
+      opts: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], 
+      ans: 2, 
+      tip: "L'instruction est obligatoire de 3 à 18 ans. L'abaissement à 3 ans date de 2019 (loi Blanquer, pour l'école maternelle). L'extension à 18 ans date de 2020 : tout jeune de 16-18 ans doit être en formation, en emploi ou en accompagnement. C'est une obligation de FORMATION, pas de scolarisation.",
+      detail: "📚 3 ans (2019) → 18 ans (2020) = instruction + formation obligatoires"
+    },
+    { 
+      q: "Postes enseignants vacants ?", 
+      opts: ["500", "1500", "4000", "10000"], 
+      ans: 2, 
+      tip: "Environ 4000 postes d'enseignants ne sont pas pourvus chaque année aux concours. Cette crise d'attractivité touche surtout les mathématiques et l'allemand. Causes : salaires bas comparés au privé et à l'Europe, conditions de travail dégradées, perte de prestige social. Le ministère recourt aux contractuels pour combler les trous.",
+      detail: "⚠️ 4000 postes vacants/an → crise d'attractivité majeure"
+    },
+    { 
+      q: "Qui nomme les recteurs ?", 
+      opts: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus locaux"], 
+      ans: 1, 
+      tip: "Les recteurs d'académie sont nommés par DÉCRET DU PRÉSIDENT DE LA RÉPUBLIQUE pris en Conseil des ministres. Ce sont des hauts fonctionnaires qui représentent le ministre dans leur académie. Ils ont autorité sur tous les personnels et établissements de leur territoire. C'est un poste très politique.",
+      detail: "🏛️ Recteur = décret présidentiel en Conseil des ministres"
+    },
+    { 
+      q: "DNB 2024 devient ?", 
+      opts: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], 
+      ans: 1, 
+      tip: "Depuis 2024, l'obtention du DNB (Diplôme National du Brevet) est devenue une CONDITION pour passer en seconde générale ou technologique. Avant, un élève pouvait passer malgré l'échec au brevet. Cette mesure du 'Choc des savoirs' vise à rehausser le niveau d'exigence. Les élèves recalés redoublent ou s'orientent en voie pro.",
+      detail: "🎯 DNB 2024 : sans brevet → pas de seconde GT (redoublement ou pro)"
+    }
   ]}
 };
 
@@ -396,7 +589,7 @@ const EXAMS = [
 ];
 
 // ============ STATE ============
-let state = JSON.parse(localStorage.getItem('ira-final-v5') || '{}');
+let state = JSON.parse(localStorage.getItem('ira-final-v6') || '{}');
 if (!state.quizScores) state.quizScores = {};
 if (!state.quizDone) state.quizDone = {};
 if (!state.examsDone) state.examsDone = {};
@@ -409,8 +602,7 @@ let currentQuiz = null, quizQuestions = [], quizIndex = 0, quizScore = 0, quizAn
 let currentExam = null, timerInterval = null, timerSeconds = 0, timerRunning = false;
 let openFiche = null;
 
-// Timer révision
-const REVISION_DURATION = 2 * 60 * 60; // 2h
+const REVISION_DURATION = 2 * 60 * 60;
 let revisionTimerInterval = null;
 let revisionTimerSeconds = 0;
 let revisionTimerRunning = false;
@@ -418,14 +610,13 @@ let revisionTimerStarted = false;
 let currentFicheStart = null;
 let jourJMode = false;
 
-function save() { localStorage.setItem('ira-final-v5', JSON.stringify(state)); }
+function save() { localStorage.setItem('ira-final-v6', JSON.stringify(state)); }
 
 // ============ REVISION TIMER ============
 function startRevisionTimer() {
   if (revisionTimerStarted) return;
   revisionTimerStarted = true;
   revisionTimerRunning = true;
-  
   document.getElementById('revisionTimerFloat').classList.add('active');
   document.getElementById('mainTabs').classList.remove('no-timer');
   
@@ -433,17 +624,11 @@ function startRevisionTimer() {
     if (revisionTimerRunning) {
       revisionTimerSeconds++;
       updateRevisionTimerDisplay();
-      
-      // Alertes
       const remaining = REVISION_DURATION - revisionTimerSeconds;
       if (remaining === 3600) showAlert("⏰ Plus qu'1 heure !");
       if (remaining === 1800) showAlert("⚠️ Plus que 30 minutes !");
       if (remaining === 900) showAlert("🔥 Plus que 15 minutes !");
-      
-      // Temps écoulé
-      if (revisionTimerSeconds >= REVISION_DURATION) {
-        endRevisionTimer();
-      }
+      if (revisionTimerSeconds >= REVISION_DURATION) endRevisionTimer();
     }
   }, 1000);
 }
@@ -454,18 +639,11 @@ function updateRevisionTimerDisplay() {
   const m = Math.floor((remaining % 3600) / 60);
   const s = remaining % 60;
   document.getElementById('rtfTime').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  
-  // Warning style
-  if (remaining < 900) {
-    document.getElementById('revisionTimerFloat').classList.add('warning');
-  }
+  if (remaining < 900) document.getElementById('revisionTimerFloat').classList.add('warning');
 }
 
 function toggleRevisionTimer() {
-  if (jourJMode) {
-    showAlert("⛔ Mode Jour J : pas de pause !");
-    return;
-  }
+  if (jourJMode) { showAlert("⛔ Mode Jour J : pas de pause !"); return; }
   revisionTimerRunning = !revisionTimerRunning;
   const btn = document.getElementById('rtfBtn');
   btn.textContent = revisionTimerRunning ? '⏸' : '▶';
@@ -475,15 +653,13 @@ function toggleRevisionTimer() {
 function endRevisionTimer() {
   clearInterval(revisionTimerInterval);
   revisionTimerRunning = false;
-  document.getElementById('quizModal').classList.remove('open'); // Fermer quiz si ouvert
+  document.getElementById('quizModal').classList.remove('open');
   document.getElementById('timeUpModal').classList.add('open');
-  
-  // Stats
   let statsHtml = '<div class="time-stats">';
   FICHES.forEach(f => {
     const time = state.fichesTime[f.id] || 0;
     const mins = Math.floor(time / 60);
-    statsHtml += `<div class="time-stat"><div class="time-stat-value">${mins}min</div><div class="time-stat-label">${f.icon} ${f.title.split(' ')[0]}</div></div>`;
+    statsHtml += `<div class="time-stat"><div class="time-stat-value">${mins}min</div><div class="time-stat-label">${f.icon}</div></div>`;
   });
   statsHtml += '</div>';
   document.getElementById('timeUpStats').innerHTML = statsHtml;
@@ -498,7 +674,6 @@ function closeTimeUpModal() {
 }
 
 function showAlert(msg) {
-  // Vibration si supporté
   if ('vibrate' in navigator) navigator.vibrate(200);
   alert(msg);
 }
@@ -524,10 +699,7 @@ function updateCountdown() {
 
 // ============ REVISIONS ============
 function renderRevisions() {
-  let html = '';
-  
-  // Mode selector
-  html += `
+  let html = `
     <div class="mode-selector">
       <div class="mode-btn ${!jourJMode ? 'active' : ''}" onclick="setMode(false)">
         <div class="mode-icon">📚</div>
@@ -542,12 +714,11 @@ function renderRevisions() {
     </div>
   `;
   
-  // Start button ou stats
   if (!revisionTimerStarted) {
     html += `
       <div class="card">
         <div class="card-title">⏱️ Session de lecture</div>
-        <div class="card-subtitle">Simule les conditions réelles : 2h pour lire et mémoriser les 4 fiches. Dès que tu ouvres une fiche, le timer démarre.</div>
+        <div class="card-subtitle">2h pour lire et mémoriser. Le timer démarre dès que tu ouvres une fiche.</div>
         <div class="time-stats">
           ${FICHES.map(f => {
             const time = state.fichesTime[f.id] || 0;
@@ -560,7 +731,6 @@ function renderRevisions() {
     `;
   }
   
-  // Fiches
   FICHES.forEach(fiche => {
     const isOpen = openFiche === fiche.id;
     const isRead = state.fichesRead[fiche.id];
@@ -580,11 +750,9 @@ function renderRevisions() {
         </div>
         <div class="fiche-body ${isOpen ? 'open' : ''}">
     `;
-    
     fiche.sections.forEach(section => {
       html += `<div class="fiche-section"><div class="fiche-section-title">${section.title}</div><div class="fiche-content">${section.content}</div></div>`;
     });
-    
     html += `
           <button class="btn ${isRead ? 'btn-success' : 'btn-primary'}" onclick="markFicheRead('${fiche.id}')">
             ${isRead ? '✓ Fiche lue' : 'Marquer comme lue'}
@@ -597,48 +765,29 @@ function renderRevisions() {
   document.getElementById('revisionsView').innerHTML = html;
 }
 
-function setMode(isJourJ) {
-  jourJMode = isJourJ;
-  renderRevisions();
-}
+function setMode(isJourJ) { jourJMode = isJourJ; renderRevisions(); }
 
 function toggleFiche(id) {
-  // Sauvegarder temps fiche précédente
   if (openFiche && currentFicheStart) {
     const elapsed = Math.floor((Date.now() - currentFicheStart) / 1000);
     state.fichesTime[openFiche] = (state.fichesTime[openFiche] || 0) + elapsed;
     save();
   }
-  
-  // Ouvrir/fermer
-  if (openFiche === id) {
-    openFiche = null;
-    currentFicheStart = null;
-  } else {
-    openFiche = id;
-    currentFicheStart = Date.now();
-    // Démarrer timer si pas encore fait
-    startRevisionTimer();
-  }
-  
+  if (openFiche === id) { openFiche = null; currentFicheStart = null; }
+  else { openFiche = id; currentFicheStart = Date.now(); startRevisionTimer(); }
   renderRevisions();
 }
 
-function markFicheRead(id) {
-  state.fichesRead[id] = true;
-  save();
-  renderRevisions();
-}
+function markFicheRead(id) { state.fichesRead[id] = true; save(); renderRevisions(); }
 
 // ============ QUIZ ============
 function renderQuiz() {
   let html = `
     <div class="card">
       <div class="card-title">🎯 Quiz de validation</div>
-      <div class="card-subtitle">8 questions par thème • 70% minimum</div>
+      <div class="card-subtitle">8 questions par thème • 70% minimum • Explications détaillées</div>
       <div class="phase-list">
   `;
-  
   Object.keys(QUIZ_DATA).forEach(key => {
     const quiz = QUIZ_DATA[key];
     const score = state.quizScores[key] || 0;
@@ -647,7 +796,6 @@ function renderQuiz() {
     const ficheRead = state.fichesRead[key];
     const pct = done ? Math.round((score/total)*100) : 0;
     const locked = !ficheRead;
-    
     html += `
       <div class="phase-item ${done ? 'done' : ''} ${locked ? 'locked' : ''}" onclick="${locked ? '' : `startQuiz('${key}')`}">
         <span class="phase-icon">${quiz.icon}</span>
@@ -659,7 +807,6 @@ function renderQuiz() {
       </div>
     `;
   });
-  
   html += '</div></div>';
   document.getElementById('quizView').innerHTML = html;
 }
@@ -677,7 +824,6 @@ function startQuiz(key) {
 function renderQuizQuestion() {
   const data = QUIZ_DATA[currentQuiz];
   const q = quizQuestions[quizIndex];
-  
   document.getElementById('quizContent').innerHTML = `
     <div class="quiz-header">
       <span class="quiz-progress">${quizIndex + 1}/${quizQuestions.length}</span>
@@ -694,22 +840,22 @@ function renderQuizQuestion() {
 function selectAnswer(idx) {
   if (quizAnswered) return;
   quizAnswered = true;
-  
   const q = quizQuestions[quizIndex];
   document.querySelectorAll('.quiz-opt').forEach((opt, i) => {
     opt.style.pointerEvents = 'none';
     if (i === q.ans) opt.classList.add('correct');
     if (i === idx && idx !== q.ans) opt.classList.add('wrong');
   });
-  
   if (idx === q.ans) quizScore++;
   
   document.getElementById('quizFeedback').innerHTML = `
     <div class="quiz-feedback ${idx === q.ans ? 'correct' : 'wrong'}">
-      <strong>${idx === q.ans ? '✓ Correct !' : '✗ Incorrect'}</strong><br>${q.tip}
+      <strong>${idx === q.ans ? '✓ Bonne réponse !' : '✗ Mauvaise réponse'}</strong>
+      ${q.tip}
+      ${q.detail ? `<div class="detail">${q.detail}</div>` : ''}
     </div>
     <button class="btn btn-primary" onclick="nextQuestion()" style="margin-top:12px">
-      ${quizIndex < quizQuestions.length - 1 ? 'Suivant →' : 'Résultat'}
+      ${quizIndex < quizQuestions.length - 1 ? 'Question suivante →' : 'Voir mon résultat'}
     </button>
   `;
 }
@@ -727,28 +873,23 @@ function showQuizResult() {
   state.quizScores[currentQuiz] = quizScore;
   state.quizDone[currentQuiz] = true;
   save();
-  
   document.getElementById('quizContent').innerHTML = `
     <div class="result-card">
       <div class="result-score ${pct >= 70 ? 'pass' : 'fail'}">${quizScore}/${total}</div>
       <div class="result-label">${pct}%</div>
       <div style="font-size:48px;margin:16px 0">${pct >= 70 ? '🎉' : '📚'}</div>
-      <p style="color:var(--muted);margin-bottom:20px">${pct >= 70 ? 'Validé !' : '70% requis. Relis la fiche !'}</p>
+      <p style="color:var(--muted);margin-bottom:20px">${pct >= 70 ? 'Thème validé ! Tu maîtrises les bases.' : '70% requis. Relis la fiche et réessaie.'}</p>
       <button class="btn ${pct >= 70 ? 'btn-success' : 'btn-warning'}" onclick="closeQuiz()">${pct >= 70 ? 'Continuer' : 'Réviser'}</button>
       ${pct < 70 ? `<button class="btn btn-outline" onclick="startQuiz('${currentQuiz}')">Réessayer</button>` : ''}
     </div>
   `;
 }
 
-function closeQuiz() {
-  document.getElementById('quizModal').classList.remove('open');
-  renderQuiz();
-}
+function closeQuiz() { document.getElementById('quizModal').classList.remove('open'); renderQuiz(); }
 
 // ============ EXAM ============
 function renderExam() {
   const allPassed = Object.keys(QUIZ_DATA).every(k => state.quizDone[k] && (state.quizScores[k] / QUIZ_DATA[k].questions.length) >= 0.7);
-  
   let html = '';
   
   if (!allPassed && !currentExam) {
@@ -769,7 +910,6 @@ function renderExam() {
     const m = Math.floor((rem % 3600) / 60);
     const s = rem % 60;
     const pct = Math.min(100, (timerSeconds / exam.duration) * 100);
-    
     html = `
       ${rem < 1800 ? '<div class="alert alert-danger"><span>⏰</span><span>Moins de 30min !</span></div>' : ''}
       <div class="timer-box">
@@ -795,7 +935,7 @@ function renderExam() {
     `;
   } else {
     html = `<div class="alert alert-success"><span>✅</span><span>Quiz validés ! Prêt pour les annales.</span></div>`;
-    html += '<div class="card"><div class="card-title">⏱️ Épreuves 4h</div><div class="card-subtitle">Télécharge le PDF, lance le timer</div><div class="phase-list">';
+    html += '<div class="card"><div class="card-title">⏱️ Épreuves 4h</div><div class="phase-list">';
     EXAMS.forEach(exam => {
       const done = state.examsDone[exam.id];
       const score = state.examScores[exam.id];
@@ -815,7 +955,6 @@ function renderExam() {
     });
     html += '</div></div>';
   }
-  
   document.getElementById('examView').innerHTML = html;
 }
 
@@ -825,7 +964,6 @@ function startExam(id) {
   timerRunning = true;
   state.criteriaScores[id] = {};
   save();
-  
   timerInterval = setInterval(() => {
     if (timerRunning) {
       timerSeconds++;
@@ -833,24 +971,15 @@ function startExam(id) {
       if (timerSeconds >= EXAMS.find(e => e.id === currentExam).duration) finishExam();
     }
   }, 1000);
-  
   renderExam();
 }
 
-function toggleExamTimer() {
-  timerRunning = !timerRunning;
-  renderExam();
-}
+function toggleExamTimer() { timerRunning = !timerRunning; renderExam(); }
 
-function finishExam() {
-  clearInterval(timerInterval);
-  timerRunning = false;
-  showCorrection();
-}
+function finishExam() { clearInterval(timerInterval); timerRunning = false; showCorrection(); }
 
 function showCorrection() {
   if (!state.criteriaScores[currentExam]) state.criteriaScores[currentExam] = {};
-  
   let html = `
     <div style="text-align:center;margin-bottom:20px">
       <div style="font-size:32px">📋</div>
@@ -859,7 +988,6 @@ function showCorrection() {
     <div class="alert alert-warning"><span>⚠️</span><span>Évalue honnêtement !</span></div>
     <div class="criteria-grid">
   `;
-  
   JURY_CRITERIA.forEach(c => {
     const s = state.criteriaScores[currentExam][c.id] ?? -1;
     html += `
@@ -874,34 +1002,25 @@ function showCorrection() {
       </div>
     `;
   });
-  
   html += `
     </div>
     <button class="btn btn-success" onclick="calcScore()" style="margin-top:16px">📊 Ma note</button>
     <button class="btn btn-outline" onclick="closeCorrection()">Annuler</button>
   `;
-  
   document.getElementById('correctionContent').innerHTML = html;
   document.getElementById('correctionModal').classList.add('open');
 }
 
-function setScore(id, val) {
-  state.criteriaScores[currentExam][id] = val;
-  save();
-  showCorrection();
-}
+function setScore(id, val) { state.criteriaScores[currentExam][id] = val; save(); showCorrection(); }
 
 function calcScore() {
   const scores = state.criteriaScores[currentExam];
   if (!JURY_CRITERIA.every(c => scores[c.id] >= 0)) { alert('Évalue tous les critères !'); return; }
-  
   let total = 0;
   JURY_CRITERIA.forEach(c => total += scores[c.id]);
-  
   state.examScores[currentExam] = total;
   state.examsDone[currentExam] = true;
   save();
-  
   let html = `
     <div class="result-card">
       <div class="result-score ${total >= 10 ? 'pass' : 'fail'}">${total}/20</div>
@@ -920,16 +1039,8 @@ function calcScore() {
   document.getElementById('correctionContent').innerHTML = html;
 }
 
-function closeCorrection() {
-  document.getElementById('correctionModal').classList.remove('open');
-}
-
-function closeAndReturn() {
-  currentExam = null;
-  timerSeconds = 0;
-  document.getElementById('correctionModal').classList.remove('open');
-  renderExam();
-}
+function closeCorrection() { document.getElementById('correctionModal').classList.remove('open'); }
+function closeAndReturn() { currentExam = null; timerSeconds = 0; document.getElementById('correctionModal').classList.remove('open'); renderExam(); }
 
 // ============ RESSOURCES ============
 function renderRessources() {
@@ -959,6 +1070,5 @@ renderQuiz();
 renderExam();
 renderRessources();
 </script>
-
 </body>
 </html>
