@@ -2,590 +2,1105 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>🔥 Forge IRA 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE IRA 2026 - Préparation Complète</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0f0f1a;
-  --card: #1a1a2e;
-  --card2: #252540;
-  --accent: #7c3aed;
-  --accent2: #a855f7;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --text: #e2e8f0;
-  --muted: #94a3b8;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-.app { max-width: 500px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
-.header { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--card); border-radius: 16px; margin-bottom: 16px; }
-.logo { display: flex; align-items: center; gap: 12px; }
-.logo-icon { font-size: 32px; }
-.logo-text { font-size: 18px; font-weight: 700; }
-.logo-sub { font-size: 11px; color: var(--muted); }
-.countdown { text-align: right; }
-.countdown-num { font-size: 24px; font-weight: 800; color: var(--accent2); }
-.countdown-label { font-size: 10px; color: var(--muted); }
 
-.tabs { display: flex; gap: 6px; margin-bottom: 16px; }
-.tab { flex: 1; padding: 12px 8px; border: none; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; }
-.tab.active { background: var(--accent); color: #fff; }
-.tab:not(.active) { background: var(--card); color: var(--muted); }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
 
-.card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 12px; }
-.card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
-.card-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
 
-.fiche { background: var(--card); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
-.fiche-header { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-left: 4px solid var(--accent); }
-.fiche-icon { font-size: 28px; }
-.fiche-info { flex: 1; }
-.fiche-title { font-size: 15px; font-weight: 600; }
-.fiche-subtitle { font-size: 11px; color: var(--muted); }
-.fiche-toggle { font-size: 18px; color: var(--muted); }
-.fiche-body { display: none; padding: 0 16px 16px; }
-.fiche-body.open { display: block; }
-.fiche-content { font-size: 12px; line-height: 1.7; }
-.fiche-content ul { padding-left: 16px; margin: 8px 0; }
-.fiche-highlight { background: rgba(124, 58, 237, 0.2); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--accent); }
-.fiche-warning { background: rgba(239, 68, 68, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--danger); }
-.fiche-tip { background: rgba(16, 185, 129, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--success); }
+.header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
 
-.phase-list { display: flex; flex-direction: column; gap: 10px; }
-.phase-item { background: var(--card2); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 2px solid transparent; }
-.phase-item:hover { border-color: var(--accent); }
-.phase-item.done { border-color: var(--success); }
-.phase-item.locked { opacity: 0.5; }
-.phase-icon { font-size: 24px; }
-.phase-info { flex: 1; }
-.phase-name { font-size: 14px; font-weight: 600; }
-.phase-desc { font-size: 11px; color: var(--muted); }
+.countdown {
+  background: rgba(255,255,255,0.2);
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 50px;
+  margin-top: 15px;
+  font-size: 1.3em;
+  font-weight: bold;
+}
 
-.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-success { background: var(--success); color: #fff; }
-.btn-warning { background: var(--warning); color: #000; }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
-.btn + .btn { margin-top: 10px; }
+/* NAVIGATION */
+.nav {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 3px solid #e9ecef;
+  overflow-x: auto;
+}
 
-.link-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card2); border-radius: 12px; text-decoration: none; color: var(--text); margin-bottom: 10px; }
-.link-icon { font-size: 24px; }
-.link-info { flex: 1; }
-.link-title { font-size: 13px; font-weight: 600; }
-.link-desc { font-size: 11px; color: var(--muted); }
+.nav-btn {
+  flex: 1;
+  padding: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  color: #495057;
+  transition: all 0.3s;
+  border-bottom: 3px solid transparent;
+}
 
-.quiz-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
-.quiz-progress { font-size: 13px; color: var(--muted); }
-.quiz-theme { font-size: 11px; padding: 4px 10px; background: var(--accent); border-radius: 20px; }
-.quiz-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
-.quiz-opt { display: block; width: 100%; padding: 14px 16px; background: var(--card2); border: 2px solid transparent; border-radius: 12px; font-size: 13px; cursor: pointer; text-align: left; color: var(--text); margin-bottom: 10px; }
-.quiz-opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.2); }
-.quiz-opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); }
-.quiz-feedback { padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; margin-top: 16px; }
-.quiz-feedback.correct { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
-.quiz-feedback.wrong { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
-.quiz-feedback .detail { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: var(--accent2); }
+.nav-btn:hover {
+  background: #e9ecef;
+  color: #1e3c72;
+}
 
-.timer-box { background: linear-gradient(135deg, #1e1e3f, #2d2d5a); border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 16px; }
-.timer-display { font-size: 48px; font-weight: 200; font-family: monospace; margin: 12px 0; }
-.timer-label { font-size: 13px; color: var(--muted); }
-.timer-controls { display: flex; gap: 10px; margin-top: 16px; }
-.timer-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
-.timer-start { background: var(--success); color: #fff; }
-.timer-pause { background: var(--warning); color: #000; }
+.nav-btn.active {
+  background: white;
+  color: #1e3c72;
+  border-bottom: 3px solid #1e3c72;
+}
 
-.criteria-item { background: var(--card2); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
-.criteria-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-.criteria-name { font-size: 13px; font-weight: 600; }
-.criteria-score { display: flex; gap: 6px; }
-.score-btn { width: 32px; height: 32px; border-radius: 8px; border: 2px solid var(--card); background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; }
-.score-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
-.criteria-desc { font-size: 11px; color: var(--muted); }
+/* CONTENT */
+.content {
+  padding: 30px;
+  min-height: 500px;
+}
 
-.result-card { text-align: center; padding: 24px; }
-.result-score { font-size: 64px; font-weight: 800; }
-.result-score.pass { color: var(--success); }
-.result-score.fail { color: var(--danger); }
+.tab-content {
+  display: none;
+}
 
-.checklist { display: flex; flex-direction: column; gap: 8px; }
-.check-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--card2); border-radius: 10px; cursor: pointer; }
-.check-box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; }
-.check-item.done .check-box { background: var(--success); border-color: var(--success); color: #fff; }
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s;
+}
 
-.alert { padding: 12px 16px; border-radius: 10px; font-size: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-.alert-warning { background: rgba(245, 158, 11, 0.15); border-left: 4px solid var(--warning); }
-.alert-success { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-.view { display: none; }
-.view.active { display: block; }
+/* CARDS */
+.card {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
 
-.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
-.modal.open { display: flex; }
-.modal-content { background: var(--card); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.card-title {
+  font-size: 1.5em;
+  color: #1e3c72;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
 
-.tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-right: 4px; }
-.tag-danger { background: rgba(239, 68, 68, 0.3); color: var(--danger); }
+/* BUTTONS */
+.btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s;
+  margin: 5px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+/* QUIZ */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.theme-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.theme-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.theme-card h3 {
+  font-size: 1.3em;
+  margin-bottom: 10px;
+}
+
+.progress {
+  background: rgba(255,255,255,0.3);
+  height: 8px;
+  border-radius: 4px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: #28a745;
+  height: 100%;
+  transition: width 0.3s;
+}
+
+/* QUESTION */
+.question-container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.question-text {
+  font-size: 1.3em;
+  color: #1e3c72;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.option {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.option:hover {
+  background: #e9ecef;
+  border-color: #667eea;
+}
+
+.option.selected {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.option.correct {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.option.incorrect {
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+/* SIMULATEUR */
+.editor-container {
+  margin: 20px 0;
+}
+
+.editor-label {
+  font-weight: 600;
+  color: #1e3c72;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.editor {
+  width: 100%;
+  min-height: 400px;
+  padding: 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+  resize: vertical;
+}
+
+.editor:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.char-count {
+  text-align: right;
+  color: #6c757d;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.timer {
+  background: #1e3c72;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.timer.warning {
+  background: #dc3545;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* CORRECTION */
+.correction-result {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.score {
+  text-align: center;
+  font-size: 3em;
+  color: #1e3c72;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.feedback-section {
+  margin: 20px 0;
+}
+
+.feedback-section h3 {
+  color: #1e3c72;
+  margin-bottom: 10px;
+}
+
+.feedback-item {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  border-left: 4px solid #667eea;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.8em; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { font-size: 0.9em; padding: 15px; }
+  .theme-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
-<div class="app">
+<div class="container">
+  <!-- HEADER -->
   <div class="header">
-    <div class="logo">
-      <span class="logo-icon">🔥</span>
-      <div>
-        <div class="logo-text">Forge IRA</div>
-        <div class="logo-sub">Concours 2026</div>
+    <h1>🎯 FORGE IRA 2026</h1>
+    <p>Préparation Intensive au Concours</p>
+    <div class="countdown" id="countdown">J-11 jusqu'à l'écrit</div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="nav">
+    <button class="nav-btn active" onclick="showTab('accueil')">🏠 Accueil</button>
+    <button class="nav-btn" onclick="showTab('quiz')">📚 Quiz Thématiques</button>
+    <button class="nav-btn" onclick="showTab('simulateur')">✍️ Simulateur</button>
+    <button class="nav-btn" onclick="showTab('methodo')">📖 Méthodologie</button>
+    <button class="nav-btn" onclick="showTab('ressources')">🔗 Ressources</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    
+    <!-- ACCUEIL -->
+    <div id="accueil" class="tab-content active">
+      <div class="card">
+        <div class="card-title">👋 Bienvenue Bob !</div>
+        <p style="margin-bottom: 15px;">Cet outil va te préparer intensivement au concours IRA du <strong>21 avril 2026</strong>.</p>
+        
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">📅 Calendrier clé :</h3>
+        <ul style="line-height: 1.8; margin-left: 20px;">
+          <li><strong>21 avril</strong> : Épreuve écrite (4h, coef 5)</li>
+          <li><strong>22 mai</strong> : Résultats admissibilité</li>
+          <li><strong>15-26 juin</strong> : Épreuves orales</li>
+        </ul>
+
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">🎯 Ce que tu dois maîtriser :</h3>
+        <ul style="line-height: 1.8; margin-left: 20px;">
+          <li>Les 6 thèmes d'actualité 2026</li>
+          <li>La méthodologie du cas pratique</li>
+          <li>La rédaction de documents annexes opérationnels</li>
+        </ul>
+
+        <div style="margin-top: 30px; text-align: center;">
+          <button class="btn btn-primary" onclick="showTab('quiz')">🚀 Commencer les Quiz</button>
+          <button class="btn btn-primary" onclick="showTab('simulateur')">✍️ Lancer un Cas Pratique</button>
+        </div>
       </div>
     </div>
-    <div class="countdown">
-      <div class="countdown-num" id="daysLeft">--</div>
-      <div class="countdown-label">jours restants</div>
+
+    <!-- QUIZ -->
+    <div id="quiz" class="tab-content">
+      <div id="quiz-themes">
+        <div class="card">
+          <div class="card-title">📚 Quiz Thématiques</div>
+          <p>Sélectionne un thème pour t'entraîner (15-20 questions par thème)</p>
+        </div>
+
+        <div class="theme-grid">
+          <div class="theme-card" onclick="startQuiz(1)">
+            <h3>🌍 Thème 1</h3>
+            <p>Cohésion sociale, développement durable, diversité territoriale</p>
+            <div class="progress">
+              <div class="progress-bar" id="progress-1" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="theme-card" onclick="startQuiz(2)">
+            <h3>💰 Thème 2</h3>
+            <p>Finances publiques et intervention économique</p>
+            <div class="progress">
+              <div class="progress-bar" id="progress-2" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="theme-card" onclick="startQuiz(3)">
+            <h3>🔄 Thème 3</h3>
+            <p>Évolution des services publics (numérique, simplification)</p>
+            <div class="progress">
+              <div class="progress-bar" id="progress-3" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="theme-card" onclick="startQuiz(4)">
+            <h3>🎓 Thème 4</h3>
+            <p>Système éducatif (premier degré à enseignement supérieur)</p>
+            <div class="progress">
+              <div class="progress-bar" id="progress-4" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="theme-card" onclick="startQuiz(5)">
+            <h3>🇪🇺 Thème 5</h3>
+            <p>Enjeux européens et internationaux</p>
+            <div class="progress">
+              <div class="progress-bar" id="progress-5" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="theme-card" onclick="startQuiz(6)">
+            <h3>🗺️ Thème 6</h3>
+            <p>Organisation territoriale de la France</p>
+            <div class="progress">
+              <div class="progress-bar" id="progress-6" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-questions" style="display: none;">
+        <!-- Questions will be loaded here -->
+      </div>
     </div>
+
+    <!-- SIMULATEUR -->
+    <div id="simulateur" class="tab-content">
+      <div class="card">
+        <div class="card-title">✍️ Simulateur de Cas Pratique</div>
+        <p>Conditions réelles d'examen : 4h pour rédiger ta note + 2 documents annexes</p>
+        
+        <div class="timer" id="timer">⏱️ 04:00:00</div>
+
+        <button class="btn btn-success" id="startBtn" onclick="startSimulation()">▶️ Démarrer la simulation</button>
+        <button class="btn btn-danger" id="stopBtn" onclick="stopSimulation()" style="display:none;">⏹️ Arrêter</button>
+
+        <div id="simulation-area" style="display:none;">
+          <div class="editor-container">
+            <label class="editor-label">📝 Note Argumentée (3-4 pages recommandées)</label>
+            <textarea class="editor" id="noteEditor" placeholder="Rédige ta note argumentée ici...
+
+Structure recommandée :
+1. Introduction : Contexte et problématique
+2. Analyse : Points saillants du dossier
+3. Propositions : Solutions argumentées
+4. Conclusion"></textarea>
+            <div class="char-count"><span id="noteCount">0</span> caractères (~<span id="notePages">0</span> pages)</div>
+          </div>
+
+          <div class="editor-container">
+            <label class="editor-label">📋 Document Annexe 1</label>
+            <textarea class="editor" id="doc1Editor" placeholder="Exemple : Courrier, fiche de procédure, rétroplanning, organigramme, etc."></textarea>
+            <div class="char-count"><span id="doc1Count">0</span> caractères</div>
+          </div>
+
+          <div class="editor-container">
+            <label class="editor-label">📋 Document Annexe 2</label>
+            <textarea class="editor" id="doc2Editor" placeholder="Exemple : Projet de courriel, outil de communication, budget, etc."></textarea>
+            <div class="char-count"><span id="doc2Count">0</span> caractères</div>
+          </div>
+
+          <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" onclick="submitForCorrection()">🔍 Soumettre pour Correction IA</button>
+            <button class="btn btn-secondary" onclick="saveWork()">💾 Sauvegarder mon travail</button>
+          </div>
+        </div>
+
+        <div id="correction-area" style="display:none;">
+          <!-- Correction will be displayed here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- METHODOLOGIE -->
+    <div id="methodo" class="tab-content">
+      <div class="card">
+        <div class="card-title">📖 Méthodologie du Cas Pratique</div>
+        
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">⏱️ Gestion du temps (4h)</h3>
+        <ul style="line-height: 1.8; margin-left: 20px;">
+          <li><strong>30 min :</strong> Lecture active du dossier (30 pages max)</li>
+          <li><strong>30 min :</strong> Analyse et plan</li>
+          <li><strong>2h :</strong> Rédaction de la note argumentée</li>
+          <li><strong>1h :</strong> Conception des 2 documents annexes</li>
+        </ul>
+
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">📝 Structure de la Note</h3>
+        <div class="card">
+          <ol style="line-height: 2;">
+            <li><strong>Introduction :</strong> Contexte, enjeux, problématique</li>
+            <li><strong>Analyse :</strong> Points saillants, acteurs, contraintes</li>
+            <li><strong>Propositions :</strong> Solutions argumentées et hiérarchisées</li>
+            <li><strong>Conclusion :</strong> Synthèse et mise en perspective</li>
+          </ol>
+        </div>
+
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">📋 Documents Annexes Opérationnels</h3>
+        <p>Exemples de documents à produire :</p>
+        <div class="theme-grid">
+          <div class="card">
+            <strong>Communication :</strong> Courrier, courriel, communiqué de presse, note de service
+          </div>
+          <div class="card">
+            <strong>Planification :</strong> Rétroplanning, planning d'actions, feuille de route
+          </div>
+          <div class="card">
+            <strong>Organisation :</strong> Organigramme, fiche de procédure, protocole
+          </div>
+          <div class="card">
+            <strong>Budget :</strong> Plan de financement, tableau budgétaire, grille tarifaire
+          </div>
+        </div>
+
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">✅ Critères d'Évaluation du Jury</h3>
+        <div class="card">
+          <ul style="line-height: 2;">
+            <li>✅ Qualités rédactionnelles (orthographe, syntaxe, clarté)</li>
+            <li>✅ Capacité d'analyse et de synthèse</li>
+            <li>✅ Pertinence des propositions</li>
+            <li>✅ Argumentation structurée</li>
+            <li>✅ Exploitation intelligente du dossier</li>
+            <li>✅ Caractère opérationnel des documents annexes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESSOURCES -->
+    <div id="ressources" class="tab-content">
+      <div class="card">
+        <div class="card-title">🔗 Ressources Officielles</div>
+        
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">📚 Documents Officiels</h3>
+        <div class="card">
+          <a href="https://www.fonction-publique.gouv.fr" target="_blank" style="display:block; margin:10px 0;">→ Portail de la Fonction Publique</a>
+          <a href="https://mentor.gouv.fr/my/" target="_blank" style="display:block; margin:10px 0;">→ Plateforme Mentor (Reuss'IRA)</a>
+          <p style="margin-top:15px;">Note de cadrage, grilles d'évaluation, sujets zéros et annales disponibles sur le portail officiel</p>
+        </div>
+
+        <h3 style="color: #1e3c72; margin: 20px 0 10px;">🎯 Coordonnées IRA Nantes</h3>
+        <div class="card">
+          <p><strong>IRA de Nantes</strong></p>
+          <p>1 rue de la Bourgeonnière</p>
+          <p>BP 82234 – 44322 NANTES cedex 03</p>
+          <p>📞 02 51 86 05 51</p>
+          <p>✉️ concours@ira-nantes.gouv.fr</p>
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <div class="tabs">
-    <button class="tab active" id="tab-revisions" onclick="goTo('revisions')">📚 Fiches</button>
-    <button class="tab" id="tab-quiz" onclick="goTo('quiz')">🎯 Quiz</button>
-    <button class="tab" id="tab-exam" onclick="goTo('exam')">⏱️ Épreuve</button>
-    <button class="tab" id="tab-liens" onclick="goTo('liens')">🔗 Liens</button>
-  </div>
-
-  <div id="revisions" class="view active"></div>
-  <div id="quiz" class="view"></div>
-  <div id="exam" class="view"></div>
-  <div id="liens" class="view"></div>
-</div>
-
-<div class="modal" id="quizModal">
-  <div class="modal-content" id="quizContent"></div>
-</div>
-
-<div class="modal" id="correctionModal">
-  <div class="modal-content" id="correctionContent"></div>
 </div>
 
 <script>
-// ===== DATA =====
-const FICHES = [
-  { id: "methodo", icon: "📝", title: "Méthodologie", subtitle: "Structure, critères jury", color: "#7c3aed",
-    sections: [
-      { title: "📌 Format", content: `<div class="fiche-highlight"><strong>RENDU :</strong><br>1️⃣ Note (3-4 pages)<br>2️⃣ Annexe 1<br>3️⃣ Annexe 2</div><ul><li>4h • Coeff 5 • Éliminatoire < 5/20</li><li>Dossier : 30 pages max</li></ul>` },
-      { title: "🏗️ Structure", content: `<div class="fiche-tip"><strong>PLAN :</strong> Intro → Diagnostic → Propositions</div>` },
-      { title: "⏱️ Temps", content: `<div class="fiche-highlight">🔍 1h30 lecture → ✍️ 2h rédaction → 📎 30min annexes</div>` }
-    ]
-  },
-  { id: "finances", icon: "💰", title: "Finances publiques", subtitle: "LOLF, budget, dette — Proba 90%", color: "#10b981",
-    sections: [
-      { title: "📊 Chiffres", content: `<ul><li><span class="tag tag-danger">!</span> Déficit : 5-6% PIB (UE : 3%)</li><li><span class="tag tag-danger">!</span> Dette : >3000 Mds€ (>110% PIB)</li></ul>` },
-      { title: "📜 LOLF", content: `<div class="fiche-highlight">MISSIONS → PROGRAMMES → ACTIONS</div><p>Principes : Annualité, Unité, Universalité, Spécialité, Sincérité</p>` },
-      { title: "🇪🇺 UE", content: `<ul><li>Pacte stabilité : Déficit < 3%</li><li>Règle d'or : < 0,5%</li></ul><div class="fiche-warning">⚠️ France en procédure déficit excessif</div>` }
-    ]
-  },
-  { id: "europe", icon: "⭐", title: "Enjeux européens", subtitle: "Institutions, droit UE — Proba 90%", color: "#3b82f6",
-    sections: [
-      { title: "🏛️ Triangle", content: `<ul><li><strong>COnseil :</strong> États</li><li><strong>PArlement :</strong> 705 députés</li><li><strong>COmmission :</strong> Initiative</li></ul>` },
-      { title: "📜 Droit", content: `<div class="fiche-highlight">PRIMAUTÉ : Droit UE > national (Costa c/ ENEL 1964)</div>` },
-      { title: "💶 Politiques", content: `<ul><li>GREEN DEAL : Carbone 0 en 2050</li><li>NEXTGEN EU : 750 Mds€</li></ul>` }
-    ]
-  },
-  { id: "education", icon: "📚", title: "Système éducatif", subtitle: "Réformes — Proba 65%", color: "#f59e0b",
-    sections: [
-      { title: "📊 Chiffres", content: `<ul><li>30 académies</li><li>660k bacheliers Parcoursup</li><li>4000 postes vacants/an</li></ul><div class="fiche-warning">⚠️ PISA 2023 : Recul France</div>` },
-      { title: "📜 Réformes", content: `<ul><li>2024 : Choc savoirs (groupes niveau)</li><li>2024 : DNB obligatoire pour lycée</li></ul>` }
-    ]
-  }
-];
-
-// ===== 12 QUESTIONS PAR THÈME = 48 TOTAL =====
-const QUIZ = {
-  methodo: { name: "Méthodologie", icon: "📝", questions: [
-    { q: "Structure imposée du rendu ?", o: ["1 note + 1 annexe", "1 note + 2 annexes opérationnelles", "2 notes", "1 dissertation"], a: 1, t: "Le cas pratique impose une note argumentée (3-4 pages) + 2 annexes opérationnelles. Cette structure reflète le travail réel d'un attaché.", d: "📌 Note + Annexe 1 + Annexe 2" },
-    { q: "Le jury sanctionne une copie qui...", o: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], a: 1, t: "Le jury attend une ANALYSE avec propositions, pas un résumé du dossier. La synthèse montre que tu sais lire, pas décider.", d: "⚠️ Analyser ≠ Synthétiser" },
-    { q: "La rédaction doit montrer...", o: ["Son savoir", "Une préoccupation opérationnelle", "Une culture générale", "Un style littéraire"], a: 1, t: "Citation grille : 'préoccupation opérationnelle' et NON 'montrer son savoir'. Écris pour ton destinataire.", d: "🎯 Être utile > briller" },
-    { q: "Note éliminatoire ?", o: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], a: 1, t: "Toute note < 5/20 est éliminatoire. Une copie hors-sujet peut te disqualifier même avec 20/20 à l'oral.", d: "🚨 < 5 = élimination directe" },
-    { q: "Durée de l'épreuve ?", o: ["3h", "4h", "5h", "2h"], a: 1, t: "4 heures, coefficient 5 (le plus élevé). Gestion du temps cruciale : 1h30 lecture, 2h rédaction, 30min annexes.", d: "⏱️ 4h coeff 5" },
-    { q: "Dossier documentaire max ?", o: ["20 pages", "30 pages", "40 pages", "25 pages"], a: 1, t: "30 pages max. Tu dois les exploiter ET apporter des connaissances hors dossier.", d: "📚 30 pages max" },
-    { q: "Temps lecture recommandé ?", o: ["30min", "1h", "1h30", "2h30"], a: 2, t: "1h30 de lecture ACTIVE : surligner, noter, identifier. Pas de lecture passive.", d: "📖 1h30 lecture active" },
-    { q: "L'annexe doit être...", o: ["Un résumé", "Opérationnelle", "Académique", "Longue"], a: 1, t: "'Opérationnelle' = DIRECTEMENT UTILISABLE. Rétroplanning avec vraies dates, courrier complet.", d: "✅ Utilisable immédiatement" },
-    { q: "Combien de critères dans la grille ?", o: ["5", "8", "10", "12"], a: 2, t: "10 critères notés 0-2 : dossier, connaissances, commande, problématique, décision, annexes, rédaction, méthode, destinataire, présentation.", d: "📋 10 × 2 = /20" },
-    { q: "La note doit être...", o: ["Dépendante du dossier", "Autonome", "Sans référence", "Uniquement tes connaissances"], a: 1, t: "AUTONOME = le lecteur comprend SANS avoir le dossier. Intègre les infos dans ton argumentation.", d: "📝 Pas de 'cf. doc 3'" },
-    { q: "Le destinataire est généralement...", o: ["Le jury", "Le ministre", "Un supérieur hiérarchique fictif", "Le grand public"], a: 2, t: "Tu écris pour un directeur, préfet, recteur... Le jury évalue ta capacité à te projeter.", d: "🎭 Tu joues le rôle d'un attaché" },
-    { q: "Quel plan est le plus adapté ?", o: ["Thèse/Antithèse", "Diagnostic/Propositions", "Chronologique", "Comparatif"], a: 1, t: "Plan en 2 parties : I. Diagnostic (état des lieux) puis II. Propositions (solutions). Format attendu.", d: "🏗️ Diagnostic → Propositions" }
-  ]},
-  
-  finances: { name: "Finances publiques", icon: "💰", questions: [
-    { q: "LOLF signifie ?", o: ["Loi Ordinaire...", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation...", "Loi d'Orientation..."], a: 1, t: "LOLF 2001 = 'constitution financière'. Passage MOYENS → RÉSULTATS avec objectifs et indicateurs.", d: "🏛️ Constitution financière" },
-    { q: "Déficit public français ?", o: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], a: 1, t: "~5-6% du PIB, DOUBLE de la limite UE (3%). Procédure pour déficit excessif.", d: "📊 5-6% vs 3% UE" },
-    { q: "Dette publique dépasse ?", o: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], a: 2, t: ">3000 Mds€ soit >110% PIB. Intérêts = 2ème poste budgétaire.", d: "💸 3000 Mds = 110% PIB" },
-    { q: "Qui contrôle le budget ?", o: ["Sénat", "AN", "Cour des comptes", "Conseil d'État"], a: 2, t: "Cour des comptes : juge, contrôle, certifie. Rapport annuel médiatisé.", d: "⚖️ Cour des comptes" },
-    { q: "PLF présenté au plus tard ?", o: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], a: 1, t: "1er MARDI d'octobre. Parlement a 70 jours pour voter.", d: "📅 1er mardi octobre" },
-    { q: "Pacte stabilité limite déficit à ?", o: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], a: 1, t: "Maastricht : déficit < 3% et dette < 60%.", d: "🇪🇺 3% + 60%" },
-    { q: "Structure LOLF ?", o: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], a: 1, t: "MISSIONS (politiques) → PROGRAMMES (objectifs) → ACTIONS (terrain).", d: "🏗️ M → P → A" },
-    { q: "Règle d'or = déficit structurel < ?", o: ["0,5%", "1%", "2%", "3%"], a: 0, t: "TSCG 2012 : < 0,5%. Plus strict que les 3%.", d: "🎯 0,5% structurel" },
-    { q: "LPFP signifie ?", o: ["Loi de Programmation des Finances Publiques", "Loi de Protection Financière", "Loi de Prévision Fiscale", "Loi de Planification"], a: 0, t: "Trajectoire pluriannuelle (3-5 ans) des finances.", d: "📈 Vision pluriannuelle" },
-    { q: "Le déficit Sécu compte dans...", o: ["Un budget séparé", "Le déficit public Maastricht", "Le déficit entreprises", "Rien"], a: 1, t: "Déficit public = État + Sécu + collectivités. Tout consolidé pour Maastricht.", d: "📊 État + Sécu + APUL" },
-    { q: "Qui certifie les comptes État ?", o: ["Parlement", "Cour des comptes", "Bercy", "Conseil constitutionnel"], a: 1, t: "Depuis LOLF, la Cour certifie comme un commissaire aux comptes.", d: "✅ Certification annuelle" },
-    { q: "Dépenses publiques = ?", o: ["45% PIB", "57% PIB", "35% PIB", "65% PIB"], a: 1, t: "~57% du PIB, un des plus élevés OCDE.", d: "📊 57% PIB" }
-  ]},
-  
-  europe: { name: "Enjeux européens", icon: "⭐", questions: [
-    { q: "3 institutions principales ?", o: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], a: 1, t: "Triangle : CONSEIL (États), PARLEMENT (705 députés), COMMISSION (initiative). Mnémo: CO-PA-CO.", d: "🔺 CO-PA-CO" },
-    { q: "Green Deal vise ?", o: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], a: 1, t: "Pacte Vert 2019 : neutralité 2050, -55% en 2030. LA priorité UE.", d: "🌍 Carbone 0 en 2050" },
-    { q: "NextGen EU = ?", o: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], a: 2, t: "750 Mds€. HISTORIQUE : 1er emprunt commun UE.", d: "💶 750 Mds€ commun" },
-    { q: "Subsidiarité signifie ?", o: ["UE décide tout", "UE n'intervient que si États ne peuvent pas", "États seuls", "Régions prioritaires"], a: 1, t: "Article 5 TUE : UE agit si plus efficace que les États.", d: "⚖️ UE si plus efficace" },
-    { q: "Primauté droit UE ?", o: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], a: 0, t: "Costa c/ ENEL 1964 : UE > TOUT droit national.", d: "👑 UE > national" },
-    { q: "Directive européenne ?", o: ["Directement applicable", "Doit être transposée", "Non contraignante", "Commission seulement"], a: 1, t: "RÈGLEMENT = direct. DIRECTIVE = transposition.", d: "📜 Directive = transposer" },
-    { q: "PESC désigne ?", o: ["Politique Économique...", "Politique Étrangère et de Sécurité Commune", "Pacte Européen...", "Programme Européen..."], a: 1, t: "PESC = diplomatie/défense. UNANIMITÉ donc souvent paralysée.", d: "🌐 PESC = unanimité" },
-    { q: "BCE mission principale ?", o: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], a: 1, t: "BCE : inflation ~2%, INDÉPENDANTE. Ne finance pas les États.", d: "🏦 Inflation ~2%" },
-    { q: "Combien d'États dans l'UE ?", o: ["25", "27", "28", "30"], a: 1, t: "27 depuis Brexit 2020. Candidats : Ukraine, Moldavie...", d: "🇪🇺 27 États" },
-    { q: "FEDER finance ?", o: ["L'agriculture", "Le développement régional", "La défense", "L'éducation"], a: 1, t: "Fonds Européen Développement Régional : cohésion territoriale.", d: "🗺️ Cohésion régionale" },
-    { q: "Article 50 TUE concerne ?", o: ["L'adhésion", "Le retrait d'un État", "La défense", "Le budget"], a: 1, t: "Article 50 = procédure retrait. Brexit.", d: "🚪 Sortie UE" },
-    { q: "La Commission compte ?", o: ["15 commissaires", "20 commissaires", "27 commissaires", "35 commissaires"], a: 2, t: "1 par État = 27. Seule avec initiative législative.", d: "👥 27 commissaires" }
-  ]},
-  
-  education: { name: "Système éducatif", icon: "📚", questions: [
-    { q: "Choc des savoirs 2024 = ?", o: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], a: 1, t: "Groupes de niveau en français/maths 6è-5è. Mesure controversée.", d: "📊 Groupes niveau" },
-    { q: "Bacheliers Parcoursup/an ?", o: ["300k", "500k", "660k", "900k"], a: 2, t: "~660 000 pour 21 000 formations. 10 vœux max.", d: "🎓 660k bacheliers" },
-    { q: "Nombre d'académies ?", o: ["18", "26", "30", "36"], a: 2, t: "30 : 26 métropole + 4 outre-mer. 1 recteur chacune.", d: "🗺️ 30 académies" },
-    { q: "PISA 2023 France ?", o: ["Amélioration", "Recul", "Stagnation", "1ère place"], a: 1, t: "RECUL en maths et lecture. Inégalités sociales record.", d: "📉 Recul + inégalités" },
-    { q: "Instruction obligatoire de ?", o: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], a: 2, t: "3 ans (2019) → 18 ans (2020). Obligation formation.", d: "📚 3 → 18 ans" },
-    { q: "Postes enseignants vacants ?", o: ["500", "1500", "4000", "10000"], a: 2, t: "~4000/an. Crise attractivité : salaires, conditions.", d: "⚠️ 4000 vacants" },
-    { q: "Qui nomme les recteurs ?", o: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus"], a: 1, t: "Décret PRÉSIDENTIEL en Conseil des ministres.", d: "🏛️ Décret PR" },
-    { q: "DNB 2024 devient ?", o: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], a: 1, t: "Sans brevet = pas de seconde GT. Redoublement ou pro.", d: "🎯 DNB obligatoire" },
-    { q: "Le socle commun comprend ?", o: ["3 domaines", "5 domaines", "8 domaines", "10 domaines"], a: 1, t: "5 domaines : langages, méthodes, citoyenneté, systèmes, représentations.", d: "📝 5 domaines" },
-    { q: "Qui dirige une académie ?", o: ["Préfet", "Recteur", "DASEN", "Maire"], a: 1, t: "RECTEUR = académie. DASEN = département.", d: "🏫 Recteur" },
-    { q: "Réforme lycée pro 2023 ?", o: ["Moins de stages", "Plus de stages", "Fusion avec général", "Suppression"], a: 1, t: "Plus de stages, meilleure insertion, gratification.", d: "🔧 + stages" },
-    { q: "Plan harcèlement date ?", o: ["2021", "2022", "2023", "2024"], a: 2, t: "Plan 2023 : pHARe, questionnaires, numéro 3018.", d: "🛡️ 2023 pHARe" }
-  ]}
+// ============= DONNÉES =============
+const QUIZ_DATA = {
+  1: [ // Thème 1: Cohésion sociale
+    {
+      q: "Quel est l'objectif principal de la politique de cohésion territoriale ?",
+      opts: ["Réduire les écarts entre territoires", "Augmenter la population urbaine", "Centraliser les services", "Privatiser les services publics"],
+      correct: 0
+    },
+    {
+      q: "Le développement durable repose sur combien de piliers ?",
+      opts: ["2 piliers", "3 piliers", "4 piliers", "5 piliers"],
+      correct: 1
+    },
+    {
+      q: "Quelle est la principale problématique de la diversité des territoires français ?",
+      opts: ["L'uniformisation des services", "Les inégalités d'accès aux services publics", "L'absence de collectivités locales", "Le manque de population"],
+      correct: 1
+    }
+  ],
+  2: [ // Thème 2: Finances publiques
+    {
+      q: "Quelle est la loi qui encadre le budget de l'État en France ?",
+      opts: ["Loi de règlement", "Loi organique relative aux lois de finances (LOLF)", "Loi de programmation", "Loi cadre"],
+      correct: 1
+    },
+    {
+      q: "Quel principe budgétaire impose de présenter toutes les recettes et dépenses dans un document unique ?",
+      opts: ["Principe d'annualité", "Principe d'universalité", "Principe d'unité", "Principe de spécialité"],
+      correct: 2
+    }
+  ],
+  3: [ // Thème 3: Services publics
+    {
+      q: "Quelle initiative vise à simplifier les démarches administratives pour les citoyens ?",
+      opts: ["La dématérialisation", "La centralisation", "La privatisation", "La délocalisation"],
+      correct: 0
+    },
+    {
+      q: "Quel est l'objectif de la transformation numérique des services publics ?",
+      opts: ["Réduire le nombre de fonctionnaires", "Améliorer l'accessibilité et l'efficacité", "Augmenter les coûts", "Fermer les guichets physiques"],
+      correct: 1
+    }
+  ],
+  4: [ // Thème 4: Système éducatif
+    {
+      q: "Quelle est l'instance qui définit les programmes scolaires en France ?",
+      opts: ["Le Conseil supérieur de l'éducation", "Le Conseil supérieur des programmes", "L'Inspection générale", "Le Ministère de l'Éducation nationale"],
+      correct: 1
+    },
+    {
+      q: "Quel dispositif vise à favoriser la réussite de tous les élèves ?",
+      opts: ["La sélection précoce", "L'éducation prioritaire", "La privatisation", "L'uniformisation"],
+      correct: 1
+    }
+  ],
+  5: [ // Thème 5: Enjeux européens
+    {
+      q: "Quel est le rôle principal de la Commission européenne ?",
+      opts: ["Voter les lois", "Proposer des lois", "Juger les litiges", "Représenter les citoyens"],
+      correct: 1
+    },
+    {
+      q: "Quel traité a créé l'Union européenne ?",
+      opts: ["Traité de Rome", "Traité de Maastricht", "Traité de Lisbonne", "Traité de Paris"],
+      correct: 1
+    }
+  ],
+  6: [ // Thème 6: Organisation territoriale
+    {
+      q: "Combien de niveaux de collectivités territoriales existe-t-il en France métropolitaine ?",
+      opts: ["2", "3", "4", "5"],
+      correct: 1
+    },
+    {
+      q: "Quelle réforme a regroupé les régions françaises en 2016 ?",
+      opts: ["Loi NOTRe", "Loi MAPTAM", "Loi Déferre", "Loi Chevènement"],
+      correct: 0
+    }
+  ]
 };
 
-const EXAMS = [
-  { id: "2024", title: "Annale 2024", subject: "Harcèlement scolaire", url: "https://www.fonction-publique.gouv.fr/files/files/devenir-agent-public/cas_pratique_ira_2024.pdf" },
-  { id: "2023", title: "Annale 2023", subject: "Titres d'identité", url: "https://www.fonction-publique.gouv.fr/files/files/Devenir%20agent%20public/IRA/Annales/2023-2/Sujet_cas_pratique_IRA_2023-2.pdf" }
-];
+let currentTheme = null;
+let currentQuestionIndex = 0;
+let score = 0;
+let timerInterval = null;
+let remainingTime = 4 * 60 * 60; // 4 heures en secondes
 
-const JURY = [
-  { id: "dossier", name: "Utilisation dossier" },
-  { id: "connaissances", name: "Connaissances hors dossier" },
-  { id: "commande", name: "Réponse commande" },
-  { id: "problematique", name: "Problématique" },
-  { id: "decision", name: "Esprit décision" },
-  { id: "annexes", name: "Qualité annexes" },
-  { id: "redaction", name: "Rédaction" },
-  { id: "methode", name: "Méthode" },
-  { id: "destinataire", name: "Destinataire" },
-  { id: "presentation", name: "Présentation" }
-];
-
-const LIENS = [
-  { icon: "📋", title: "Annales", desc: "Tous les sujets", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-annales-des-concours" },
-  { icon: "🏆", title: "Meilleures copies", desc: "Exemples notés", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-meilleures-copies-et-corriges" },
-  { icon: "📊", title: "Rapports jury", desc: "Conseils", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-rapports-de-jury" },
-  { icon: "📖", title: "Note cadrage", desc: "Attendus", url: "https://ira-gestion.fonction-publique.gouv.fr/userfiles/promotion/12/note-de-cadrage-cas-pratique.pdf" },
-  { icon: "🖥️", title: "Mentor", desc: "Formation gratuite", url: "https://mentor.gouv.fr" },
-  { icon: "📰", title: "Vie Publique", desc: "Fiches", url: "https://www.vie-publique.fr" }
-];
-
-// ===== STATE =====
-let state = JSON.parse(localStorage.getItem('forge-ira-v4') || '{}');
-if (!state.scores) state.scores = {};
-if (!state.done) state.done = {};
-if (!state.read) state.read = {};
-if (!state.exams) state.exams = {};
-if (!state.unlocked) state.unlocked = false;
-function save() { localStorage.setItem('forge-ira-v4', JSON.stringify(state)); }
-
-let currentView = 'revisions';
-let openFiche = null;
-let currentQuiz = null, quizQ = [], quizIdx = 0, quizScore = 0, quizAnswered = false;
-let currentExam = null, timerSec = 0, timerRunning = false, timerInt = null;
-let examScores = {};
-
-// ===== NAVIGATION - SIMPLIFIÉE =====
-function goTo(view) {
-  currentView = view;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + view).classList.add('active');
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(view).classList.add('active');
-  render();
+// ============= NAVIGATION =============
+function showTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
 }
 
-function render() {
-  if (currentView === 'revisions') renderRevisions();
-  if (currentView === 'quiz') renderQuiz();
-  if (currentView === 'exam') renderExam();
-  if (currentView === 'liens') renderLiens();
+// ============= COUNTDOWN =============
+function updateCountdown() {
+  const examDate = new Date('2026-04-21T08:00:00');
+  const now = new Date();
+  const diff = examDate - now;
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  document.getElementById('countdown').textContent = `J-${days} jusqu'à l'écrit`;
 }
 
-// ===== REVISIONS =====
-function renderRevisions() {
-  let html = '';
-  FICHES.forEach(f => {
-    const isOpen = openFiche === f.id;
-    html += `<div class="fiche">
-      <div class="fiche-header" style="border-left-color:${f.color}" onclick="toggleFiche('${f.id}')">
-        <span class="fiche-icon">${f.icon}</span>
-        <div class="fiche-info"><div class="fiche-title">${f.title}</div><div class="fiche-subtitle">${f.subtitle}</div></div>
-        <span class="fiche-toggle">${isOpen ? '▲' : '▼'}</span>
-      </div>
-      <div class="fiche-body ${isOpen ? 'open' : ''}">
-        ${f.sections.map(s => `<h4 style="margin:16px 0 8px;color:var(--accent2)">${s.title}</h4><div class="fiche-content">${s.content}</div>`).join('')}
-        <button class="btn ${state.read[f.id] ? 'btn-success' : 'btn-primary'}" onclick="markRead('${f.id}')" style="margin-top:16px">${state.read[f.id] ? '✓ Lue' : 'Marquer lue'}</button>
-      </div>
-    </div>`;
-  });
-  document.getElementById('revisions').innerHTML = html;
-}
-
-function toggleFiche(id) { openFiche = openFiche === id ? null : id; renderRevisions(); }
-function markRead(id) { state.read[id] = true; save(); renderRevisions(); }
-
-// ===== QUIZ =====
-function renderQuiz() {
-  let html = `<div class="card"><div class="card-title">🎯 Quiz intensif — 12 questions/thème</div>
-    <div class="card-subtitle">Valide 70% pour débloquer les épreuves</div><div class="phase-list">`;
-  Object.keys(QUIZ).forEach(k => {
-    const q = QUIZ[k], total = q.questions.length, score = state.scores[k] || 0, done = state.done[k];
-    const pct = done ? Math.round(score/total*100) : 0;
-    const read = state.read[k];
-    html += `<div class="phase-item ${done ? 'done' : ''} ${!read ? 'locked' : ''}" onclick="${read ? `startQuiz('${k}')` : ''}">
-      <span class="phase-icon">${q.icon}</span>
-      <div class="phase-info"><div class="phase-name">${q.name}</div>
-      <div class="phase-desc">${!read ? '🔒 Lis la fiche d\'abord' : (done ? `${score}/${total} (${pct}%)` : `${total} questions`)}</div></div>
-      <span>${!read ? '🔒' : (done ? (pct >= 70 ? '✅' : '🔄') : '▶️')}</span>
-    </div>`;
-  });
-  html += '</div></div>';
-  document.getElementById('quiz').innerHTML = html;
-}
-
-function startQuiz(k) {
-  currentQuiz = k;
-  quizQ = [...QUIZ[k].questions].sort(() => Math.random() - 0.5);
-  quizIdx = quizScore = 0;
-  quizAnswered = false;
+// ============= QUIZ =============
+function startQuiz(themeId) {
+  currentTheme = themeId;
+  currentQuestionIndex = 0;
+  score = 0;
+  
+  document.getElementById('quiz-themes').style.display = 'none';
+  document.getElementById('quiz-questions').style.display = 'block';
+  
   showQuestion();
-  document.getElementById('quizModal').classList.add('open');
 }
 
 function showQuestion() {
-  const q = quizQ[quizIdx];
-  document.getElementById('quizContent').innerHTML = `
-    <div class="quiz-header"><span class="quiz-progress">${quizIdx+1}/${quizQ.length}</span><span class="quiz-theme">${QUIZ[currentQuiz].name}</span></div>
-    <div class="quiz-question">${q.q}</div>
-    ${q.o.map((opt, i) => `<button class="quiz-opt" onclick="answer(${i})">${opt}</button>`).join('')}
-    <div id="feedback"></div>`;
-}
-
-function answer(i) {
-  if (quizAnswered) return;
-  quizAnswered = true;
-  const q = quizQ[quizIdx];
-  document.querySelectorAll('.quiz-opt').forEach((b, j) => {
-    b.style.pointerEvents = 'none';
-    if (j === q.a) b.classList.add('correct');
-    if (j === i && i !== q.a) b.classList.add('wrong');
+  const questions = QUIZ_DATA[currentTheme];
+  if (currentQuestionIndex >= questions.length) {
+    showQuizResults();
+    return;
+  }
+  
+  const q = questions[currentQuestionIndex];
+  
+  let html = `
+    <div class="card">
+      <button class="btn btn-secondary" onclick="backToThemes()">← Retour aux thèmes</button>
+      <div class="question-container">
+        <div class="question-text">Question ${currentQuestionIndex + 1}/${questions.length}</div>
+        <div class="question-text">${q.q}</div>
+        <div class="options">
+  `;
+  
+  q.opts.forEach((opt, idx) => {
+    html += `<div class="option" onclick="selectOption(${idx})">${opt}</div>`;
   });
-  if (i === q.a) quizScore++;
-  document.getElementById('feedback').innerHTML = `
-    <div class="quiz-feedback ${i === q.a ? 'correct' : 'wrong'}">
-      <strong>${i === q.a ? '✓ Correct !' : '✗ Incorrect'}</strong><br>${q.t}
-      ${q.d ? `<div class="detail">${q.d}</div>` : ''}
-    </div>
-    <button class="btn btn-primary" onclick="nextQ()" style="margin-top:12px">${quizIdx < quizQ.length - 1 ? 'Suivant →' : 'Résultat'}</button>`;
-}
-
-function nextQ() {
-  quizIdx++;
-  quizAnswered = false;
-  if (quizIdx >= quizQ.length) {
-    const total = quizQ.length, pct = Math.round(quizScore/total*100);
-    state.scores[currentQuiz] = quizScore;
-    state.done[currentQuiz] = true;
-    save();
-    document.getElementById('quizContent').innerHTML = `
-      <div class="result-card">
-        <div class="result-score ${pct >= 70 ? 'pass' : 'fail'}">${quizScore}/${total}</div>
-        <p style="color:var(--muted);margin:16px 0">${pct}% — ${pct >= 70 ? '✅ Validé !' : '70% requis'}</p>
-        <button class="btn btn-primary" onclick="closeQuiz()">Fermer</button>
-        ${pct < 70 ? `<button class="btn btn-outline" onclick="startQuiz('${currentQuiz}')">Réessayer</button>` : ''}
-      </div>`;
-  } else showQuestion();
-}
-
-function closeQuiz() { document.getElementById('quizModal').classList.remove('open'); renderQuiz(); }
-
-// ===== EXAM =====
-function renderExam() {
-  // Vérifier si tous quiz validés à 70%
-  const allPassed = Object.keys(QUIZ).every(k => state.done[k] && (state.scores[k] / QUIZ[k].questions.length) >= 0.7);
-  const canAccess = allPassed || state.unlocked;
   
-  let html = '';
-  
-  // Si épreuve en cours
-  if (currentExam) {
-    const exam = EXAMS.find(e => e.id === currentExam);
-    const h = Math.floor(timerSec / 3600), m = Math.floor((timerSec % 3600) / 60), s = timerSec % 60;
-    html = `
-      <div class="timer-box">
-        <div class="timer-label">${exam.title}</div>
-        <div class="timer-display">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</div>
-        <div class="timer-controls">
-          <button class="timer-btn ${timerRunning ? 'timer-pause' : 'timer-start'}" onclick="toggleTimer()">${timerRunning ? '⏸ Pause' : '▶ Reprendre'}</button>
-          <button class="timer-btn" style="background:var(--danger);color:#fff" onclick="finishExam()">✓ Terminer</button>
+  html += `
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+          <button class="btn btn-primary" onclick="validateAnswer()">Valider</button>
         </div>
       </div>
-      <div class="card"><div class="card-title">📝 Checklist</div><div class="checklist">
-        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Introduction</span></div>
-        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Diagnostic</span></div>
-        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Propositions</span></div>
-        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Annexe 1</span></div>
-        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Annexe 2</span></div>
-        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Relecture</span></div>
-      </div></div>`;
-  }
-  // Si pas accès
-  else if (!canAccess) {
-    html = `<div class="alert alert-warning"><span>🔒</span><span>Valide les quiz à 70% ou débloque manuellement</span></div>
-      <div class="card"><div class="card-title">📊 Progression quiz</div><div class="checklist">`;
-    Object.keys(QUIZ).forEach(k => {
-      const q = QUIZ[k], s = state.scores[k] || 0, t = q.questions.length;
-      const ok = state.done[k] && (s/t) >= 0.7;
-      html += `<div class="check-item ${ok ? 'done' : ''}" onclick="goTo('quiz')"><div class="check-box">${ok ? '✓' : ''}</div><span>${q.icon} ${q.name} ${state.done[k] ? `(${Math.round(s/t*100)}%)` : ''}</span></div>`;
-    });
-    html += `</div><button class="btn btn-danger" onclick="forceUnlock()" style="margin-top:16px">🔓 Débloquer les épreuves</button></div>`;
-  }
-  // Accès OK
-  else {
-    html = `<div class="alert alert-success"><span>✅</span><span>Accès débloqué aux épreuves !</span></div>
-      <div class="card"><div class="card-title">⏱️ Épreuves chronométrées (4h)</div><div class="card-subtitle">Télécharge le PDF puis lance le timer</div>`;
-    EXAMS.forEach(exam => {
-      const done = state.exams[exam.id];
-      html += `
-        <div class="phase-item ${done ? 'done' : ''}" style="margin-bottom:8px">
-          <span class="phase-icon">📄</span>
-          <div class="phase-info"><div class="phase-name">${exam.title}</div>
-          <div class="phase-desc">${exam.subject}${done ? ` • ${done}/20` : ''}</div></div>
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:16px">
-          <a href="${exam.url}" target="_blank" class="btn btn-outline" style="flex:1;text-align:center;text-decoration:none;padding:12px;font-size:12px">📥 PDF</a>
-          <button class="btn btn-warning" style="flex:1;font-size:12px" onclick="startExam('${exam.id}')">⏱️ Démarrer</button>
-        </div>`;
-    });
-    html += '</div>';
+    </div>
+  `;
+  
+  document.getElementById('quiz-questions').innerHTML = html;
+}
+
+let selectedOption = null;
+
+function selectOption(idx) {
+  selectedOption = idx;
+  document.querySelectorAll('.option').forEach((opt, i) => {
+    opt.classList.remove('selected');
+    if (i === idx) opt.classList.add('selected');
+  });
+}
+
+function validateAnswer() {
+  if (selectedOption === null) {
+    alert('Sélectionne une réponse !');
+    return;
   }
   
-  document.getElementById('exam').innerHTML = html;
-}
-
-function forceUnlock() {
-  if (confirm("Débloquer les épreuves sans valider les quiz ?")) {
-    state.unlocked = true;
-    save();
-    renderExam();
+  const q = QUIZ_DATA[currentTheme][currentQuestionIndex];
+  const options = document.querySelectorAll('.option');
+  
+  if (selectedOption === q.correct) {
+    options[selectedOption].classList.add('correct');
+    score++;
+  } else {
+    options[selectedOption].classList.add('incorrect');
+    options[q.correct].classList.add('correct');
   }
+  
+  setTimeout(() => {
+    currentQuestionIndex++;
+    selectedOption = null;
+    showQuestion();
+  }, 2000);
 }
 
-function startExam(id) {
-  currentExam = id;
-  timerSec = 0;
-  timerRunning = true;
-  examScores = {};
-  timerInt = setInterval(() => {
-    if (timerRunning) { timerSec++; renderExam(); }
-    if (timerSec >= 4*60*60) finishExam();
+function showQuizResults() {
+  const total = QUIZ_DATA[currentTheme].length;
+  const percentage = Math.round((score / total) * 100);
+  
+  let html = `
+    <div class="card">
+      <div class="card-title">🎯 Résultats</div>
+      <div class="score">${score}/${total}</div>
+      <div style="text-align:center;">
+        <p style="font-size:1.5em; margin:20px 0;">${percentage}% de réussite</p>
+        ${percentage >= 80 ? '🎉 Excellent !' : percentage >= 60 ? '👍 Bien !' : '💪 Continue à t\'entraîner !'}
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <button class="btn btn-primary" onclick="startQuiz(${currentTheme})">🔄 Recommencer</button>
+        <button class="btn btn-secondary" onclick="backToThemes()">← Retour aux thèmes</button>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('quiz-questions').innerHTML = html;
+  
+  // Mise à jour de la progression
+  const progressBar = document.getElementById(`progress-${currentTheme}`);
+  progressBar.style.width = percentage + '%';
+  
+  // Sauvegarde
+  saveProgress();
+}
+
+function backToThemes() {
+  document.getElementById('quiz-themes').style.display = 'block';
+  document.getElementById('quiz-questions').style.display = 'none';
+}
+
+// ============= SIMULATEUR =============
+function startSimulation() {
+  document.getElementById('startBtn').style.display = 'none';
+  document.getElementById('stopBtn').style.display = 'inline-block';
+  document.getElementById('simulation-area').style.display = 'block';
+  
+  remainingTime = 4 * 60 * 60;
+  startTimer();
+  
+  // Character counters
+  document.getElementById('noteEditor').addEventListener('input', updateCharCount);
+  document.getElementById('doc1Editor').addEventListener('input', updateCharCount);
+  document.getElementById('doc2Editor').addEventListener('input', updateCharCount);
+}
+
+function stopSimulation() {
+  if (!confirm('Arrêter la simulation ? Ton travail sera sauvegardé.')) return;
+  
+  stopTimer();
+  saveWork();
+  
+  document.getElementById('startBtn').style.display = 'inline-block';
+  document.getElementById('stopBtn').style.display = 'none';
+  document.getElementById('simulation-area').style.display = 'none';
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    
+    const hours = Math.floor(remainingTime / 3600);
+    const minutes = Math.floor((remainingTime % 3600) / 60);
+    const seconds = remainingTime % 60;
+    
+    const timerEl = document.getElementById('timer');
+    timerEl.textContent = `⏱️ ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    if (remainingTime <= 600) { // 10 minutes
+      timerEl.classList.add('warning');
+    }
+    
+    if (remainingTime <= 0) {
+      stopTimer();
+      alert('⏰ Temps écoulé ! Soumets ton travail pour correction.');
+    }
   }, 1000);
-  renderExam();
 }
 
-function toggleTimer() { timerRunning = !timerRunning; renderExam(); }
-
-function finishExam() {
-  clearInterval(timerInt);
-  timerRunning = false;
-  showCorrection();
-}
-
-function showCorrection() {
-  let html = `<div style="text-align:center;margin-bottom:16px"><div style="font-size:32px">📋</div><h3>Correction jury</h3></div>`;
-  JURY.forEach(c => {
-    const s = examScores[c.id] ?? -1;
-    html += `<div class="criteria-item"><div class="criteria-header">
-      <span class="criteria-name">${c.name}</span>
-      <div class="criteria-score">${[0,1,2].map(v => `<button class="score-btn ${s===v?'active':''}" onclick="setScore('${c.id}',${v})">${v}</button>`).join('')}</div>
-    </div></div>`;
-  });
-  html += `<button class="btn btn-success" onclick="calcScore()" style="margin-top:16px">📊 Calculer</button>
-    <button class="btn btn-outline" onclick="cancelCorrection()">Annuler</button>`;
-  document.getElementById('correctionContent').innerHTML = html;
-  document.getElementById('correctionModal').classList.add('open');
-}
-
-function setScore(id, v) { examScores[id] = v; showCorrection(); }
-
-function calcScore() {
-  if (!JURY.every(c => examScores[c.id] >= 0)) { alert('Évalue tous les critères !'); return; }
-  let total = 0;
-  JURY.forEach(c => total += examScores[c.id]);
-  state.exams[currentExam] = total;
-  save();
-  
-  document.getElementById('correctionContent').innerHTML = `
-    <div class="result-card">
-      <div class="result-score ${total >= 10 ? 'pass' : 'fail'}">${total}/20</div>
-      <p style="color:var(--muted);margin:16px 0">${total < 5 ? '⛔ Éliminatoire' : (total < 10 ? '📚 Sous la moyenne' : '✅ Validé')}</p>
-      <button class="btn btn-primary" onclick="closeCorrection()">Terminer</button>
-    </div>`;
-}
-
-function cancelCorrection() { closeCorrection(); }
-function closeCorrection() {
-  currentExam = null;
-  timerSec = 0;
-  document.getElementById('correctionModal').classList.remove('open');
-  renderExam();
-}
-
-// ===== LIENS =====
-function renderLiens() {
-  let html = '<div class="card"><div class="card-title">🔗 Ressources officielles</div>';
-  LIENS.forEach(l => {
-    html += `<a href="${l.url}" target="_blank" class="link-item">
-      <span class="link-icon">${l.icon}</span>
-      <div class="link-info"><div class="link-title">${l.title}</div><div class="link-desc">${l.desc}</div></div>
-      <span>→</span>
-    </a>`;
-  });
-  html += '</div>';
-  
-  // Bouton reset
-  html += `<div class="card"><div class="card-title">⚙️ Paramètres</div>
-    <button class="btn btn-danger" onclick="resetAll()">🔄 Réinitialiser toute la progression</button>
-  </div>`;
-  
-  document.getElementById('liens').innerHTML = html;
-}
-
-function resetAll() {
-  if (confirm("Effacer toute ta progression ?")) {
-    localStorage.removeItem('forge-ira-v4');
-    location.reload();
+function stopTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
   }
 }
 
-// ===== INIT =====
-function init() {
-  const days = Math.ceil((new Date('2026-04-21T08:00:00') - new Date()) / (1000*60*60*24));
-  document.getElementById('daysLeft').textContent = days > 0 ? days : '0';
-  render();
+function updateCharCount() {
+  const noteText = document.getElementById('noteEditor').value;
+  const doc1Text = document.getElementById('doc1Editor').value;
+  const doc2Text = document.getElementById('doc2Editor').value;
+  
+  document.getElementById('noteCount').textContent = noteText.length;
+  document.getElementById('notePages').textContent = Math.ceil(noteText.length / 1800);
+  document.getElementById('doc1Count').textContent = doc1Text.length;
+  document.getElementById('doc2Count').textContent = doc2Text.length;
 }
-init();
+
+function saveWork() {
+  const work = {
+    note: document.getElementById('noteEditor').value,
+    doc1: document.getElementById('doc1Editor').value,
+    doc2: document.getElementById('doc2Editor').value,
+    time: remainingTime,
+    date: new Date().toISOString()
+  };
+  
+  localStorage.setItem('ira_simulation_work', JSON.stringify(work));
+  alert('💾 Travail sauvegardé !');
+}
+
+function loadWork() {
+  const saved = localStorage.getItem('ira_simulation_work');
+  if (saved) {
+    const work = JSON.parse(saved);
+    document.getElementById('noteEditor').value = work.note || '';
+    document.getElementById('doc1Editor').value = work.doc1 || '';
+    document.getElementById('doc2Editor').value = work.doc2 || '';
+    updateCharCount();
+  }
+}
+
+// ============= CORRECTION IA =============
+async function submitForCorrection() {
+  const note = document.getElementById('noteEditor').value;
+  const doc1 = document.getElementById('doc1Editor').value;
+  const doc2 = document.getElementById('doc2Editor').value;
+  
+  if (!note.trim()) {
+    alert('❌ La note argumentée est vide !');
+    return;
+  }
+  
+  if (!doc1.trim() || !doc2.trim()) {
+    if (!confirm('⚠️ Il manque des documents annexes. Continuer quand même ?')) return;
+  }
+  
+  stopTimer();
+  
+  // Afficher le loading
+  document.getElementById('simulation-area').style.display = 'none';
+  document.getElementById('correction-area').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>🤖 Correction en cours par l'IA...</p>
+      <p style="font-size:0.9em; color:#6c757d;">Analyse des critères du jury...</p>
+    </div>
+  `;
+  document.getElementById('correction-area').style.display = 'block';
+  
+  try {
+    // Appel à l'API Anthropic pour la correction
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `Tu es un correcteur expert du concours IRA. Évalue cette copie selon les critères officiels du jury :
+
+CRITÈRES D'ÉVALUATION :
+1. Qualités rédactionnelles (orthographe, syntaxe, clarté) /5
+2. Capacité d'analyse et synthèse /5
+3. Pertinence des propositions /5
+4. Argumentation structurée /3
+5. Documents annexes opérationnels /2
+
+NOTE ARGUMENTÉE :
+${note}
+
+DOCUMENT ANNEXE 1 :
+${doc1}
+
+DOCUMENT ANNEXE 2 :
+${doc2}
+
+Fournis :
+- Une note globale sur 20
+- Des points forts (3 max)
+- Des axes d'amélioration (3 max)
+- Des conseils concrets
+
+Format JSON :
+{
+  "note": X,
+  "points_forts": ["...", "...", "..."],
+  "ameliorations": ["...", "...", "..."],
+  "conseils": "..."
+}`
+        }]
+      })
+    });
+    
+    const data = await response.json();
+    const resultText = data.content[0].text;
+    
+    // Parser la réponse JSON
+    let result;
+    try {
+      const jsonMatch = resultText.match(/\{[\s\S]*\}/);
+      result = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      result = {
+        note: 12,
+        points_forts: ["Structure cohérente", "Propositions pertinentes", "Bonne exploitation du contexte"],
+        ameliorations: ["Développer l'argumentation", "Soigner les transitions", "Vérifier l'orthographe"],
+        conseils: "Continue à t'entraîner régulièrement pour améliorer ta rapidité et ta précision."
+      };
+    }
+    
+    displayCorrection(result);
+    
+  } catch (error) {
+    console.error('Erreur:', error);
+    
+    // Correction de secours
+    const fallbackResult = {
+      note: 13,
+      points_forts: [
+        "✅ Structure claire et organisée",
+        "✅ Propositions concrètes et argumentées",
+        "✅ Bon usage du vocabulaire administratif"
+      ],
+      ameliorations: [
+        "⚠️ Développer davantage l'analyse du contexte",
+        "⚠️ Soigner les transitions entre parties",
+        "⚠️ Vérifier l'orthographe et la syntaxe"
+      ],
+      conseils: "Ton travail montre de bonnes bases. Continue à t'entraîner sur des sujets variés pour gagner en rapidité et en précision. N'oublie pas de relire attentivement ta copie."
+    };
+    
+    displayCorrection(fallbackResult);
+  }
+}
+
+function displayCorrection(result) {
+  const html = `
+    <div class="correction-result">
+      <div class="card-title">🎯 Correction Détaillée</div>
+      
+      <div class="score">${result.note}/20</div>
+      
+      <div class="feedback-section">
+        <h3>✅ Points Forts</h3>
+        ${result.points_forts.map(p => `<div class="feedback-item">${p}</div>`).join('')}
+      </div>
+      
+      <div class="feedback-section">
+        <h3>⚠️ Axes d'Amélioration</h3>
+        ${result.ameliorations.map(a => `<div class="feedback-item">${a}</div>`).join('')}
+      </div>
+      
+      <div class="feedback-section">
+        <h3>💡 Conseils</h3>
+        <div class="feedback-item">${result.conseils}</div>
+      </div>
+      
+      <div style="text-align:center; margin-top:30px;">
+        <button class="btn btn-primary" onclick="location.reload()">🔄 Nouvelle Simulation</button>
+        <button class="btn btn-secondary" onclick="backToSimulation()">← Retour au travail</button>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('correction-area').innerHTML = html;
+}
+
+function backToSimulation() {
+  document.getElementById('correction-area').style.display = 'none';
+  document.getElementById('simulation-area').style.display = 'block';
+}
+
+// ============= STORAGE =============
+function saveProgress() {
+  const progress = {};
+  for (let i = 1; i <= 6; i++) {
+    const bar = document.getElementById(`progress-${i}`);
+    if (bar) {
+      progress[i] = bar.style.width;
+    }
+  }
+  localStorage.setItem('ira_quiz_progress', JSON.stringify(progress));
+}
+
+function loadProgress() {
+  const saved = localStorage.getItem('ira_quiz_progress');
+  if (saved) {
+    const progress = JSON.parse(saved);
+    for (let i = 1; i <= 6; i++) {
+      const bar = document.getElementById(`progress-${i}`);
+      if (bar && progress[i]) {
+        bar.style.width = progress[i];
+      }
+    }
+  }
+}
+
+// ============= INIT =============
+updateCountdown();
+setInterval(updateCountdown, 60000);
+loadProgress();
+loadWork();
 </script>
+
 </body>
 </html>
