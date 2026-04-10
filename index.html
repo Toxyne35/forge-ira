@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1a1a2e">
-<title>🔥 Forge IRA 2026 - Final</title>
+<title>🔥 Forge IRA 2026</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -17,13 +15,11 @@
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
-  --info: #3b82f6;
   --text: #e2e8f0;
   --muted: #94a3b8;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 .app { max-width: 500px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
-
 .header { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--card); border-radius: 16px; margin-bottom: 16px; }
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-icon { font-size: 32px; }
@@ -33,37 +29,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .countdown-num { font-size: 24px; font-weight: 800; color: var(--accent2); }
 .countdown-label { font-size: 10px; color: var(--muted); }
 
-.revision-timer-float { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #1e1e3f, #2d2d5a); padding: 12px 16px; z-index: 50; display: none; }
-.revision-timer-float.active { display: flex; align-items: center; justify-content: space-between; }
-.revision-timer-float.warning { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
-.rtf-time { font-size: 24px; font-weight: 700; font-family: 'SF Mono', monospace; }
-.rtf-label { font-size: 11px; color: var(--muted); }
-.rtf-btn { padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; }
-.rtf-pause { background: var(--warning); color: #000; }
-.rtf-resume { background: var(--success); color: #fff; }
-
-.tabs { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; margin-top: 60px; }
-.tabs.no-timer { margin-top: 0; }
-.tab { padding: 10px 12px; border: none; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.tab { flex: 1; padding: 12px 8px; border: none; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; }
 .tab.active { background: var(--accent); color: #fff; }
 .tab:not(.active) { background: var(--card); color: var(--muted); }
 
 .card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 12px; }
-.card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-.card-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-
-.progress-bar { height: 8px; background: var(--card2); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.3s; }
-.progress-text { font-size: 12px; color: var(--muted); text-align: right; }
-
-.link-list { display: flex; flex-direction: column; gap: 10px; }
-.link-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card2); border-radius: 12px; text-decoration: none; color: var(--text); transition: all 0.2s; }
-.link-item:hover { background: rgba(124, 58, 237, 0.2); }
-.link-icon { font-size: 24px; }
-.link-info { flex: 1; }
-.link-title { font-size: 13px; font-weight: 600; }
-.link-desc { font-size: 11px; color: var(--muted); }
-.link-arrow { color: var(--muted); }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.card-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
 
 .fiche { background: var(--card); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
 .fiche-header { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-left: 4px solid var(--accent); }
@@ -71,60 +44,62 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .fiche-info { flex: 1; }
 .fiche-title { font-size: 15px; font-weight: 600; }
 .fiche-subtitle { font-size: 11px; color: var(--muted); }
-.fiche-time { font-size: 10px; color: var(--warning); margin-top: 2px; }
-.fiche-toggle { font-size: 18px; color: var(--muted); transition: transform 0.2s; }
-.fiche-toggle.open { transform: rotate(180deg); }
+.fiche-toggle { font-size: 18px; color: var(--muted); }
 .fiche-body { display: none; padding: 0 16px 16px; }
 .fiche-body.open { display: block; }
-.fiche-section { margin-bottom: 16px; }
-.fiche-section-title { font-size: 13px; font-weight: 600; color: var(--accent2); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-.fiche-content { font-size: 12px; line-height: 1.7; color: var(--text); }
+.fiche-content { font-size: 12px; line-height: 1.7; }
 .fiche-content ul { padding-left: 16px; margin: 8px 0; }
-.fiche-content li { margin-bottom: 6px; }
 .fiche-highlight { background: rgba(124, 58, 237, 0.2); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--accent); }
 .fiche-warning { background: rgba(239, 68, 68, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--danger); }
 .fiche-tip { background: rgba(16, 185, 129, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--success); }
-.fiche-number { display: inline-block; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; margin-right: 6px; }
 
-.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.quiz-progress { font-size: 13px; color: var(--muted); }
-.quiz-theme { font-size: 11px; padding: 4px 10px; background: var(--accent); border-radius: 20px; }
-.quiz-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
-.quiz-options { display: flex; flex-direction: column; gap: 10px; }
-.quiz-opt { padding: 14px 16px; background: var(--card2); border: 2px solid transparent; border-radius: 12px; font-size: 13px; cursor: pointer; transition: all 0.2s; text-align: left; color: var(--text); }
-.quiz-opt:hover { border-color: var(--accent); }
-.quiz-opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.2); }
-.quiz-opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); }
-.quiz-feedback { margin-top: 16px; padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; }
-.quiz-feedback.correct { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
-.quiz-feedback.wrong { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
-.quiz-feedback strong { display: block; margin-bottom: 8px; }
-.quiz-feedback .detail { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: var(--muted); }
+.phase-list { display: flex; flex-direction: column; gap: 10px; }
+.phase-item { background: var(--card2); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 2px solid transparent; }
+.phase-item:hover { border-color: var(--accent); }
+.phase-item.done { border-color: var(--success); }
+.phase-item.locked { opacity: 0.5; }
+.phase-icon { font-size: 24px; }
+.phase-info { flex: 1; }
+.phase-name { font-size: 14px; font-weight: 600; }
+.phase-desc { font-size: 11px; color: var(--muted); }
 
-.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-success { background: var(--success); color: #fff; }
 .btn-warning { background: var(--warning); color: #000; }
 .btn-danger { background: var(--danger); color: #fff; }
 .btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn + .btn { margin-top: 10px; }
 
+.link-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card2); border-radius: 12px; text-decoration: none; color: var(--text); margin-bottom: 10px; }
+.link-icon { font-size: 24px; }
+.link-info { flex: 1; }
+.link-title { font-size: 13px; font-weight: 600; }
+.link-desc { font-size: 11px; color: var(--muted); }
+
+.quiz-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+.quiz-progress { font-size: 13px; color: var(--muted); }
+.quiz-theme { font-size: 11px; padding: 4px 10px; background: var(--accent); border-radius: 20px; }
+.quiz-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+.quiz-opt { display: block; width: 100%; padding: 14px 16px; background: var(--card2); border: 2px solid transparent; border-radius: 12px; font-size: 13px; cursor: pointer; text-align: left; color: var(--text); margin-bottom: 10px; }
+.quiz-opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.2); }
+.quiz-opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); }
+.quiz-feedback { padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; margin-top: 16px; }
+.quiz-feedback.correct { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
+.quiz-feedback.wrong { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
+.quiz-feedback .detail { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: var(--accent2); }
+
 .timer-box { background: linear-gradient(135deg, #1e1e3f, #2d2d5a); border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 16px; }
-.timer-display { font-size: 56px; font-weight: 200; font-family: 'SF Mono', 'Consolas', monospace; letter-spacing: 2px; margin: 12px 0; }
+.timer-display { font-size: 48px; font-weight: 200; font-family: monospace; margin: 12px 0; }
 .timer-label { font-size: 13px; color: var(--muted); }
-.timer-progress { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 16px; overflow: hidden; }
-.timer-fill { height: 100%; background: var(--success); transition: width 1s linear; }
 .timer-controls { display: flex; gap: 10px; margin-top: 16px; }
 .timer-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .timer-start { background: var(--success); color: #fff; }
 .timer-pause { background: var(--warning); color: #000; }
-.timer-reset { background: rgba(255,255,255,0.1); color: var(--text); }
 
-.criteria-grid { display: flex; flex-direction: column; gap: 12px; }
-.criteria-item { background: var(--card2); border-radius: 12px; padding: 14px; }
-.criteria-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-.criteria-name { font-size: 13px; font-weight: 600; flex: 1; }
+.criteria-item { background: var(--card2); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+.criteria-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.criteria-name { font-size: 13px; font-weight: 600; }
 .criteria-score { display: flex; gap: 6px; }
 .score-btn { width: 32px; height: 32px; border-radius: 8px; border: 2px solid var(--card); background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; }
 .score-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
@@ -134,71 +109,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .result-score { font-size: 64px; font-weight: 800; }
 .result-score.pass { color: var(--success); }
 .result-score.fail { color: var(--danger); }
-.result-label { font-size: 14px; color: var(--muted); margin-top: 8px; }
-.result-detail { margin-top: 20px; text-align: left; }
-.result-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--card2); font-size: 13px; }
-
-.phase-list { display: flex; flex-direction: column; gap: 10px; }
-.phase-item { background: var(--card2); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
-.phase-item:hover { border-color: var(--accent); }
-.phase-item.locked { opacity: 0.5; pointer-events: none; }
-.phase-item.done { border-color: var(--success); }
-.phase-icon { font-size: 24px; }
-.phase-info { flex: 1; }
-.phase-name { font-size: 14px; font-weight: 600; }
-.phase-desc { font-size: 11px; color: var(--muted); }
-.phase-status { font-size: 20px; }
-
-.view { display: none; }
-.view.active { display: block; }
-
-.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
-.modal.open { display: flex; }
-.modal-content { background: var(--card); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
 
 .checklist { display: flex; flex-direction: column; gap: 8px; }
 .check-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--card2); border-radius: 10px; cursor: pointer; }
-.check-box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-size: 14px; color: transparent; }
+.check-box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; }
 .check-item.done .check-box { background: var(--success); border-color: var(--success); color: #fff; }
-.check-label { font-size: 13px; flex: 1; }
-.check-item.done .check-label { color: var(--success); }
 
 .alert { padding: 12px 16px; border-radius: 10px; font-size: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
 .alert-warning { background: rgba(245, 158, 11, 0.15); border-left: 4px solid var(--warning); }
 .alert-success { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
-.alert-danger { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
-.alert-info { background: rgba(59, 130, 246, 0.15); border-left: 4px solid var(--info); }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+.modal.open { display: flex; }
+.modal-content { background: var(--card); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
 
 .tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-right: 4px; }
 .tag-danger { background: rgba(239, 68, 68, 0.3); color: var(--danger); }
-.tag-warning { background: rgba(245, 158, 11, 0.3); color: var(--warning); }
-.tag-success { background: rgba(16, 185, 129, 0.3); color: var(--success); }
-
-.mode-selector { display: flex; gap: 8px; margin-bottom: 16px; }
-.mode-btn { flex: 1; padding: 16px 12px; border: 2px solid var(--card2); border-radius: 12px; background: var(--card); cursor: pointer; text-align: center; transition: all 0.2s; }
-.mode-btn:hover { border-color: var(--accent); }
-.mode-btn.active { border-color: var(--accent); background: rgba(124, 58, 237, 0.2); }
-.mode-btn.jour-j { border-color: var(--danger); }
-.mode-btn.jour-j.active { background: rgba(239, 68, 68, 0.2); }
-.mode-icon { font-size: 24px; margin-bottom: 4px; }
-.mode-title { font-size: 13px; font-weight: 600; }
-.mode-desc { font-size: 10px; color: var(--muted); }
-
-.time-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-.time-stat { background: var(--card2); padding: 10px; border-radius: 8px; text-align: center; }
-.time-stat-value { font-size: 18px; font-weight: 700; color: var(--accent2); }
-.time-stat-label { font-size: 10px; color: var(--muted); }
 </style>
 </head>
 <body>
-
-<div class="revision-timer-float" id="revisionTimerFloat">
-  <div>
-    <div class="rtf-time" id="rtfTime">02:00:00</div>
-    <div class="rtf-label">⏱️ Temps de lecture restant</div>
-  </div>
-  <button class="rtf-btn rtf-pause" id="rtfBtn" onclick="toggleRevisionTimer()">⏸</button>
-</div>
 
 <div class="app">
   <div class="header">
@@ -206,7 +138,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <span class="logo-icon">🔥</span>
       <div>
         <div class="logo-text">Forge IRA</div>
-        <div class="logo-sub">Final Edition 2026</div>
+        <div class="logo-sub">Concours 2026</div>
       </div>
     </div>
     <div class="countdown">
@@ -215,17 +147,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     </div>
   </div>
 
-  <div class="tabs" id="mainTabs">
-    <button class="tab active" onclick="showView('revisions')">📚 Révisions</button>
-    <button class="tab" onclick="showView('quiz')">🎯 Quiz</button>
-    <button class="tab" onclick="showView('exam')">⏱️ Épreuve</button>
-    <button class="tab" onclick="showView('ressources')">🔗 Liens</button>
+  <div class="tabs">
+    <button class="tab active" id="tab-revisions" onclick="goTo('revisions')">📚 Fiches</button>
+    <button class="tab" id="tab-quiz" onclick="goTo('quiz')">🎯 Quiz</button>
+    <button class="tab" id="tab-exam" onclick="goTo('exam')">⏱️ Épreuve</button>
+    <button class="tab" id="tab-liens" onclick="goTo('liens')">🔗 Liens</button>
   </div>
 
-  <div id="revisionsView" class="view active"></div>
-  <div id="quizView" class="view"></div>
-  <div id="examView" class="view"></div>
-  <div id="ressourcesView" class="view"></div>
+  <div id="revisions" class="view active"></div>
+  <div id="quiz" class="view"></div>
+  <div id="exam" class="view"></div>
+  <div id="liens" class="view"></div>
 </div>
 
 <div class="modal" id="quizModal">
@@ -236,839 +168,424 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="modal-content" id="correctionContent"></div>
 </div>
 
-<div class="modal" id="timeUpModal">
-  <div class="modal-content">
-    <div style="text-align:center">
-      <div style="font-size:48px">⏰</div>
-      <div style="font-size:20px;font-weight:700;margin:12px 0">Temps écoulé !</div>
-      <p style="color:var(--muted);margin-bottom:20px">Tes 2h de lecture sont terminées. Le jour J, tu passerais maintenant à la rédaction.</p>
-      <div id="timeUpStats"></div>
-      <button class="btn btn-primary" onclick="closeTimeUpModal()">Voir mes statistiques</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// ============ FICHES DE RÉVISION ============
+// ===== DATA =====
 const FICHES = [
-  {
-    id: "methodo",
-    icon: "📝",
-    title: "Méthodologie du cas pratique",
-    subtitle: "Structure imposée, critères du jury",
-    color: "#7c3aed",
+  { id: "methodo", icon: "📝", title: "Méthodologie", subtitle: "Structure, critères jury", color: "#7c3aed",
     sections: [
-      { title: "📌 Format imposé", content: `<div class="fiche-highlight"><strong>RENDU OBLIGATOIRE :</strong><br>1️⃣ Note argumentée (3-4 pages)<br>2️⃣ Annexe opérationnelle n°1<br>3️⃣ Annexe opérationnelle n°2</div><ul><li><strong>Durée :</strong> 4 heures</li><li><strong>Coefficient :</strong> 5</li><li><strong>Note éliminatoire :</strong> < 5/20</li><li><strong>Dossier :</strong> 30 pages max</li></ul>` },
-      { title: "🏗️ Structure de la note", content: `<div class="fiche-tip"><strong>PLAN TYPE :</strong><br>Introduction → Diagnostic → Propositions</div><p><strong>Introduction (½ page) :</strong> Accroche, définitions, problématique, plan</p><p><strong>Partie 1 - Diagnostic (1-1,5 pages) :</strong> État des lieux, enjeux, acteurs</p><p><strong>Partie 2 - Propositions (1,5-2 pages) :</strong> Solutions concrètes, moyens, calendrier</p>` },
-      { title: "📎 Annexes opérationnelles", content: `<p><strong>Types possibles :</strong> Courrier, note de service, fiche procédure, rétroplanning, organigramme, tableau de bord, courriel</p><div class="fiche-warning"><strong>⚠️</strong> OPÉRATIONNELLE = directement utilisable. Pas un résumé !</div>` },
-      { title: "⚖️ 10 critères du jury", content: `<ol><li>Utilisation du dossier</li><li>Connaissances hors dossier</li><li>Réponse à la commande (opérationnel > savoir)</li><li>Problématique identifiée</li><li>Esprit de décision</li><li>Qualité des annexes</li><li>Qualités rédactionnelles</li><li>Méthode et organisation</li><li>Prise en compte destinataire</li><li>Présentation</li></ol>` },
-      { title: "⏱️ Gestion du temps", content: `<div class="fiche-highlight"><strong>RÉPARTITION :</strong><br>🔍 1h30 — Lecture active<br>✍️ 2h00 — Rédaction note<br>📎 30min — Annexes + relecture</div>` }
+      { title: "📌 Format", content: `<div class="fiche-highlight"><strong>RENDU :</strong><br>1️⃣ Note (3-4 pages)<br>2️⃣ Annexe 1<br>3️⃣ Annexe 2</div><ul><li>4h • Coeff 5 • Éliminatoire < 5/20</li><li>Dossier : 30 pages max</li></ul>` },
+      { title: "🏗️ Structure", content: `<div class="fiche-tip"><strong>PLAN :</strong> Intro → Diagnostic → Propositions</div>` },
+      { title: "⏱️ Temps", content: `<div class="fiche-highlight">🔍 1h30 lecture → ✍️ 2h rédaction → 📎 30min annexes</div>` }
     ]
   },
-  {
-    id: "finances",
-    icon: "💰",
-    title: "Finances publiques",
-    subtitle: "LOLF, budget, dette — Proba: 90%",
-    color: "#10b981",
+  { id: "finances", icon: "💰", title: "Finances publiques", subtitle: "LOLF, budget, dette — Proba 90%", color: "#10b981",
     sections: [
-      { title: "🔊 Mnémotechnique", content: `<div class="fiche-highlight"><strong>Son :</strong> "LO-LO-F" (eau qui fuit)<br><strong>Acronyme :</strong> B.D.R.F = Budget → Dette → Réforme → Fiscalité</div>` },
-      { title: "📊 Chiffres clés", content: `<ul><li><span class="tag tag-danger">CRITIQUE</span> <strong>Déficit :</strong> 5-6% du PIB (objectif UE : 3%)</li><li><span class="tag tag-danger">CRITIQUE</span> <strong>Dette :</strong> >3000 Mds€ (>110% PIB)</li><li><strong>PIB France :</strong> ~2800 Mds€</li><li><strong>Dépenses publiques :</strong> ~57% du PIB</li></ul>` },
-      { title: "📜 LOLF 2001", content: `<p><strong>= Constitution financière</strong></p><div class="fiche-highlight">Structure : MISSIONS → PROGRAMMES → ACTIONS</div><p><strong>Principes :</strong> Annualité, Unité, Universalité, Spécialité, Sincérité</p>` },
-      { title: "🏛️ Acteurs", content: `<ul><li><strong>Parlement :</strong> Vote (PLF 1er mardi octobre)</li><li><strong>Cour des comptes :</strong> Contrôle + Certification</li><li><strong>Direction du Budget :</strong> Pilotage (Bercy)</li></ul>` },
-      { title: "🇪🇺 Contraintes UE", content: `<ul><li><strong>Pacte stabilité :</strong> Déficit < 3%</li><li><strong>Dette :</strong> < 60% (objectif)</li><li><strong>Règle d'or :</strong> Déficit structurel < 0,5%</li></ul><div class="fiche-warning">⚠️ France en procédure pour déficit excessif</div>` }
+      { title: "📊 Chiffres", content: `<ul><li><span class="tag tag-danger">!</span> Déficit : 5-6% PIB (UE : 3%)</li><li><span class="tag tag-danger">!</span> Dette : >3000 Mds€ (>110% PIB)</li></ul>` },
+      { title: "📜 LOLF", content: `<div class="fiche-highlight">MISSIONS → PROGRAMMES → ACTIONS</div><p>Principes : Annualité, Unité, Universalité, Spécialité, Sincérité</p>` },
+      { title: "🇪🇺 UE", content: `<ul><li>Pacte stabilité : Déficit < 3%</li><li>Règle d'or : < 0,5%</li></ul><div class="fiche-warning">⚠️ France en procédure déficit excessif</div>` }
     ]
   },
-  {
-    id: "europe",
-    icon: "⭐",
-    title: "Enjeux européens",
-    subtitle: "Institutions, droit UE — Proba: 90%",
-    color: "#3b82f6",
+  { id: "europe", icon: "⭐", title: "Enjeux européens", subtitle: "Institutions, droit UE — Proba 90%", color: "#3b82f6",
     sections: [
-      { title: "🔊 Mnémotechnique", content: `<div class="fiche-highlight"><strong>Son :</strong> "CO-PA-CO"<br><strong>Acronyme :</strong> F.O.N.D.S = FEDER → OMbudsman → NextGen → Directives → Subsidiarité</div>` },
-      { title: "🏛️ Triangle institutionnel", content: `<p><strong>CO-PA-CO :</strong></p><ul><li><strong>COnseil UE :</strong> États (ministres)</li><li><strong>PArlement :</strong> Citoyens (705 députés)</li><li><strong>COmmission :</strong> Gardienne traités + Initiative</li></ul>` },
-      { title: "📜 Droit européen", content: `<div class="fiche-highlight"><strong>PRIMAUTÉ :</strong> Droit UE > droit national (Costa c/ ENEL 1964)</div><p><strong>Actes :</strong> Règlement (direct) / Directive (transposition) / Décision</p><p><strong>Principes :</strong> Subsidiarité, Proportionnalité</p>` },
-      { title: "💶 Politiques", content: `<ul><li><span class="tag tag-success">GREEN DEAL</span> Neutralité carbone 2050</li><li><span class="tag tag-warning">NEXTGEN EU</span> 750 Mds€ (relance)</li><li><strong>FEDER, FSE+, PAC, PESC</strong></li></ul>` },
-      { title: "🌍 Actualité 2026", content: `<div class="fiche-warning"><strong>Contexte :</strong> Guerre Ukraine, Trump 2.0, élargissement potentiel, réforme Pacte stabilité</div>` }
+      { title: "🏛️ Triangle", content: `<ul><li><strong>COnseil :</strong> États</li><li><strong>PArlement :</strong> 705 députés</li><li><strong>COmmission :</strong> Initiative</li></ul>` },
+      { title: "📜 Droit", content: `<div class="fiche-highlight">PRIMAUTÉ : Droit UE > national (Costa c/ ENEL 1964)</div>` },
+      { title: "💶 Politiques", content: `<ul><li>GREEN DEAL : Carbone 0 en 2050</li><li>NEXTGEN EU : 750 Mds€</li></ul>` }
     ]
   },
-  {
-    id: "education",
-    icon: "📚",
-    title: "Système éducatif",
-    subtitle: "Réformes, Parcoursup — Proba: 65%",
-    color: "#f59e0b",
+  { id: "education", icon: "📚", title: "Système éducatif", subtitle: "Réformes — Proba 65%", color: "#f59e0b",
     sections: [
-      { title: "🔊 Mnémotechnique", content: `<div class="fiche-highlight"><strong>Son :</strong> "CHOC !" (Choc des savoirs)<br><strong>Acronyme :</strong> P.A.R.E = Parcoursup → Académies → Réformes → Égalité</div>` },
-      { title: "📊 Chiffres", content: `<ul><li><strong>30 académies</strong></li><li><strong>660 000 bacheliers</strong> Parcoursup/an</li><li><strong>4 000 postes</strong> non pourvus/an</li><li><strong>Instruction :</strong> 3 à 18 ans</li></ul><div class="fiche-warning">⚠️ PISA 2023 : Recul France</div>` },
-      { title: "🏗️ Organisation", content: `<ul><li><strong>Recteur :</strong> Académie (nommé PR)</li><li><strong>DASEN :</strong> Département</li><li><strong>1er degré :</strong> Maternelle + Élémentaire</li><li><strong>2nd degré :</strong> Collège + Lycée</li></ul>` },
-      { title: "📜 Réformes récentes", content: `<ul><li><span class="tag tag-danger">2024</span> Choc des savoirs (groupes niveau)</li><li><span class="tag tag-warning">2024</span> DNB obligatoire pour seconde</li><li><span class="tag tag-success">2023</span> Lycée pro (+ stages)</li></ul>` },
-      { title: "🎯 Enjeux", content: `<ul><li>Attractivité métier enseignant</li><li>Mixité sociale</li><li>Inclusion handicap</li><li>Harcèlement scolaire (plan 2023)</li></ul>` }
+      { title: "📊 Chiffres", content: `<ul><li>30 académies</li><li>660k bacheliers Parcoursup</li><li>4000 postes vacants/an</li></ul><div class="fiche-warning">⚠️ PISA 2023 : Recul France</div>` },
+      { title: "📜 Réformes", content: `<ul><li>2024 : Choc savoirs (groupes niveau)</li><li>2024 : DNB obligatoire pour lycée</li></ul>` }
     ]
   }
 ];
 
-// ============ RESSOURCES ============
-const RESSOURCES = [
-  { category: "📄 Annales", links: [
-    { icon: "📋", title: "Toutes les annales", desc: "Sujets précédents", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-annales-des-concours" },
-    { icon: "📝", title: "Cas pratique 2024", desc: "Harcèlement scolaire", url: "https://www.fonction-publique.gouv.fr/files/files/devenir-agent-public/cas_pratique_ira_2024.pdf" }
-  ]},
-  { category: "✅ Corrigés", links: [
-    { icon: "🏆", title: "Meilleures copies", desc: "Exemples bien notés", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-meilleures-copies-et-corriges" },
-    { icon: "📊", title: "Rapports jury", desc: "Conseils officiels", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-rapports-de-jury" }
-  ]},
-  { category: "📚 Docs officiels", links: [
-    { icon: "📖", title: "Note de cadrage", desc: "Attendus épreuve", url: "https://ira-gestion.fonction-publique.gouv.fr/userfiles/promotion/12/note-de-cadrage-cas-pratique.pdf" },
-    { icon: "📋", title: "Grille jury", desc: "Critères notation", url: "https://www.ira-lille.gouv.fr/wp-content/uploads/2025/07/2025_grille_evaluation_differenciee_cas_pratique.pdf" }
-  ]},
-  { category: "🎓 Préparation", links: [
-    { icon: "🖥️", title: "Mentor", desc: "Formation gratuite", url: "https://mentor.gouv.fr" },
-    { icon: "📰", title: "Vie Publique", desc: "Fiches thématiques", url: "https://www.vie-publique.fr" }
-  ]}
-];
-
-// ============ QUIZ AVEC EXPLICATIONS DÉTAILLÉES ============
-const QUIZ_DATA = {
-  methodo: { name: "Méthodologie", icon: "📝", color: "#7c3aed", questions: [
-    { 
-      q: "Structure imposée du rendu ?", 
-      opts: ["1 note + 1 annexe", "1 note + 2 annexes opérationnelles", "2 notes", "1 dissertation"], 
-      ans: 1, 
-      tip: "Le cas pratique IRA impose une structure précise : une note argumentée (3-4 pages) qui expose ton diagnostic et tes propositions, accompagnée de 2 documents annexes opérationnels choisis parmi une liste (courrier, rétroplanning, fiche procédure, etc.). Cette structure reflète le travail réel d'un attaché d'administration.",
-      detail: "📌 À retenir : Note + Annexe 1 + Annexe 2 = les 3 livrables obligatoires"
-    },
-    { 
-      q: "Le jury sanctionne une copie qui...", 
-      opts: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], 
-      ans: 1, 
-      tip: "Le piège classique ! Beaucoup de candidats font une synthèse des documents du dossier. Or le jury attend une ANALYSE avec des propositions concrètes. La synthèse montre que tu sais lire, mais pas que tu sais réfléchir et décider. Le cas pratique évalue ta capacité à te projeter dans un rôle d'encadrant.",
-      detail: "⚠️ Erreur fatale : restituer le dossier au lieu de l'exploiter"
-    },
-    { 
-      q: "La rédaction doit montrer...", 
-      opts: ["Son savoir", "Une préoccupation opérationnelle", "Une culture générale", "Un style littéraire"], 
-      ans: 1, 
-      tip: "Citation exacte de la grille du jury : la copie doit montrer 'une préoccupation opérationnelle (se faire comprendre)' et NON 'une préoccupation personnelle (montrer son savoir)'. Autrement dit, écris pour ton destinataire (le directeur, le préfet...), pas pour impressionner le jury avec tes connaissances.",
-      detail: "🎯 Objectif : être utile au destinataire, pas briller"
-    },
-    { 
-      q: "Note éliminatoire ?", 
-      opts: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], 
-      ans: 1, 
-      tip: "Toute note strictement inférieure à 5/20 au cas pratique est éliminatoire. Cela signifie qu'une copie hors-sujet, incomplète (sans annexes) ou montrant une incompréhension totale de la commande peut te disqualifier immédiatement, même si tu excelles à l'oral. C'est le filet de sécurité du jury.",
-      detail: "🚨 Même avec 20/20 à l'oral, un 4/20 ici = élimination"
-    },
-    { 
-      q: "Durée de l'épreuve ?", 
-      opts: ["3h", "4h", "5h", "2h"], 
-      ans: 1, 
-      tip: "L'épreuve dure 4 heures avec un coefficient 5 (le plus élevé de l'admissibilité). C'est un marathon qui demande une vraie gestion du temps : ~1h30 pour lire et analyser les 30 pages du dossier, ~2h pour rédiger la note, ~30min pour les annexes et la relecture.",
-      detail: "⏱️ 4h coefficient 5 = l'épreuve reine de l'admissibilité"
-    },
-    { 
-      q: "Dossier documentaire max ?", 
-      opts: ["20 pages", "30 pages", "40 pages", "25 pages"], 
-      ans: 1, 
-      tip: "Le dossier documentaire contient au maximum 30 pages. Il regroupe des textes variés : extraits de lois, circulaires, articles de presse, rapports, statistiques... Tu dois les exploiter pour construire ton argumentation, mais attention : le jury vérifie que tu apportes aussi des connaissances HORS dossier.",
-      detail: "📚 30 pages à lire, analyser et exploiter en 1h30 max"
-    },
-    { 
-      q: "Temps lecture recommandé ?", 
-      opts: ["30min", "1h", "1h30", "2h30"], 
-      ans: 2, 
-      tip: "La lecture active du dossier devrait prendre environ 1h30. 'Active' signifie : surligner les passages clés, noter les idées dans la marge, identifier les documents utiles pour chaque partie de ta note. Une lecture passive te fera perdre du temps ensuite. Les 2h30 restantes sont pour la rédaction.",
-      detail: "📖 1h30 lecture → 2h rédaction → 30min annexes/relecture"
-    },
-    { 
-      q: "L'annexe doit être...", 
-      opts: ["Un résumé", "Opérationnelle", "Académique", "Longue"], 
-      ans: 1, 
-      tip: "Une annexe 'opérationnelle' signifie qu'elle doit être DIRECTEMENT UTILISABLE par le destinataire. Si tu fais un rétroplanning, il doit contenir de vraies dates et actions. Si tu fais un courrier, il doit avoir l'en-tête, la formule de politesse, tout. Le jury vérifie que tu sais produire des documents administratifs professionnels.",
-      detail: "✅ Test : ton annexe peut-elle être envoyée telle quelle ?"
-    }
+// ===== 12 QUESTIONS PAR THÈME = 48 TOTAL =====
+const QUIZ = {
+  methodo: { name: "Méthodologie", icon: "📝", questions: [
+    { q: "Structure imposée du rendu ?", o: ["1 note + 1 annexe", "1 note + 2 annexes opérationnelles", "2 notes", "1 dissertation"], a: 1, t: "Le cas pratique impose une note argumentée (3-4 pages) + 2 annexes opérationnelles. Cette structure reflète le travail réel d'un attaché.", d: "📌 Note + Annexe 1 + Annexe 2" },
+    { q: "Le jury sanctionne une copie qui...", o: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], a: 1, t: "Le jury attend une ANALYSE avec propositions, pas un résumé du dossier. La synthèse montre que tu sais lire, pas décider.", d: "⚠️ Analyser ≠ Synthétiser" },
+    { q: "La rédaction doit montrer...", o: ["Son savoir", "Une préoccupation opérationnelle", "Une culture générale", "Un style littéraire"], a: 1, t: "Citation grille : 'préoccupation opérationnelle' et NON 'montrer son savoir'. Écris pour ton destinataire.", d: "🎯 Être utile > briller" },
+    { q: "Note éliminatoire ?", o: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], a: 1, t: "Toute note < 5/20 est éliminatoire. Une copie hors-sujet peut te disqualifier même avec 20/20 à l'oral.", d: "🚨 < 5 = élimination directe" },
+    { q: "Durée de l'épreuve ?", o: ["3h", "4h", "5h", "2h"], a: 1, t: "4 heures, coefficient 5 (le plus élevé). Gestion du temps cruciale : 1h30 lecture, 2h rédaction, 30min annexes.", d: "⏱️ 4h coeff 5" },
+    { q: "Dossier documentaire max ?", o: ["20 pages", "30 pages", "40 pages", "25 pages"], a: 1, t: "30 pages max. Tu dois les exploiter ET apporter des connaissances hors dossier.", d: "📚 30 pages max" },
+    { q: "Temps lecture recommandé ?", o: ["30min", "1h", "1h30", "2h30"], a: 2, t: "1h30 de lecture ACTIVE : surligner, noter, identifier. Pas de lecture passive.", d: "📖 1h30 lecture active" },
+    { q: "L'annexe doit être...", o: ["Un résumé", "Opérationnelle", "Académique", "Longue"], a: 1, t: "'Opérationnelle' = DIRECTEMENT UTILISABLE. Rétroplanning avec vraies dates, courrier complet.", d: "✅ Utilisable immédiatement" },
+    { q: "Combien de critères dans la grille ?", o: ["5", "8", "10", "12"], a: 2, t: "10 critères notés 0-2 : dossier, connaissances, commande, problématique, décision, annexes, rédaction, méthode, destinataire, présentation.", d: "📋 10 × 2 = /20" },
+    { q: "La note doit être...", o: ["Dépendante du dossier", "Autonome", "Sans référence", "Uniquement tes connaissances"], a: 1, t: "AUTONOME = le lecteur comprend SANS avoir le dossier. Intègre les infos dans ton argumentation.", d: "📝 Pas de 'cf. doc 3'" },
+    { q: "Le destinataire est généralement...", o: ["Le jury", "Le ministre", "Un supérieur hiérarchique fictif", "Le grand public"], a: 2, t: "Tu écris pour un directeur, préfet, recteur... Le jury évalue ta capacité à te projeter.", d: "🎭 Tu joues le rôle d'un attaché" },
+    { q: "Quel plan est le plus adapté ?", o: ["Thèse/Antithèse", "Diagnostic/Propositions", "Chronologique", "Comparatif"], a: 1, t: "Plan en 2 parties : I. Diagnostic (état des lieux) puis II. Propositions (solutions). Format attendu.", d: "🏗️ Diagnostic → Propositions" }
   ]},
   
-  finances: { name: "Finances publiques", icon: "💰", color: "#10b981", questions: [
-    { 
-      q: "LOLF signifie ?", 
-      opts: ["Loi Ordinaire...", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation...", "Loi d'Orientation..."], 
-      ans: 1, 
-      tip: "La LOLF (2001, appliquée en 2006) est surnommée 'constitution financière de l'État'. Elle a révolutionné la gestion publique en passant d'une logique de MOYENS à une logique de RÉSULTATS. Avant, on votait des crédits par ministère. Maintenant, on vote par MISSIONS → PROGRAMMES → ACTIONS avec des objectifs et indicateurs de performance.",
-      detail: "🏛️ LOLF 2001 = passage de 'combien on dépense' à 'pour quoi on dépense'"
-    },
-    { 
-      q: "Déficit public français ?", 
-      opts: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], 
-      ans: 1, 
-      tip: "Le déficit public français tourne autour de 5-6% du PIB, soit près du DOUBLE de la limite européenne (3% fixée par Maastricht). Cette situation a conduit l'UE à ouvrir une procédure pour déficit excessif contre la France. C'est un sujet brûlant d'actualité qui peut facilement tomber au concours.",
-      detail: "📊 France ~5-6% vs limite UE 3% = procédure déficit excessif"
-    },
-    { 
-      q: "Dette publique dépasse ?", 
-      opts: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], 
-      ans: 2, 
-      tip: "La dette publique française dépasse désormais les 3000 milliards d'euros, soit plus de 110% du PIB (le critère de Maastricht fixait 60%). Pour donner un ordre d'idée : chaque Français 'doit' environ 45 000€. Les intérêts de la dette représentent le 2ème poste budgétaire de l'État, devant la Défense.",
-      detail: "💸 3000 Mds€ = 110% PIB. Intérêts = 2ème budget de l'État"
-    },
-    { 
-      q: "Qui contrôle le budget ?", 
-      opts: ["Sénat", "AN", "Cour des comptes", "Conseil d'État"], 
-      ans: 2, 
-      tip: "La Cour des comptes est la juridiction financière suprême. Elle remplit 3 missions : 1) Juger les comptes des comptables publics, 2) Contrôler la gestion des administrations, 3) Certifier les comptes de l'État et de la Sécu. Elle publie chaque année un rapport très médiatisé qui épingle les gaspillages.",
-      detail: "⚖️ Cour des comptes : juge + contrôle + certifie les comptes publics"
-    },
-    { 
-      q: "PLF présenté au plus tard ?", 
-      opts: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], 
-      ans: 1, 
-      tip: "Le Projet de Loi de Finances (PLF) doit être déposé au Parlement au plus tard le 1er MARDI d'octobre (article 39 LOLF). Le Parlement a ensuite 70 jours pour l'examiner et le voter. Si le délai n'est pas respecté, le gouvernement peut mettre en œuvre le projet par ordonnance.",
-      detail: "📅 1er mardi octobre → vote avant le 31 décembre (70 jours)"
-    },
-    { 
-      q: "Pacte stabilité limite déficit à ?", 
-      opts: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], 
-      ans: 1, 
-      tip: "Le Pacte de Stabilité et de Croissance (PSC) fixe deux limites issues du Traité de Maastricht : déficit < 3% du PIB et dette < 60% du PIB. Ces règles ont été assouplies puis suspendues pendant le Covid, mais sont revenues en vigueur. La France ne les respecte pas, d'où la procédure pour déficit excessif.",
-      detail: "🇪🇺 Maastricht : déficit < 3% + dette < 60% → France hors clous"
-    },
-    { 
-      q: "Structure LOLF ?", 
-      opts: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], 
-      ans: 1, 
-      tip: "La LOLF organise le budget en 3 niveaux : les MISSIONS (grandes politiques publiques, votées par le Parlement), les PROGRAMMES (enveloppes confiées à un responsable avec objectifs), et les ACTIONS (déclinaison opérationnelle). Exemple : Mission 'Sécurités' → Programme 'Police nationale' → Action 'Ordre public'.",
-      detail: "🏗️ Mission (politique) → Programme (objectifs) → Action (terrain)"
-    },
-    { 
-      q: "Règle d'or = déficit structurel < ?", 
-      opts: ["0,5%", "1%", "2%", "3%"], 
-      ans: 0, 
-      tip: "La 'règle d'or' européenne (TSCG 2012) impose un déficit STRUCTUREL inférieur à 0,5% du PIB. Le déficit structurel est le déficit corrigé des effets de la conjoncture économique. C'est plus strict que la règle des 3% car même en période de croissance, tu dois être quasi à l'équilibre.",
-      detail: "🎯 Déficit structurel < 0,5% = quasi-équilibre hors conjoncture"
-    }
+  finances: { name: "Finances publiques", icon: "💰", questions: [
+    { q: "LOLF signifie ?", o: ["Loi Ordinaire...", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation...", "Loi d'Orientation..."], a: 1, t: "LOLF 2001 = 'constitution financière'. Passage MOYENS → RÉSULTATS avec objectifs et indicateurs.", d: "🏛️ Constitution financière" },
+    { q: "Déficit public français ?", o: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], a: 1, t: "~5-6% du PIB, DOUBLE de la limite UE (3%). Procédure pour déficit excessif.", d: "📊 5-6% vs 3% UE" },
+    { q: "Dette publique dépasse ?", o: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], a: 2, t: ">3000 Mds€ soit >110% PIB. Intérêts = 2ème poste budgétaire.", d: "💸 3000 Mds = 110% PIB" },
+    { q: "Qui contrôle le budget ?", o: ["Sénat", "AN", "Cour des comptes", "Conseil d'État"], a: 2, t: "Cour des comptes : juge, contrôle, certifie. Rapport annuel médiatisé.", d: "⚖️ Cour des comptes" },
+    { q: "PLF présenté au plus tard ?", o: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], a: 1, t: "1er MARDI d'octobre. Parlement a 70 jours pour voter.", d: "📅 1er mardi octobre" },
+    { q: "Pacte stabilité limite déficit à ?", o: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], a: 1, t: "Maastricht : déficit < 3% et dette < 60%.", d: "🇪🇺 3% + 60%" },
+    { q: "Structure LOLF ?", o: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], a: 1, t: "MISSIONS (politiques) → PROGRAMMES (objectifs) → ACTIONS (terrain).", d: "🏗️ M → P → A" },
+    { q: "Règle d'or = déficit structurel < ?", o: ["0,5%", "1%", "2%", "3%"], a: 0, t: "TSCG 2012 : < 0,5%. Plus strict que les 3%.", d: "🎯 0,5% structurel" },
+    { q: "LPFP signifie ?", o: ["Loi de Programmation des Finances Publiques", "Loi de Protection Financière", "Loi de Prévision Fiscale", "Loi de Planification"], a: 0, t: "Trajectoire pluriannuelle (3-5 ans) des finances.", d: "📈 Vision pluriannuelle" },
+    { q: "Le déficit Sécu compte dans...", o: ["Un budget séparé", "Le déficit public Maastricht", "Le déficit entreprises", "Rien"], a: 1, t: "Déficit public = État + Sécu + collectivités. Tout consolidé pour Maastricht.", d: "📊 État + Sécu + APUL" },
+    { q: "Qui certifie les comptes État ?", o: ["Parlement", "Cour des comptes", "Bercy", "Conseil constitutionnel"], a: 1, t: "Depuis LOLF, la Cour certifie comme un commissaire aux comptes.", d: "✅ Certification annuelle" },
+    { q: "Dépenses publiques = ?", o: ["45% PIB", "57% PIB", "35% PIB", "65% PIB"], a: 1, t: "~57% du PIB, un des plus élevés OCDE.", d: "📊 57% PIB" }
   ]},
   
-  europe: { name: "Enjeux européens", icon: "⭐", color: "#3b82f6", questions: [
-    { 
-      q: "3 institutions principales ?", 
-      opts: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], 
-      ans: 1, 
-      tip: "Le 'triangle institutionnel' de l'UE : le CONSEIL de l'UE (ministres des États, défend les intérêts nationaux), le PARLEMENT européen (705 députés élus, représente les citoyens), et la COMMISSION européenne (27 commissaires, propose les lois et veille à leur application). Mnémotechnique : CO-PA-CO.",
-      detail: "🔺 Triangle : Conseil (États) + Parlement (citoyens) + Commission (gardienne)"
-    },
-    { 
-      q: "Green Deal vise ?", 
-      opts: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], 
-      ans: 1, 
-      tip: "Le Pacte Vert (Green Deal) européen, lancé en 2019 par Ursula von der Leyen, vise la NEUTRALITÉ CARBONE de l'Europe d'ici 2050. Objectif intermédiaire : -55% d'émissions en 2030. Il couvre tous les secteurs : énergie, transports, agriculture, industrie, bâtiment. C'est LA priorité stratégique de l'UE.",
-      detail: "🌍 Green Deal : Europe neutre en carbone 2050, -55% en 2030"
-    },
-    { 
-      q: "NextGen EU = ?", 
-      opts: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], 
-      ans: 2, 
-      tip: "NextGeneration EU est le plan de relance post-Covid de 750 milliards d'euros, dont 390 Mds de subventions et 360 Mds de prêts. C'est historique : pour la première fois, l'UE emprunte en commun sur les marchés. La France reçoit environ 40 Mds€ pour financer son plan 'France Relance', notamment la transition écologique.",
-      detail: "💶 750 Mds€ = 1er emprunt commun de l'UE (révolution !)"
-    },
-    { 
-      q: "Subsidiarité signifie ?", 
-      opts: ["UE décide tout", "UE n'intervient que si États ne peuvent pas", "États décident seuls", "Régions prioritaires"], 
-      ans: 1, 
-      tip: "Le principe de subsidiarité (article 5 TUE) signifie que l'UE n'agit que si l'objectif ne peut pas être atteint de manière suffisante par les États membres. Autrement dit : on traite au niveau européen uniquement ce qui est PLUS EFFICACE à ce niveau (environnement, marché unique...). Les Parlements nationaux peuvent lever un 'carton jaune' si ce principe n'est pas respecté.",
-      detail: "⚖️ UE intervient SEULEMENT si plus efficace que les États seuls"
-    },
-    { 
-      q: "Primauté droit UE ?", 
-      opts: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], 
-      ans: 0, 
-      tip: "L'arrêt Costa c/ ENEL (CJCE, 1964) a posé le principe de PRIMAUTÉ : le droit européen l'emporte sur le droit national, y compris les constitutions. C'est le pilier de l'intégration européenne. Sans ce principe, chaque État pourrait ignorer les règles communes. Attention : ce n'est pas absolu, les cours constitutionnelles nationales gardent un 'contrôle d'identité'.",
-      detail: "👑 Costa c/ ENEL 1964 : droit UE prime sur TOUT droit national"
-    },
-    { 
-      q: "Directive européenne ?", 
-      opts: ["Directement applicable", "Doit être transposée", "Pas de valeur", "Commission seulement"], 
-      ans: 1, 
-      tip: "Contrairement au RÈGLEMENT (directement applicable), la DIRECTIVE fixe un objectif mais laisse aux États le choix des moyens pour l'atteindre. Elle doit être 'transposée' en droit national dans un délai fixé. Si un État ne transpose pas ou mal, la Commission peut lancer une procédure d'infraction (amende possible).",
-      detail: "📜 Règlement = direct / Directive = objectif → transposition nationale"
-    },
-    { 
-      q: "PESC désigne ?", 
-      opts: ["Politique Économique...", "Politique Étrangère et de Sécurité Commune", "Pacte Européen...", "Programme Européen..."], 
-      ans: 1, 
-      tip: "La PESC (Politique Étrangère et de Sécurité Commune) est le volet diplomatique et militaire de l'UE. Elle fonctionne à l'UNANIMITÉ (chaque État a un droit de veto), ce qui la rend souvent paralysée. Le Haut Représentant (actuellement Kaja Kallas) coordonne cette politique. La guerre en Ukraine a relancé le débat sur une défense européenne.",
-      detail: "🌐 PESC = diplomatie/défense UE, mais unanimité → blocages"
-    },
-    { 
-      q: "BCE mission principale ?", 
-      opts: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], 
-      ans: 1, 
-      tip: "La BCE (Banque Centrale Européenne, Francfort) a pour mission PRINCIPALE la stabilité des prix, avec un objectif d'inflation proche de 2%. Elle est INDÉPENDANTE des gouvernements. Elle fixe les taux directeurs et peut acheter des obligations. Attention : elle ne finance PAS directement les États (interdiction du traité).",
-      detail: "🏦 BCE : inflation ~2%, indépendante, ne finance pas les États"
-    }
+  europe: { name: "Enjeux européens", icon: "⭐", questions: [
+    { q: "3 institutions principales ?", o: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], a: 1, t: "Triangle : CONSEIL (États), PARLEMENT (705 députés), COMMISSION (initiative). Mnémo: CO-PA-CO.", d: "🔺 CO-PA-CO" },
+    { q: "Green Deal vise ?", o: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], a: 1, t: "Pacte Vert 2019 : neutralité 2050, -55% en 2030. LA priorité UE.", d: "🌍 Carbone 0 en 2050" },
+    { q: "NextGen EU = ?", o: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], a: 2, t: "750 Mds€. HISTORIQUE : 1er emprunt commun UE.", d: "💶 750 Mds€ commun" },
+    { q: "Subsidiarité signifie ?", o: ["UE décide tout", "UE n'intervient que si États ne peuvent pas", "États seuls", "Régions prioritaires"], a: 1, t: "Article 5 TUE : UE agit si plus efficace que les États.", d: "⚖️ UE si plus efficace" },
+    { q: "Primauté droit UE ?", o: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], a: 0, t: "Costa c/ ENEL 1964 : UE > TOUT droit national.", d: "👑 UE > national" },
+    { q: "Directive européenne ?", o: ["Directement applicable", "Doit être transposée", "Non contraignante", "Commission seulement"], a: 1, t: "RÈGLEMENT = direct. DIRECTIVE = transposition.", d: "📜 Directive = transposer" },
+    { q: "PESC désigne ?", o: ["Politique Économique...", "Politique Étrangère et de Sécurité Commune", "Pacte Européen...", "Programme Européen..."], a: 1, t: "PESC = diplomatie/défense. UNANIMITÉ donc souvent paralysée.", d: "🌐 PESC = unanimité" },
+    { q: "BCE mission principale ?", o: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], a: 1, t: "BCE : inflation ~2%, INDÉPENDANTE. Ne finance pas les États.", d: "🏦 Inflation ~2%" },
+    { q: "Combien d'États dans l'UE ?", o: ["25", "27", "28", "30"], a: 1, t: "27 depuis Brexit 2020. Candidats : Ukraine, Moldavie...", d: "🇪🇺 27 États" },
+    { q: "FEDER finance ?", o: ["L'agriculture", "Le développement régional", "La défense", "L'éducation"], a: 1, t: "Fonds Européen Développement Régional : cohésion territoriale.", d: "🗺️ Cohésion régionale" },
+    { q: "Article 50 TUE concerne ?", o: ["L'adhésion", "Le retrait d'un État", "La défense", "Le budget"], a: 1, t: "Article 50 = procédure retrait. Brexit.", d: "🚪 Sortie UE" },
+    { q: "La Commission compte ?", o: ["15 commissaires", "20 commissaires", "27 commissaires", "35 commissaires"], a: 2, t: "1 par État = 27. Seule avec initiative législative.", d: "👥 27 commissaires" }
   ]},
   
-  education: { name: "Système éducatif", icon: "📚", color: "#f59e0b", questions: [
-    { 
-      q: "Choc des savoirs 2024 = ?", 
-      opts: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], 
-      ans: 1, 
-      tip: "Le 'Choc des savoirs' (décembre 2023, appliqué rentrée 2024) introduit des GROUPES DE NIVEAU en français et mathématiques en 6ème et 5ème. Les élèves sont répartis selon leur niveau, avec des effectifs réduits pour les plus en difficulté. Objectif : mieux accompagner chaque élève. Mesure controversée, accusée de 'tri social'.",
-      detail: "📊 Groupes de niveau 6è-5è en français/maths = mesure phare 2024"
-    },
-    { 
-      q: "Bacheliers Parcoursup/an ?", 
-      opts: ["300k", "500k", "660k", "900k"], 
-      ans: 2, 
-      tip: "Environ 660 000 bacheliers utilisent Parcoursup chaque année pour accéder à plus de 21 000 formations. La plateforme a remplacé APB en 2018 après un scandale de tirage au sort. Chaque candidat peut faire 10 vœux (+ sous-vœux). Les formations classent les dossiers selon leurs propres critères, souvent opaques.",
-      detail: "🎓 660k bacheliers × 10 vœux → 21 000 formations"
-    },
-    { 
-      q: "Nombre d'académies ?", 
-      opts: ["18", "26", "30", "36"], 
-      ans: 2, 
-      tip: "La France compte 30 académies : 26 en métropole (dont 3 en Île-de-France : Paris, Créteil, Versailles) et 4 en outre-mer (Guadeloupe, Martinique, Guyane, Réunion/Mayotte). Chaque académie est dirigée par un RECTEUR, nommé en Conseil des ministres par le Président de la République.",
-      detail: "🗺️ 30 académies : 26 métropole + 4 outre-mer, 1 recteur chacune"
-    },
-    { 
-      q: "PISA 2023 France ?", 
-      opts: ["Amélioration", "Recul", "Stagnation", "1ère place"], 
-      ans: 1, 
-      tip: "PISA 2023 confirme le RECUL de la France, notamment en mathématiques (-21 points depuis 2018) et en lecture. La France se situe dans la moyenne OCDE, mais ses résultats sont très marqués par les INÉGALITÉS SOCIALES : l'écart entre élèves favorisés et défavorisés est l'un des plus élevés de l'OCDE.",
-      detail: "📉 PISA 2023 : France recule, inégalités record parmi OCDE"
-    },
-    { 
-      q: "Instruction obligatoire de ?", 
-      opts: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], 
-      ans: 2, 
-      tip: "L'instruction est obligatoire de 3 à 18 ans. L'abaissement à 3 ans date de 2019 (loi Blanquer, pour l'école maternelle). L'extension à 18 ans date de 2020 : tout jeune de 16-18 ans doit être en formation, en emploi ou en accompagnement. C'est une obligation de FORMATION, pas de scolarisation.",
-      detail: "📚 3 ans (2019) → 18 ans (2020) = instruction + formation obligatoires"
-    },
-    { 
-      q: "Postes enseignants vacants ?", 
-      opts: ["500", "1500", "4000", "10000"], 
-      ans: 2, 
-      tip: "Environ 4000 postes d'enseignants ne sont pas pourvus chaque année aux concours. Cette crise d'attractivité touche surtout les mathématiques et l'allemand. Causes : salaires bas comparés au privé et à l'Europe, conditions de travail dégradées, perte de prestige social. Le ministère recourt aux contractuels pour combler les trous.",
-      detail: "⚠️ 4000 postes vacants/an → crise d'attractivité majeure"
-    },
-    { 
-      q: "Qui nomme les recteurs ?", 
-      opts: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus locaux"], 
-      ans: 1, 
-      tip: "Les recteurs d'académie sont nommés par DÉCRET DU PRÉSIDENT DE LA RÉPUBLIQUE pris en Conseil des ministres. Ce sont des hauts fonctionnaires qui représentent le ministre dans leur académie. Ils ont autorité sur tous les personnels et établissements de leur territoire. C'est un poste très politique.",
-      detail: "🏛️ Recteur = décret présidentiel en Conseil des ministres"
-    },
-    { 
-      q: "DNB 2024 devient ?", 
-      opts: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], 
-      ans: 1, 
-      tip: "Depuis 2024, l'obtention du DNB (Diplôme National du Brevet) est devenue une CONDITION pour passer en seconde générale ou technologique. Avant, un élève pouvait passer malgré l'échec au brevet. Cette mesure du 'Choc des savoirs' vise à rehausser le niveau d'exigence. Les élèves recalés redoublent ou s'orientent en voie pro.",
-      detail: "🎯 DNB 2024 : sans brevet → pas de seconde GT (redoublement ou pro)"
-    }
+  education: { name: "Système éducatif", icon: "📚", questions: [
+    { q: "Choc des savoirs 2024 = ?", o: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], a: 1, t: "Groupes de niveau en français/maths 6è-5è. Mesure controversée.", d: "📊 Groupes niveau" },
+    { q: "Bacheliers Parcoursup/an ?", o: ["300k", "500k", "660k", "900k"], a: 2, t: "~660 000 pour 21 000 formations. 10 vœux max.", d: "🎓 660k bacheliers" },
+    { q: "Nombre d'académies ?", o: ["18", "26", "30", "36"], a: 2, t: "30 : 26 métropole + 4 outre-mer. 1 recteur chacune.", d: "🗺️ 30 académies" },
+    { q: "PISA 2023 France ?", o: ["Amélioration", "Recul", "Stagnation", "1ère place"], a: 1, t: "RECUL en maths et lecture. Inégalités sociales record.", d: "📉 Recul + inégalités" },
+    { q: "Instruction obligatoire de ?", o: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], a: 2, t: "3 ans (2019) → 18 ans (2020). Obligation formation.", d: "📚 3 → 18 ans" },
+    { q: "Postes enseignants vacants ?", o: ["500", "1500", "4000", "10000"], a: 2, t: "~4000/an. Crise attractivité : salaires, conditions.", d: "⚠️ 4000 vacants" },
+    { q: "Qui nomme les recteurs ?", o: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus"], a: 1, t: "Décret PRÉSIDENTIEL en Conseil des ministres.", d: "🏛️ Décret PR" },
+    { q: "DNB 2024 devient ?", o: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], a: 1, t: "Sans brevet = pas de seconde GT. Redoublement ou pro.", d: "🎯 DNB obligatoire" },
+    { q: "Le socle commun comprend ?", o: ["3 domaines", "5 domaines", "8 domaines", "10 domaines"], a: 1, t: "5 domaines : langages, méthodes, citoyenneté, systèmes, représentations.", d: "📝 5 domaines" },
+    { q: "Qui dirige une académie ?", o: ["Préfet", "Recteur", "DASEN", "Maire"], a: 1, t: "RECTEUR = académie. DASEN = département.", d: "🏫 Recteur" },
+    { q: "Réforme lycée pro 2023 ?", o: ["Moins de stages", "Plus de stages", "Fusion avec général", "Suppression"], a: 1, t: "Plus de stages, meilleure insertion, gratification.", d: "🔧 + stages" },
+    { q: "Plan harcèlement date ?", o: ["2021", "2022", "2023", "2024"], a: 2, t: "Plan 2023 : pHARe, questionnaires, numéro 3018.", d: "🛡️ 2023 pHARe" }
   ]}
 };
 
-// ============ CRITÈRES JURY ============
-const JURY_CRITERIA = [
-  { id: "dossier", name: "Utilisation dossier", desc: "Compréhension, appui docs-clés", max: 2 },
-  { id: "connaissances", name: "Connaissances hors dossier", desc: "Apport personnel", max: 2 },
-  { id: "commande", name: "Réponse commande", desc: "Opérationnel > savoir", max: 2 },
-  { id: "problematique", name: "Problématique", desc: "Points saillants", max: 2 },
-  { id: "decision", name: "Esprit de décision", desc: "Propositions claires", max: 2 },
-  { id: "annexes", name: "Qualité annexes", desc: "Opérationnalité", max: 2 },
-  { id: "redaction", name: "Rédaction", desc: "Syntaxe, orthographe", max: 2 },
-  { id: "methode", name: "Méthode", desc: "Cohérence, fluidité", max: 2 },
-  { id: "destinataire", name: "Destinataire", desc: "Formalisme", max: 2 },
-  { id: "presentation", name: "Présentation", desc: "Clarté visuelle", max: 2 }
-];
-
-// ============ EXAMS ============
 const EXAMS = [
-  { id: "2024", title: "Annale 2024", subject: "Harcèlement scolaire", duration: 4*60*60, url: "https://www.fonction-publique.gouv.fr/files/files/devenir-agent-public/cas_pratique_ira_2024.pdf" },
-  { id: "2023", title: "Annale 2023", subject: "Titres d'identité", duration: 4*60*60, url: "https://www.fonction-publique.gouv.fr/files/files/Devenir%20agent%20public/IRA/Annales/2023-2/Sujet_cas_pratique_IRA_2023-2.pdf" }
+  { id: "2024", title: "Annale 2024", subject: "Harcèlement scolaire", url: "https://www.fonction-publique.gouv.fr/files/files/devenir-agent-public/cas_pratique_ira_2024.pdf" },
+  { id: "2023", title: "Annale 2023", subject: "Titres d'identité", url: "https://www.fonction-publique.gouv.fr/files/files/Devenir%20agent%20public/IRA/Annales/2023-2/Sujet_cas_pratique_IRA_2023-2.pdf" }
 ];
 
-// ============ STATE ============
-let state = JSON.parse(localStorage.getItem('ira-final-v6') || '{}');
-if (!state.quizScores) state.quizScores = {};
-if (!state.quizDone) state.quizDone = {};
-if (!state.examsDone) state.examsDone = {};
-if (!state.examScores) state.examScores = {};
-if (!state.criteriaScores) state.criteriaScores = {};
-if (!state.fichesRead) state.fichesRead = {};
-if (!state.fichesTime) state.fichesTime = {};
+const JURY = [
+  { id: "dossier", name: "Utilisation dossier" },
+  { id: "connaissances", name: "Connaissances hors dossier" },
+  { id: "commande", name: "Réponse commande" },
+  { id: "problematique", name: "Problématique" },
+  { id: "decision", name: "Esprit décision" },
+  { id: "annexes", name: "Qualité annexes" },
+  { id: "redaction", name: "Rédaction" },
+  { id: "methode", name: "Méthode" },
+  { id: "destinataire", name: "Destinataire" },
+  { id: "presentation", name: "Présentation" }
+];
 
-let currentQuiz = null, quizQuestions = [], quizIndex = 0, quizScore = 0, quizAnswered = false;
-let currentExam = null, timerInterval = null, timerSeconds = 0, timerRunning = false;
+const LIENS = [
+  { icon: "📋", title: "Annales", desc: "Tous les sujets", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-annales-des-concours" },
+  { icon: "🏆", title: "Meilleures copies", desc: "Exemples notés", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-meilleures-copies-et-corriges" },
+  { icon: "📊", title: "Rapports jury", desc: "Conseils", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-rapports-de-jury" },
+  { icon: "📖", title: "Note cadrage", desc: "Attendus", url: "https://ira-gestion.fonction-publique.gouv.fr/userfiles/promotion/12/note-de-cadrage-cas-pratique.pdf" },
+  { icon: "🖥️", title: "Mentor", desc: "Formation gratuite", url: "https://mentor.gouv.fr" },
+  { icon: "📰", title: "Vie Publique", desc: "Fiches", url: "https://www.vie-publique.fr" }
+];
+
+// ===== STATE =====
+let state = JSON.parse(localStorage.getItem('forge-ira-v4') || '{}');
+if (!state.scores) state.scores = {};
+if (!state.done) state.done = {};
+if (!state.read) state.read = {};
+if (!state.exams) state.exams = {};
+if (!state.unlocked) state.unlocked = false;
+function save() { localStorage.setItem('forge-ira-v4', JSON.stringify(state)); }
+
+let currentView = 'revisions';
 let openFiche = null;
+let currentQuiz = null, quizQ = [], quizIdx = 0, quizScore = 0, quizAnswered = false;
+let currentExam = null, timerSec = 0, timerRunning = false, timerInt = null;
+let examScores = {};
 
-const REVISION_DURATION = 2 * 60 * 60;
-let revisionTimerInterval = null;
-let revisionTimerSeconds = 0;
-let revisionTimerRunning = false;
-let revisionTimerStarted = false;
-let currentFicheStart = null;
-let jourJMode = false;
-
-function save() { localStorage.setItem('ira-final-v6', JSON.stringify(state)); }
-
-// ============ REVISION TIMER ============
-function startRevisionTimer() {
-  if (revisionTimerStarted) return;
-  revisionTimerStarted = true;
-  revisionTimerRunning = true;
-  document.getElementById('revisionTimerFloat').classList.add('active');
-  document.getElementById('mainTabs').classList.remove('no-timer');
-  
-  revisionTimerInterval = setInterval(() => {
-    if (revisionTimerRunning) {
-      revisionTimerSeconds++;
-      updateRevisionTimerDisplay();
-      const remaining = REVISION_DURATION - revisionTimerSeconds;
-      if (remaining === 3600) showAlert("⏰ Plus qu'1 heure !");
-      if (remaining === 1800) showAlert("⚠️ Plus que 30 minutes !");
-      if (remaining === 900) showAlert("🔥 Plus que 15 minutes !");
-      if (revisionTimerSeconds >= REVISION_DURATION) endRevisionTimer();
-    }
-  }, 1000);
+// ===== NAVIGATION - SIMPLIFIÉE =====
+function goTo(view) {
+  currentView = view;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + view).classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(view).classList.add('active');
+  render();
 }
 
-function updateRevisionTimerDisplay() {
-  const remaining = Math.max(0, REVISION_DURATION - revisionTimerSeconds);
-  const h = Math.floor(remaining / 3600);
-  const m = Math.floor((remaining % 3600) / 60);
-  const s = remaining % 60;
-  document.getElementById('rtfTime').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  if (remaining < 900) document.getElementById('revisionTimerFloat').classList.add('warning');
+function render() {
+  if (currentView === 'revisions') renderRevisions();
+  if (currentView === 'quiz') renderQuiz();
+  if (currentView === 'exam') renderExam();
+  if (currentView === 'liens') renderLiens();
 }
 
-function toggleRevisionTimer() {
-  if (jourJMode) { showAlert("⛔ Mode Jour J : pas de pause !"); return; }
-  revisionTimerRunning = !revisionTimerRunning;
-  const btn = document.getElementById('rtfBtn');
-  btn.textContent = revisionTimerRunning ? '⏸' : '▶';
-  btn.className = revisionTimerRunning ? 'rtf-btn rtf-pause' : 'rtf-btn rtf-resume';
-}
-
-function endRevisionTimer() {
-  clearInterval(revisionTimerInterval);
-  revisionTimerRunning = false;
-  document.getElementById('quizModal').classList.remove('open');
-  document.getElementById('timeUpModal').classList.add('open');
-  let statsHtml = '<div class="time-stats">';
-  FICHES.forEach(f => {
-    const time = state.fichesTime[f.id] || 0;
-    const mins = Math.floor(time / 60);
-    statsHtml += `<div class="time-stat"><div class="time-stat-value">${mins}min</div><div class="time-stat-label">${f.icon}</div></div>`;
-  });
-  statsHtml += '</div>';
-  document.getElementById('timeUpStats').innerHTML = statsHtml;
-}
-
-function closeTimeUpModal() {
-  document.getElementById('timeUpModal').classList.remove('open');
-  revisionTimerStarted = false;
-  revisionTimerSeconds = 0;
-  document.getElementById('revisionTimerFloat').classList.remove('active', 'warning');
-  renderRevisions();
-}
-
-function showAlert(msg) {
-  if ('vibrate' in navigator) navigator.vibrate(200);
-  alert(msg);
-}
-
-function resetRevisionTimer() {
-  clearInterval(revisionTimerInterval);
-  revisionTimerStarted = false;
-  revisionTimerRunning = false;
-  revisionTimerSeconds = 0;
-  FICHES.forEach(f => state.fichesTime[f.id] = 0);
-  save();
-  document.getElementById('revisionTimerFloat').classList.remove('active', 'warning');
-  renderRevisions();
-}
-
-// ============ COUNTDOWN ============
-function updateCountdown() {
-  const exam = new Date('2026-04-21T08:00:00');
-  const now = new Date();
-  const days = Math.ceil((exam - now) / (1000*60*60*24));
-  document.getElementById('daysLeft').textContent = days > 0 ? days : '0';
-}
-
-// ============ REVISIONS ============
+// ===== REVISIONS =====
 function renderRevisions() {
-  let html = `
-    <div class="mode-selector">
-      <div class="mode-btn ${!jourJMode ? 'active' : ''}" onclick="setMode(false)">
-        <div class="mode-icon">📚</div>
-        <div class="mode-title">Entraînement</div>
-        <div class="mode-desc">Pause autorisée</div>
+  let html = '';
+  FICHES.forEach(f => {
+    const isOpen = openFiche === f.id;
+    html += `<div class="fiche">
+      <div class="fiche-header" style="border-left-color:${f.color}" onclick="toggleFiche('${f.id}')">
+        <span class="fiche-icon">${f.icon}</span>
+        <div class="fiche-info"><div class="fiche-title">${f.title}</div><div class="fiche-subtitle">${f.subtitle}</div></div>
+        <span class="fiche-toggle">${isOpen ? '▲' : '▼'}</span>
       </div>
-      <div class="mode-btn jour-j ${jourJMode ? 'active' : ''}" onclick="setMode(true)">
-        <div class="mode-icon">🔥</div>
-        <div class="mode-title">Mode Jour J</div>
-        <div class="mode-desc">Pas de pause !</div>
+      <div class="fiche-body ${isOpen ? 'open' : ''}">
+        ${f.sections.map(s => `<h4 style="margin:16px 0 8px;color:var(--accent2)">${s.title}</h4><div class="fiche-content">${s.content}</div>`).join('')}
+        <button class="btn ${state.read[f.id] ? 'btn-success' : 'btn-primary'}" onclick="markRead('${f.id}')" style="margin-top:16px">${state.read[f.id] ? '✓ Lue' : 'Marquer lue'}</button>
       </div>
-    </div>
-  `;
-  
-  if (!revisionTimerStarted) {
-    html += `
-      <div class="card">
-        <div class="card-title">⏱️ Session de lecture</div>
-        <div class="card-subtitle">2h pour lire et mémoriser. Le timer démarre dès que tu ouvres une fiche.</div>
-        <div class="time-stats">
-          ${FICHES.map(f => {
-            const time = state.fichesTime[f.id] || 0;
-            const mins = Math.floor(time / 60);
-            return `<div class="time-stat"><div class="time-stat-value">${mins}min</div><div class="time-stat-label">${f.icon}</div></div>`;
-          }).join('')}
-        </div>
-        <button class="btn btn-danger" onclick="resetRevisionTimer()" style="margin-top:12px">🔄 Reset temps</button>
-      </div>
-    `;
-  }
-  
-  FICHES.forEach(fiche => {
-    const isOpen = openFiche === fiche.id;
-    const isRead = state.fichesRead[fiche.id];
-    const time = state.fichesTime[fiche.id] || 0;
-    const mins = Math.floor(time / 60);
-    
-    html += `
-      <div class="fiche">
-        <div class="fiche-header" style="border-left-color:${fiche.color}" onclick="toggleFiche('${fiche.id}')">
-          <span class="fiche-icon">${fiche.icon}</span>
-          <div class="fiche-info">
-            <div class="fiche-title">${fiche.title}</div>
-            <div class="fiche-subtitle">${fiche.subtitle}</div>
-            ${time > 0 ? `<div class="fiche-time">⏱️ ${mins}min passées</div>` : ''}
-          </div>
-          <span class="fiche-toggle ${isOpen ? 'open' : ''}">▼</span>
-        </div>
-        <div class="fiche-body ${isOpen ? 'open' : ''}">
-    `;
-    fiche.sections.forEach(section => {
-      html += `<div class="fiche-section"><div class="fiche-section-title">${section.title}</div><div class="fiche-content">${section.content}</div></div>`;
-    });
-    html += `
-          <button class="btn ${isRead ? 'btn-success' : 'btn-primary'}" onclick="markFicheRead('${fiche.id}')">
-            ${isRead ? '✓ Fiche lue' : 'Marquer comme lue'}
-          </button>
-        </div>
-      </div>
-    `;
+    </div>`;
   });
-  
-  document.getElementById('revisionsView').innerHTML = html;
+  document.getElementById('revisions').innerHTML = html;
 }
 
-function setMode(isJourJ) { jourJMode = isJourJ; renderRevisions(); }
+function toggleFiche(id) { openFiche = openFiche === id ? null : id; renderRevisions(); }
+function markRead(id) { state.read[id] = true; save(); renderRevisions(); }
 
-function toggleFiche(id) {
-  if (openFiche && currentFicheStart) {
-    const elapsed = Math.floor((Date.now() - currentFicheStart) / 1000);
-    state.fichesTime[openFiche] = (state.fichesTime[openFiche] || 0) + elapsed;
-    save();
-  }
-  if (openFiche === id) { openFiche = null; currentFicheStart = null; }
-  else { openFiche = id; currentFicheStart = Date.now(); startRevisionTimer(); }
-  renderRevisions();
-}
-
-function markFicheRead(id) { state.fichesRead[id] = true; save(); renderRevisions(); }
-
-// ============ QUIZ ============
+// ===== QUIZ =====
 function renderQuiz() {
-  let html = `
-    <div class="card">
-      <div class="card-title">🎯 Quiz de validation</div>
-      <div class="card-subtitle">8 questions par thème • 70% minimum • Explications détaillées</div>
-      <div class="phase-list">
-  `;
-  Object.keys(QUIZ_DATA).forEach(key => {
-    const quiz = QUIZ_DATA[key];
-    const score = state.quizScores[key] || 0;
-    const total = quiz.questions.length;
-    const done = state.quizDone[key];
-    const ficheRead = state.fichesRead[key];
-    const pct = done ? Math.round((score/total)*100) : 0;
-    const locked = !ficheRead;
-    html += `
-      <div class="phase-item ${done ? 'done' : ''} ${locked ? 'locked' : ''}" onclick="${locked ? '' : `startQuiz('${key}')`}">
-        <span class="phase-icon">${quiz.icon}</span>
-        <div class="phase-info">
-          <div class="phase-name">${quiz.name}</div>
-          <div class="phase-desc">${locked ? '🔒 Lis la fiche' : (done ? `${score}/${total} (${pct}%)` : `${total} questions`)}</div>
-        </div>
-        <span class="phase-status">${locked ? '🔒' : (done ? (pct >= 70 ? '✅' : '🔄') : '▶️')}</span>
-      </div>
-    `;
+  let html = `<div class="card"><div class="card-title">🎯 Quiz intensif — 12 questions/thème</div>
+    <div class="card-subtitle">Valide 70% pour débloquer les épreuves</div><div class="phase-list">`;
+  Object.keys(QUIZ).forEach(k => {
+    const q = QUIZ[k], total = q.questions.length, score = state.scores[k] || 0, done = state.done[k];
+    const pct = done ? Math.round(score/total*100) : 0;
+    const read = state.read[k];
+    html += `<div class="phase-item ${done ? 'done' : ''} ${!read ? 'locked' : ''}" onclick="${read ? `startQuiz('${k}')` : ''}">
+      <span class="phase-icon">${q.icon}</span>
+      <div class="phase-info"><div class="phase-name">${q.name}</div>
+      <div class="phase-desc">${!read ? '🔒 Lis la fiche d\'abord' : (done ? `${score}/${total} (${pct}%)` : `${total} questions`)}</div></div>
+      <span>${!read ? '🔒' : (done ? (pct >= 70 ? '✅' : '🔄') : '▶️')}</span>
+    </div>`;
   });
   html += '</div></div>';
-  document.getElementById('quizView').innerHTML = html;
+  document.getElementById('quiz').innerHTML = html;
 }
 
-function startQuiz(key) {
-  currentQuiz = key;
-  quizQuestions = [...QUIZ_DATA[key].questions].sort(() => Math.random() - 0.5);
-  quizIndex = 0;
-  quizScore = 0;
+function startQuiz(k) {
+  currentQuiz = k;
+  quizQ = [...QUIZ[k].questions].sort(() => Math.random() - 0.5);
+  quizIdx = quizScore = 0;
   quizAnswered = false;
-  renderQuizQuestion();
+  showQuestion();
   document.getElementById('quizModal').classList.add('open');
 }
 
-function renderQuizQuestion() {
-  const data = QUIZ_DATA[currentQuiz];
-  const q = quizQuestions[quizIndex];
+function showQuestion() {
+  const q = quizQ[quizIdx];
   document.getElementById('quizContent').innerHTML = `
-    <div class="quiz-header">
-      <span class="quiz-progress">${quizIndex + 1}/${quizQuestions.length}</span>
-      <span class="quiz-theme" style="background:${data.color}">${data.name}</span>
-    </div>
+    <div class="quiz-header"><span class="quiz-progress">${quizIdx+1}/${quizQ.length}</span><span class="quiz-theme">${QUIZ[currentQuiz].name}</span></div>
     <div class="quiz-question">${q.q}</div>
-    <div class="quiz-options">
-      ${q.opts.map((opt, i) => `<button class="quiz-opt" onclick="selectAnswer(${i})">${opt}</button>`).join('')}
-    </div>
-    <div id="quizFeedback"></div>
-  `;
+    ${q.o.map((opt, i) => `<button class="quiz-opt" onclick="answer(${i})">${opt}</button>`).join('')}
+    <div id="feedback"></div>`;
 }
 
-function selectAnswer(idx) {
+function answer(i) {
   if (quizAnswered) return;
   quizAnswered = true;
-  const q = quizQuestions[quizIndex];
-  document.querySelectorAll('.quiz-opt').forEach((opt, i) => {
-    opt.style.pointerEvents = 'none';
-    if (i === q.ans) opt.classList.add('correct');
-    if (i === idx && idx !== q.ans) opt.classList.add('wrong');
+  const q = quizQ[quizIdx];
+  document.querySelectorAll('.quiz-opt').forEach((b, j) => {
+    b.style.pointerEvents = 'none';
+    if (j === q.a) b.classList.add('correct');
+    if (j === i && i !== q.a) b.classList.add('wrong');
   });
-  if (idx === q.ans) quizScore++;
-  
-  document.getElementById('quizFeedback').innerHTML = `
-    <div class="quiz-feedback ${idx === q.ans ? 'correct' : 'wrong'}">
-      <strong>${idx === q.ans ? '✓ Bonne réponse !' : '✗ Mauvaise réponse'}</strong>
-      ${q.tip}
-      ${q.detail ? `<div class="detail">${q.detail}</div>` : ''}
+  if (i === q.a) quizScore++;
+  document.getElementById('feedback').innerHTML = `
+    <div class="quiz-feedback ${i === q.a ? 'correct' : 'wrong'}">
+      <strong>${i === q.a ? '✓ Correct !' : '✗ Incorrect'}</strong><br>${q.t}
+      ${q.d ? `<div class="detail">${q.d}</div>` : ''}
     </div>
-    <button class="btn btn-primary" onclick="nextQuestion()" style="margin-top:12px">
-      ${quizIndex < quizQuestions.length - 1 ? 'Question suivante →' : 'Voir mon résultat'}
-    </button>
-  `;
+    <button class="btn btn-primary" onclick="nextQ()" style="margin-top:12px">${quizIdx < quizQ.length - 1 ? 'Suivant →' : 'Résultat'}</button>`;
 }
 
-function nextQuestion() {
-  quizIndex++;
+function nextQ() {
+  quizIdx++;
   quizAnswered = false;
-  if (quizIndex >= quizQuestions.length) showQuizResult();
-  else renderQuizQuestion();
-}
-
-function showQuizResult() {
-  const total = quizQuestions.length;
-  const pct = Math.round((quizScore / total) * 100);
-  state.quizScores[currentQuiz] = quizScore;
-  state.quizDone[currentQuiz] = true;
-  save();
-  document.getElementById('quizContent').innerHTML = `
-    <div class="result-card">
-      <div class="result-score ${pct >= 70 ? 'pass' : 'fail'}">${quizScore}/${total}</div>
-      <div class="result-label">${pct}%</div>
-      <div style="font-size:48px;margin:16px 0">${pct >= 70 ? '🎉' : '📚'}</div>
-      <p style="color:var(--muted);margin-bottom:20px">${pct >= 70 ? 'Thème validé ! Tu maîtrises les bases.' : '70% requis. Relis la fiche et réessaie.'}</p>
-      <button class="btn ${pct >= 70 ? 'btn-success' : 'btn-warning'}" onclick="closeQuiz()">${pct >= 70 ? 'Continuer' : 'Réviser'}</button>
-      ${pct < 70 ? `<button class="btn btn-outline" onclick="startQuiz('${currentQuiz}')">Réessayer</button>` : ''}
-    </div>
-  `;
+  if (quizIdx >= quizQ.length) {
+    const total = quizQ.length, pct = Math.round(quizScore/total*100);
+    state.scores[currentQuiz] = quizScore;
+    state.done[currentQuiz] = true;
+    save();
+    document.getElementById('quizContent').innerHTML = `
+      <div class="result-card">
+        <div class="result-score ${pct >= 70 ? 'pass' : 'fail'}">${quizScore}/${total}</div>
+        <p style="color:var(--muted);margin:16px 0">${pct}% — ${pct >= 70 ? '✅ Validé !' : '70% requis'}</p>
+        <button class="btn btn-primary" onclick="closeQuiz()">Fermer</button>
+        ${pct < 70 ? `<button class="btn btn-outline" onclick="startQuiz('${currentQuiz}')">Réessayer</button>` : ''}
+      </div>`;
+  } else showQuestion();
 }
 
 function closeQuiz() { document.getElementById('quizModal').classList.remove('open'); renderQuiz(); }
 
-// ============ EXAM ============
+// ===== EXAM =====
 function renderExam() {
-  const allPassed = Object.keys(QUIZ_DATA).every(k => state.quizDone[k] && (state.quizScores[k] / QUIZ_DATA[k].questions.length) >= 0.7);
+  // Vérifier si tous quiz validés à 70%
+  const allPassed = Object.keys(QUIZ).every(k => state.done[k] && (state.scores[k] / QUIZ[k].questions.length) >= 0.7);
+  const canAccess = allPassed || state.unlocked;
+  
   let html = '';
   
-  if (!allPassed && !currentExam) {
-    html = `<div class="alert alert-danger"><span>🔒</span><span>Valide tous les quiz (70%) avant les annales</span></div>`;
-    html += '<div class="card"><div class="card-title">📊 Prérequis</div><div class="checklist">';
-    Object.keys(QUIZ_DATA).forEach(k => {
-      const q = QUIZ_DATA[k];
-      const s = state.quizScores[k] || 0;
-      const t = q.questions.length;
-      const ok = state.quizDone[k] && (s/t) >= 0.7;
-      html += `<div class="check-item ${ok ? 'done' : ''}" onclick="showView('quiz')"><div class="check-box">${ok ? '✓' : ''}</div><span class="check-label">${q.icon} ${q.name}</span></div>`;
-    });
-    html += '</div></div>';
-  } else if (currentExam) {
+  // Si épreuve en cours
+  if (currentExam) {
     const exam = EXAMS.find(e => e.id === currentExam);
-    const rem = Math.max(0, exam.duration - timerSeconds);
-    const h = Math.floor(rem / 3600);
-    const m = Math.floor((rem % 3600) / 60);
-    const s = rem % 60;
-    const pct = Math.min(100, (timerSeconds / exam.duration) * 100);
+    const h = Math.floor(timerSec / 3600), m = Math.floor((timerSec % 3600) / 60), s = timerSec % 60;
     html = `
-      ${rem < 1800 ? '<div class="alert alert-danger"><span>⏰</span><span>Moins de 30min !</span></div>' : ''}
       <div class="timer-box">
         <div class="timer-label">${exam.title}</div>
         <div class="timer-display">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</div>
-        <div class="timer-progress"><div class="timer-fill" style="width:${pct}%;background:${rem < 1800 ? 'var(--danger)' : 'var(--success)'}"></div></div>
         <div class="timer-controls">
-          <button class="timer-btn ${timerRunning ? 'timer-pause' : 'timer-start'}" onclick="toggleExamTimer()">${timerRunning ? '⏸' : '▶'}</button>
-          <button class="timer-btn timer-reset" onclick="finishExam()">✓ Terminer</button>
+          <button class="timer-btn ${timerRunning ? 'timer-pause' : 'timer-start'}" onclick="toggleTimer()">${timerRunning ? '⏸ Pause' : '▶ Reprendre'}</button>
+          <button class="timer-btn" style="background:var(--danger);color:#fff" onclick="finishExam()">✓ Terminer</button>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">📝 Checklist</div>
-        <div class="checklist">
-          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Introduction</span></div>
-          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Diagnostic</span></div>
-          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Propositions</span></div>
-          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Annexe 1</span></div>
-          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Annexe 2</span></div>
-          <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span class="check-label">Relecture</span></div>
-        </div>
-      </div>
-    `;
-  } else {
-    html = `<div class="alert alert-success"><span>✅</span><span>Quiz validés ! Prêt pour les annales.</span></div>`;
-    html += '<div class="card"><div class="card-title">⏱️ Épreuves 4h</div><div class="phase-list">';
-    EXAMS.forEach(exam => {
-      const done = state.examsDone[exam.id];
-      const score = state.examScores[exam.id];
-      html += `
-        <div class="phase-item ${done ? 'done' : ''}">
-          <span class="phase-icon">📄</span>
-          <div class="phase-info">
-            <div class="phase-name">${exam.title}</div>
-            <div class="phase-desc">${exam.subject}${done ? ` • ${score}/20` : ''}</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:-4px;margin-bottom:12px">
-          <a href="${exam.url}" target="_blank" class="btn btn-outline" style="flex:1;text-align:center;text-decoration:none;padding:10px;font-size:12px">📥 PDF</a>
-          <button class="btn btn-warning" style="flex:1;font-size:12px" onclick="startExam('${exam.id}')">⏱️ Go</button>
-        </div>
-      `;
-    });
-    html += '</div></div>';
+      <div class="card"><div class="card-title">📝 Checklist</div><div class="checklist">
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Introduction</span></div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Diagnostic</span></div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Propositions</span></div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Annexe 1</span></div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Annexe 2</span></div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box">✓</div><span>Relecture</span></div>
+      </div></div>`;
   }
-  document.getElementById('examView').innerHTML = html;
+  // Si pas accès
+  else if (!canAccess) {
+    html = `<div class="alert alert-warning"><span>🔒</span><span>Valide les quiz à 70% ou débloque manuellement</span></div>
+      <div class="card"><div class="card-title">📊 Progression quiz</div><div class="checklist">`;
+    Object.keys(QUIZ).forEach(k => {
+      const q = QUIZ[k], s = state.scores[k] || 0, t = q.questions.length;
+      const ok = state.done[k] && (s/t) >= 0.7;
+      html += `<div class="check-item ${ok ? 'done' : ''}" onclick="goTo('quiz')"><div class="check-box">${ok ? '✓' : ''}</div><span>${q.icon} ${q.name} ${state.done[k] ? `(${Math.round(s/t*100)}%)` : ''}</span></div>`;
+    });
+    html += `</div><button class="btn btn-danger" onclick="forceUnlock()" style="margin-top:16px">🔓 Débloquer les épreuves</button></div>`;
+  }
+  // Accès OK
+  else {
+    html = `<div class="alert alert-success"><span>✅</span><span>Accès débloqué aux épreuves !</span></div>
+      <div class="card"><div class="card-title">⏱️ Épreuves chronométrées (4h)</div><div class="card-subtitle">Télécharge le PDF puis lance le timer</div>`;
+    EXAMS.forEach(exam => {
+      const done = state.exams[exam.id];
+      html += `
+        <div class="phase-item ${done ? 'done' : ''}" style="margin-bottom:8px">
+          <span class="phase-icon">📄</span>
+          <div class="phase-info"><div class="phase-name">${exam.title}</div>
+          <div class="phase-desc">${exam.subject}${done ? ` • ${done}/20` : ''}</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <a href="${exam.url}" target="_blank" class="btn btn-outline" style="flex:1;text-align:center;text-decoration:none;padding:12px;font-size:12px">📥 PDF</a>
+          <button class="btn btn-warning" style="flex:1;font-size:12px" onclick="startExam('${exam.id}')">⏱️ Démarrer</button>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  
+  document.getElementById('exam').innerHTML = html;
+}
+
+function forceUnlock() {
+  if (confirm("Débloquer les épreuves sans valider les quiz ?")) {
+    state.unlocked = true;
+    save();
+    renderExam();
+  }
 }
 
 function startExam(id) {
   currentExam = id;
-  timerSeconds = 0;
+  timerSec = 0;
   timerRunning = true;
-  state.criteriaScores[id] = {};
-  save();
-  timerInterval = setInterval(() => {
-    if (timerRunning) {
-      timerSeconds++;
-      renderExam();
-      if (timerSeconds >= EXAMS.find(e => e.id === currentExam).duration) finishExam();
-    }
+  examScores = {};
+  timerInt = setInterval(() => {
+    if (timerRunning) { timerSec++; renderExam(); }
+    if (timerSec >= 4*60*60) finishExam();
   }, 1000);
   renderExam();
 }
 
-function toggleExamTimer() { timerRunning = !timerRunning; renderExam(); }
+function toggleTimer() { timerRunning = !timerRunning; renderExam(); }
 
-function finishExam() { clearInterval(timerInterval); timerRunning = false; showCorrection(); }
+function finishExam() {
+  clearInterval(timerInt);
+  timerRunning = false;
+  showCorrection();
+}
 
 function showCorrection() {
-  if (!state.criteriaScores[currentExam]) state.criteriaScores[currentExam] = {};
-  let html = `
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:32px">📋</div>
-      <div style="font-size:18px;font-weight:700">Correction Jury</div>
-    </div>
-    <div class="alert alert-warning"><span>⚠️</span><span>Évalue honnêtement !</span></div>
-    <div class="criteria-grid">
-  `;
-  JURY_CRITERIA.forEach(c => {
-    const s = state.criteriaScores[currentExam][c.id] ?? -1;
-    html += `
-      <div class="criteria-item">
-        <div class="criteria-header">
-          <span class="criteria-name">${c.name}</span>
-          <div class="criteria-score">
-            ${[0,1,2].map(v => `<button class="score-btn ${s===v?'active':''}" onclick="setScore('${c.id}',${v})">${v}</button>`).join('')}
-          </div>
-        </div>
-        <div class="criteria-desc">${c.desc}</div>
-      </div>
-    `;
+  let html = `<div style="text-align:center;margin-bottom:16px"><div style="font-size:32px">📋</div><h3>Correction jury</h3></div>`;
+  JURY.forEach(c => {
+    const s = examScores[c.id] ?? -1;
+    html += `<div class="criteria-item"><div class="criteria-header">
+      <span class="criteria-name">${c.name}</span>
+      <div class="criteria-score">${[0,1,2].map(v => `<button class="score-btn ${s===v?'active':''}" onclick="setScore('${c.id}',${v})">${v}</button>`).join('')}</div>
+    </div></div>`;
   });
-  html += `
-    </div>
-    <button class="btn btn-success" onclick="calcScore()" style="margin-top:16px">📊 Ma note</button>
-    <button class="btn btn-outline" onclick="closeCorrection()">Annuler</button>
-  `;
+  html += `<button class="btn btn-success" onclick="calcScore()" style="margin-top:16px">📊 Calculer</button>
+    <button class="btn btn-outline" onclick="cancelCorrection()">Annuler</button>`;
   document.getElementById('correctionContent').innerHTML = html;
   document.getElementById('correctionModal').classList.add('open');
 }
 
-function setScore(id, val) { state.criteriaScores[currentExam][id] = val; save(); showCorrection(); }
+function setScore(id, v) { examScores[id] = v; showCorrection(); }
 
 function calcScore() {
-  const scores = state.criteriaScores[currentExam];
-  if (!JURY_CRITERIA.every(c => scores[c.id] >= 0)) { alert('Évalue tous les critères !'); return; }
+  if (!JURY.every(c => examScores[c.id] >= 0)) { alert('Évalue tous les critères !'); return; }
   let total = 0;
-  JURY_CRITERIA.forEach(c => total += scores[c.id]);
-  state.examScores[currentExam] = total;
-  state.examsDone[currentExam] = true;
+  JURY.forEach(c => total += examScores[c.id]);
+  state.exams[currentExam] = total;
   save();
-  let html = `
+  
+  document.getElementById('correctionContent').innerHTML = `
     <div class="result-card">
       <div class="result-score ${total >= 10 ? 'pass' : 'fail'}">${total}/20</div>
-      <div style="font-size:40px;margin:16px 0">${total < 5 ? '⛔' : (total >= 10 ? '✅' : '📚')}</div>
-      <p style="color:var(--muted);margin-bottom:20px">${total < 5 ? 'Éliminatoire !' : (total < 10 ? 'Sous la moyenne' : (total < 14 ? 'Correct !' : 'Excellent !'))}</p>
-      <div class="result-detail">
-        ${JURY_CRITERIA.map(c => {
-          const s = scores[c.id];
-          const col = s === 0 ? 'var(--danger)' : (s === 1 ? 'var(--warning)' : 'var(--success)');
-          return `<div class="result-item"><span>${c.name}</span><span style="color:${col};font-weight:600">${s}/2</span></div>`;
-        }).join('')}
-      </div>
-      <button class="btn btn-primary" onclick="closeAndReturn()" style="margin-top:20px">Terminer</button>
-    </div>
-  `;
-  document.getElementById('correctionContent').innerHTML = html;
+      <p style="color:var(--muted);margin:16px 0">${total < 5 ? '⛔ Éliminatoire' : (total < 10 ? '📚 Sous la moyenne' : '✅ Validé')}</p>
+      <button class="btn btn-primary" onclick="closeCorrection()">Terminer</button>
+    </div>`;
 }
 
-function closeCorrection() { document.getElementById('correctionModal').classList.remove('open'); }
-function closeAndReturn() { currentExam = null; timerSeconds = 0; document.getElementById('correctionModal').classList.remove('open'); renderExam(); }
+function cancelCorrection() { closeCorrection(); }
+function closeCorrection() {
+  currentExam = null;
+  timerSec = 0;
+  document.getElementById('correctionModal').classList.remove('open');
+  renderExam();
+}
 
-// ============ RESSOURCES ============
-function renderRessources() {
-  let html = '';
-  RESSOURCES.forEach(cat => {
-    html += `<div class="card"><div class="card-title">${cat.category}</div><div class="link-list">`;
-    cat.links.forEach(l => {
-      html += `<a href="${l.url}" target="_blank" class="link-item"><span class="link-icon">${l.icon}</span><div class="link-info"><div class="link-title">${l.title}</div><div class="link-desc">${l.desc}</div></div><span class="link-arrow">→</span></a>`;
-    });
-    html += '</div></div>';
+// ===== LIENS =====
+function renderLiens() {
+  let html = '<div class="card"><div class="card-title">🔗 Ressources officielles</div>';
+  LIENS.forEach(l => {
+    html += `<a href="${l.url}" target="_blank" class="link-item">
+      <span class="link-icon">${l.icon}</span>
+      <div class="link-info"><div class="link-title">${l.title}</div><div class="link-desc">${l.desc}</div></div>
+      <span>→</span>
+    </a>`;
   });
-  document.getElementById('ressourcesView').innerHTML = html;
+  html += '</div>';
+  
+  // Bouton reset
+  html += `<div class="card"><div class="card-title">⚙️ Paramètres</div>
+    <button class="btn btn-danger" onclick="resetAll()">🔄 Réinitialiser toute la progression</button>
+  </div>`;
+  
+  document.getElementById('liens').innerHTML = html;
 }
 
-// ============ NAV ============
-function showView(view) {
-  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['revisions','quiz','exam','ressources'][i] === view));
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(view + 'View').classList.add('active');
+function resetAll() {
+  if (confirm("Effacer toute ta progression ?")) {
+    localStorage.removeItem('forge-ira-v4');
+    location.reload();
+  }
 }
 
-// ============ INIT ============
-updateCountdown();
-document.getElementById('mainTabs').classList.add('no-timer');
-renderRevisions();
-renderQuiz();
-renderExam();
-renderRessources();
+// ===== INIT =====
+function init() {
+  const days = Math.ceil((new Date('2026-04-21T08:00:00') - new Date()) / (1000*60*60*24));
+  document.getElementById('daysLeft').textContent = days > 0 ? days : '0';
+  render();
+}
+init();
 </script>
 </body>
 </html>
