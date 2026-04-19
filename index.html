@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🔥 Forge IRA 2026</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f1a;
+  --card: #1a1a2e;
+  --card2: #252540;
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.app { max-width: 500px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--card); border-radius: 16px; margin-bottom: 16px; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon { font-size: 32px; }
+.logo-text { font-size: 18px; font-weight: 700; }
+.logo-sub { font-size: 11px; color: var(--muted); }
+.countdown { text-align: right; }
+.countdown-num { font-size: 24px; font-weight: 800; color: var(--accent2); }
+.countdown-label { font-size: 10px; color: var(--muted); }
+
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; }
+.tab { flex: 1; min-width: 70px; padding: 12px 8px; border: none; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; }
+.tab.active { background: var(--accent); color: #fff; }
+.tab:not(.active) { background: var(--card); color: var(--muted); }
+
+.card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.card-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+.fiche { background: var(--card); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
+.fiche-header { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-left: 4px solid var(--accent); }
+.fiche-icon { font-size: 28px; }
+.fiche-info { flex: 1; }
+.fiche-title { font-size: 15px; font-weight: 600; }
+.fiche-subtitle { font-size: 11px; color: var(--muted); }
+.fiche-toggle { font-size: 18px; color: var(--muted); }
+.fiche-body { display: none; padding: 0 16px 16px; }
+.fiche-body.open { display: block; }
+.fiche-content { font-size: 12px; line-height: 1.7; }
+.fiche-content ul { padding-left: 16px; margin: 8px 0; }
+.fiche-highlight { background: rgba(124, 58, 237, 0.2); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--accent); }
+.fiche-warning { background: rgba(239, 68, 68, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--danger); }
+.fiche-tip { background: rgba(16, 185, 129, 0.15); padding: 12px; border-radius: 10px; margin: 10px 0; border-left: 3px solid var(--success); }
+
+.phase-list { display: flex; flex-direction: column; gap: 10px; }
+.phase-item { background: var(--card2); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 2px solid transparent; }
+.phase-item:hover { border-color: var(--accent); }
+.phase-item.done { border-color: var(--success); }
+.phase-item.locked { opacity: 0.5; }
+.phase-icon { font-size: 24px; }
+.phase-info { flex: 1; }
+.phase-name { font-size: 14px; font-weight: 600; }
+.phase-desc { font-size: 11px; color: var(--muted); }
+
+.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-warning { background: var(--warning); color: #000; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+.btn + .btn { margin-top: 10px; }
+
+.link-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card2); border-radius: 12px; text-decoration: none; color: var(--text); margin-bottom: 10px; }
+.link-icon { font-size: 24px; }
+.link-info { flex: 1; }
+.link-title { font-size: 13px; font-weight: 600; }
+.link-desc { font-size: 11px; color: var(--muted); }
+
+.quiz-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+.quiz-progress { font-size: 13px; color: var(--muted); }
+.quiz-theme { font-size: 11px; padding: 4px 10px; background: var(--accent); border-radius: 20px; }
+.quiz-question { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+.quiz-opt { display: block; width: 100%; padding: 14px 16px; background: var(--card2); border: 2px solid transparent; border-radius: 12px; font-size: 13px; cursor: pointer; text-align: left; color: var(--text); margin-bottom: 10px; }
+.quiz-opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.2); }
+.quiz-opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); }
+.quiz-feedback { padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; margin-top: 16px; }
+.quiz-feedback.correct { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
+.quiz-feedback.wrong { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); }
+.quiz-feedback .detail { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: var(--accent2); }
+
+.timer-box { background: linear-gradient(135deg, #1e1e3f, #2d2d5a); border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 16px; }
+.timer-display { font-size: 48px; font-weight: 200; font-family: monospace; margin: 12px 0; }
+.timer-label { font-size: 13px; color: var(--muted); }
+.timer-controls { display: flex; gap: 10px; margin-top: 16px; }
+.timer-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.timer-start { background: var(--success); color: #fff; }
+.timer-pause { background: var(--warning); color: #000; }
+
+.editor-zone { margin-top: 16px; }
+.editor-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: block; color: var(--accent2); }
+.editor {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  background: var(--card2);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  resize: vertical;
+  line-height: 1.6;
+}
+.editor:focus { outline: none; border-color: var(--accent2); }
+.char-info { text-align: right; font-size: 11px; color: var(--muted); margin-top: 4px; margin-bottom: 12px; }
+
+.annale-select {
+  width: 100%;
+  padding: 12px;
+  background: var(--card2);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+.annale-select:focus { outline: none; border-color: var(--accent2); }
+.annale-select option { background: #1a1a2e; }
+
+.result-card { text-align: center; padding: 24px; }
+.result-score { font-size: 64px; font-weight: 800; }
+.result-score.pass { color: var(--success); }
+.result-score.fail { color: var(--danger); }
+
+.alert { padding: 12px 16px; border-radius: 10px; font-size: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.alert-warning { background: rgba(245, 158, 11, 0.15); border-left: 4px solid var(--warning); }
+.alert-success { background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--success); }
+.alert-info { background: rgba(124, 58, 237, 0.15); border-left: 4px solid var(--accent); }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+.modal.open { display: flex; }
+.modal-content { background: var(--card); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+.feedback-block { background: var(--card2); border-radius: 12px; padding: 14px; margin: 12px 0; border-left: 4px solid var(--accent); }
+.feedback-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.feedback-list { font-size: 12px; line-height: 1.8; }
+
+.copy-zone { background: var(--card2); border-radius: 10px; padding: 16px; margin-top: 12px; }
+.copy-textarea { width: 100%; height: 120px; background: #0f0f1a; border: 1px solid var(--accent); border-radius: 8px; color: var(--text); font-size: 10px; padding: 8px; font-family: monospace; resize: none; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">
+      <span class="logo-icon">🔥</span>
+      <div>
+        <div class="logo-text">Forge IRA</div>
+        <div class="logo-sub">Concours 2026</div>
+      </div>
+    </div>
+    <div class="countdown">
+      <div class="countdown-num" id="daysLeft">--</div>
+      <div class="countdown-label">jours restants</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-methodo" onclick="goTo('methodo')">📖 Méthodo</button>
+    <button class="tab" id="tab-quiz" onclick="goTo('quiz')">🎯 Quiz</button>
+    <button class="tab" id="tab-simulateur" onclick="goTo('simulateur')">✍️ Simul</button>
+    <button class="tab" id="tab-ressources" onclick="goTo('ressources')">🔗 Liens</button>
+  </div>
+
+  <div id="methodo" class="view active"></div>
+  <div id="quiz" class="view"></div>
+  <div id="simulateur" class="view"></div>
+  <div id="ressources" class="view"></div>
+</div>
+
+<div class="modal" id="quizModal">
+  <div class="modal-content" id="quizContent"></div>
+</div>
+
+<div class="modal" id="correctionModal">
+  <div class="modal-content" id="correctionContent"></div>
+</div>
+
+<script>
+// ===== DATA =====
+const FICHES = [
+  { id: "structure", icon: "📝", title: "Méthodologie cas pratique", subtitle: "Structure, timing, critères jury", color: "#7c3aed",
+    sections: [
+      { title: "📌 Format de rendu", content: `<div class="fiche-highlight"><strong>LIVRABLE IMPOSÉ :</strong><br>✅ 1 note argumentée (3-4 pages)<br>✅ 2 documents annexes opérationnels</div><ul><li>Durée : 4h • Coefficient 5</li><li>Note éliminatoire : < 5/20</li><li>Dossier : 30 pages max</li></ul>` },
+      { title: "⏱️ Gestion du temps", content: `<div class="fiche-tip"><strong>RÉPARTITION RECOMMANDÉE :</strong><br>🔍 30min : Lecture active du dossier<br>📋 30min : Analyse et construction du plan<br>✍️ 2h : Rédaction de la note<br>📎 1h : Conception des 2 documents annexes</div>` },
+      { title: "🏗️ Structure de la note", content: `<div class="fiche-highlight"><strong>PLAN TYPE :</strong><br>1️⃣ Introduction : Contexte, enjeux, problématique<br>2️⃣ Diagnostic : Analyse de la situation<br>3️⃣ Propositions : Solutions argumentées et hiérarchisées<br>4️⃣ Conclusion : Synthèse et perspective</div>` },
+      { title: "📋 Documents annexes", content: `<div class="fiche-content"><strong>Exemples de documents opérationnels :</strong><ul><li>📧 Communication : courrier, courriel, communiqué</li><li>📅 Planification : rétroplanning, planning d'actions</li><li>🏗️ Organisation : organigramme, fiche de procédure</li><li>💰 Budget : plan de financement, tableau budgétaire</li></ul><div class="fiche-warning">⚠️ Les documents doivent être DIRECTEMENT UTILISABLES</div></div>` },
+      { title: "✅ Critères d'évaluation", content: `<div class="fiche-tip"><strong>5 CRITÈRES OFFICIELS DU JURY :</strong><br>📝 Qualités rédactionnelles /5<br>🔍 Capacité d'analyse et synthèse /5<br>💡 Pertinence des propositions /5<br>🎯 Argumentation structurée /3<br>📎 Documents annexes opérationnels /2</div>` }
+    ]
+  },
+  { id: "finances", icon: "💰", title: "Finances publiques", subtitle: "LOLF, budget, dette — Thème majeur", color: "#10b981",
+    sections: [
+      { title: "📊 Chiffres clés", content: `<ul><li><span style="color:var(--danger)">⚠️</span> Déficit public : 5-6% PIB (limite UE : 3%)</li><li><span style="color:var(--danger)">⚠️</span> Dette publique : >3000 Mds€ (>110% PIB)</li><li>Dépenses publiques : ~57% PIB</li></ul>` },
+      { title: "📜 LOLF 2001", content: `<div class="fiche-highlight"><strong>STRUCTURE BUDGÉTAIRE :</strong><br>MISSIONS → PROGRAMMES → ACTIONS</div><p><strong>5 principes :</strong> Annualité, Unité, Universalité, Spécialité, Sincérité</p>` },
+      { title: "🇪🇺 Règles européennes", content: `<ul><li>Pacte de stabilité : Déficit < 3% PIB</li><li>Dette publique < 60% PIB</li><li>Règle d'or : Déficit structurel < 0,5%</li></ul><div class="fiche-warning">⚠️ La France est en procédure pour déficit excessif</div>` }
+    ]
+  },
+  { id: "europe", icon: "⭐", title: "Union européenne", subtitle: "Institutions, politiques, enjeux", color: "#3b82f6",
+    sections: [
+      { title: "🏛️ Triangle institutionnel", content: `<ul><li><strong>Conseil européen :</strong> Orientations générales (États)</li><li><strong>Parlement :</strong> 705 députés élus</li><li><strong>Commission :</strong> Initiative législative (27 commissaires)</li></ul>` },
+      { title: "📜 Droit de l'UE", content: `<div class="fiche-highlight"><strong>PRIMAUTÉ :</strong> Droit UE > droit national (Costa c/ ENEL 1964)</div><p>Règlement = direct • Directive = transposition</p>` },
+      { title: "🌍 Politiques clés", content: `<ul><li><strong>Green Deal :</strong> Neutralité carbone 2050</li><li><strong>NextGen EU :</strong> 750 Mds€ relance post-Covid</li><li><strong>PAC :</strong> Politique Agricole Commune (~30% budget)</li></ul>` }
+    ]
+  },
+  { id: "education", icon: "📚", title: "Système éducatif", subtitle: "Réformes, enjeux actuels", color: "#f59e0b",
+    sections: [
+      { title: "📊 Chiffres clés", content: `<ul><li>30 académies (26 métropole + 4 outre-mer)</li><li>~660 000 bacheliers sur Parcoursup/an</li><li>~4000 postes enseignants vacants/an</li></ul><div class="fiche-warning">⚠️ PISA 2023 : Recul de la France</div>` },
+      { title: "📜 Réformes 2024", content: `<ul><li><strong>Choc des savoirs :</strong> Groupes de niveau en français/maths</li><li><strong>DNB obligatoire :</strong> Brevet requis pour accès lycée GT</li><li><strong>Instruction 3-18 ans :</strong> Obligation de formation</li></ul>` }
+    ]
+  },
+  { id: "cohesion", icon: "🌍", title: "Cohésion territoriale", subtitle: "Diversité, développement durable", color: "#ec4899",
+    sections: [
+      { title: "🎯 Objectifs", content: `<div class="fiche-highlight">Réduire les écarts de développement entre territoires et garantir l'égalité d'accès aux services publics</div>` },
+      { title: "🏛️ Acteurs", content: `<ul><li><strong>ANCT :</strong> Agence Nationale Cohésion des Territoires</li><li><strong>Action Cœur de Ville :</strong> Revitalisation centres-villes moyens</li><li><strong>Territoires d'Industrie :</strong> Soutien bassins industriels</li></ul>` },
+      { title: "♻️ Développement durable", content: `<div class="fiche-tip"><strong>3 PILIERS :</strong> Économique, Social, Environnemental<br><strong>Agenda 2030 :</strong> 17 objectifs ONU</div>` }
+    ]
+  },
+  { id: "services", icon: "🔄", title: "Transformation services publics", subtitle: "Numérique, simplification, efficience", color: "#06b6d4",
+    sections: [
+      { title: "💻 Transformation numérique", content: `<ul><li><strong>Dématérialisation :</strong> Accès 24/7 aux services</li><li><strong>France Services :</strong> Guichet unique multi-services</li><li><strong>Inclusion numérique :</strong> Accompagnement usagers</li></ul>` },
+      { title: "📋 Simplification", content: `<div class="fiche-highlight"><strong>LOI ESSOC :</strong> Droit à l'erreur pour usagers de bonne foi</div><p>Réduction des démarches et formalités</p>` },
+      { title: "📊 Évaluation", content: `<ul><li>Baromètre satisfaction usagers</li><li>Mesure qualité de service</li><li>Amélioration continue</li></ul>` }
+    ]
+  }
+];
+
+const ANNALES = [
+  { value: "", label: "— Choisir l'annale —" },
+  { value: "IRA 2025 — Pouvoir de dérogation du préfet (simplification action publique, circulaire PM 28/10/2024)", label: "2025 — Pouvoir de dérogation du préfet" },
+  { value: "IRA 2024 — Lutte contre le harcèlement scolaire (loi n°2022-299 du 2 mars 2022, plan interministériel)", label: "2024 — Harcèlement scolaire" },
+  { value: "IRA 2023-2 (Automne) — Plan de sobriété énergétique dans les services déconcentrés de l'État", label: "2023-2 — Sobriété énergétique" },
+  { value: "IRA 2023-1 (Printemps) — Plan d'urgence CNI et passeports : réduction des délais de délivrance", label: "2023-1 — Titres d'identité (CNI/passeports)" },
+  { value: "IRA 2022-2 (Automne) — Déploiement du télétravail dans la fonction publique (accord 13 juillet 2021)", label: "2022-2 — Télétravail dans la FP" },
+  { value: "IRA 2022-1 (Printemps) — Zones à Faibles Émissions Mobilité (ZFE-m) : qualité de l'air et mobilité durable", label: "2022-1 — ZFE-m (mobilité durable)" },
+  { value: "IRA 2021-2 (Automne) — Service public de l'insertion et de l'emploi (SPIE), lutte contre la pauvreté, RSA", label: "2021-2 — SPIE / Insertion & emploi" },
+  { value: "SUJET LIBRE (non officiel) — entraînement thème libre", label: "🆓 Sujet libre (entraînement)" },
+];
+
+const QUIZ_DATA = {
+  cohesion: { name: "Cohésion territoriale", icon: "🌍", questions: [
+    { q: "Objectif principal de la politique de cohésion territoriale ?", o: ["Réduire les écarts entre territoires", "Augmenter la population urbaine", "Centraliser les services", "Privatiser les services"], a: 0, t: "La cohésion territoriale vise à réduire les inégalités de développement et garantir l'égalité d'accès aux services publics sur tout le territoire." },
+    { q: "Le développement durable repose sur combien de piliers ?", o: ["2 piliers", "3 piliers", "4 piliers", "5 piliers"], a: 1, t: "3 piliers : économique, social, environnemental. Modèle adopté par l'ONU." },
+    { q: "L'Agenda 2030 comprend combien d'objectifs ?", o: ["10 objectifs", "15 objectifs", "17 objectifs", "20 objectifs"], a: 2, t: "17 Objectifs de Développement Durable (ODD) fixés par l'ONU pour 2030." },
+    { q: "Quelle instance coordonne la cohésion territoriale en France ?", o: ["L'ANCT", "Le Ministère de l'Intérieur", "Les régions", "La Commission UE"], a: 0, t: "L'Agence Nationale de la Cohésion des Territoires (ANCT) coordonne les politiques de cohésion." },
+    { q: "Le programme Action Cœur de Ville vise à ?", o: ["Construire de nouveaux quartiers", "Revitaliser les centres-villes moyens", "Détruire le patrimoine", "Privatiser les espaces publics"], a: 1, t: "Action Cœur de Ville : programme de revitalisation des centres-villes moyens." },
+    { q: "Qu'est-ce que la trame verte et bleue ?", o: ["Un réseau écologique", "Un projet urbain", "Une taxe", "Un label"], a: 0, t: "La trame verte et bleue est un réseau écologique qui préserve la biodiversité." },
+    { q: "Les Zones de Revitalisation Rurale offrent ?", o: ["Des contraintes", "Des exonérations fiscales", "Une interdiction", "Rien"], a: 1, t: "Les ZRR bénéficient d'exonérations fiscales pour favoriser l'activité économique en milieu rural." },
+    { q: "Territoires d'Industrie vise à ?", o: ["Fermer les usines", "Soutenir les bassins industriels", "Délocaliser", "Privatiser"], a: 1, t: "Dispositif de soutien aux bassins industriels pour reconquête et attractivité." },
+    { q: "Principale problématique des territoires ultra-marins ?", o: ["Richesse excessive", "Éloignement et inégalités d'accès", "Surpeuplement", "Absence de collectivités"], a: 1, t: "L'éloignement géographique crée des inégalités d'accès aux services et opportunités." },
+    { q: "La politique de la ville cible ?", o: ["Les métropoles riches", "Les quartiers prioritaires", "Les zones rurales", "Les centres historiques"], a: 1, t: "Politique de la ville : favoriser l'égalité des chances dans les quartiers prioritaires." },
+    { q: "France Services est ?", o: ["Un commerce", "Un guichet unique multi-services", "Une taxe", "Un ministère"], a: 1, t: "France Services regroupe plusieurs services publics en un lieu unique." },
+    { q: "La neutralité carbone vise ?", o: ["2030", "2040", "2050", "2100"], a: 2, t: "Objectif de neutralité carbone fixé pour 2050 (accords de Paris)." }
+  ]},
+  finances: { name: "Finances publiques", icon: "💰", questions: [
+    { q: "LOLF signifie ?", o: ["Loi Ordinaire", "Loi Organique relative aux Lois de Finances", "Loi d'Organisation", "Loi d'Orientation"], a: 1, t: "LOLF 2001 = constitution financière de l'État. Passage moyens → résultats." },
+    { q: "Déficit public français actuel ?", o: ["2-3% PIB", "5-6% PIB", "8-10% PIB", "1% PIB"], a: 1, t: "~5-6% du PIB, double de la limite européenne (3%)." },
+    { q: "Dette publique dépasse ?", o: ["1000 Mds€", "2000 Mds€", "3000 Mds€", "500 Mds€"], a: 2, t: ">3000 Mds€ soit >110% PIB. Intérêts = 2ème poste budgétaire." },
+    { q: "Qui contrôle le budget de l'État ?", o: ["Sénat", "Assemblée nationale", "Cour des comptes", "Conseil d'État"], a: 2, t: "La Cour des comptes juge, contrôle et certifie les comptes publics." },
+    { q: "Structure LOLF ?", o: ["Budgets→Titres", "Missions→Programmes→Actions", "Ministères→Services", "Recettes→Dépenses"], a: 1, t: "MISSIONS (politiques) → PROGRAMMES (objectifs) → ACTIONS (terrain)." },
+    { q: "Pacte de stabilité limite déficit à ?", o: ["1% PIB", "3% PIB", "5% PIB", "10% PIB"], a: 1, t: "Traité de Maastricht : déficit < 3% et dette < 60%." },
+    { q: "Règle d'or = déficit structurel < ?", o: ["0,5%", "1%", "2%", "3%"], a: 0, t: "TSCG 2012 : déficit structurel < 0,5% PIB, plus strict que les 3%." },
+    { q: "PLF présenté au plus tard ?", o: ["1er octobre", "1er mardi octobre", "15 septembre", "1er janvier"], a: 1, t: "1er MARDI d'octobre. Le Parlement a 70 jours pour voter." },
+    { q: "Dépenses publiques françaises = ?", o: ["45% PIB", "57% PIB", "35% PIB", "65% PIB"], a: 1, t: "~57% du PIB, un des taux les plus élevés de l'OCDE." },
+    { q: "Le déficit Sécu compte dans ?", o: ["Un budget séparé", "Le déficit public Maastricht", "Le déficit entreprises", "Rien"], a: 1, t: "Déficit public = État + Sécu + collectivités (consolidé pour Maastricht)." },
+    { q: "Qui certifie les comptes de l'État ?", o: ["Parlement", "Cour des comptes", "Bercy", "Conseil constitutionnel"], a: 1, t: "Depuis LOLF, la Cour des comptes certifie annuellement les comptes." },
+    { q: "LPFP signifie ?", o: ["Loi de Programmation des Finances Publiques", "Loi de Protection Financière", "Loi de Prévision", "Loi de Planification"], a: 0, t: "Loi de programmation fixant la trajectoire pluriannuelle (3-5 ans)." }
+  ]},
+  europe: { name: "Union européenne", icon: "⭐", questions: [
+    { q: "3 institutions principales ?", o: ["Parlement, Sénat, Gouv", "Conseil, Parlement, Commission", "Commission, Cour, BCE", "Conseil, Cour, Parlement"], a: 1, t: "Triangle : Conseil (États), Parlement (705 députés), Commission (initiative)." },
+    { q: "Green Deal vise ?", o: ["Croissance", "Neutralité carbone 2050", "Sortie UE", "Moins d'échanges"], a: 1, t: "Pacte Vert 2019 : neutralité carbone 2050, -55% émissions en 2030." },
+    { q: "NextGen EU = ?", o: ["150 Mds€", "450 Mds€", "750 Mds€", "1000 Mds€"], a: 2, t: "750 Mds€. Historique : 1er emprunt commun de l'UE." },
+    { q: "Subsidiarité signifie ?", o: ["UE décide tout", "UE intervient si États ne peuvent pas", "États seuls", "Régions prioritaires"], a: 1, t: "Article 5 TUE : UE agit seulement si plus efficace que les États." },
+    { q: "Primauté droit UE ?", o: ["Droit UE > national", "National prime", "Égalité", "Directives seulement"], a: 0, t: "Costa c/ ENEL 1964 : droit UE prime sur TOUT droit national." },
+    { q: "Directive européenne ?", o: ["Directement applicable", "Doit être transposée", "Non contraignante", "Commission seulement"], a: 1, t: "RÈGLEMENT = direct. DIRECTIVE = nécessite transposition." },
+    { q: "BCE mission principale ?", o: ["Financer États", "Stabilité des prix", "Réguler banques", "Politique fiscale"], a: 1, t: "BCE : maintenir inflation ~2%, indépendante des États." },
+    { q: "Combien d'États dans l'UE ?", o: ["25", "27", "28", "30"], a: 1, t: "27 États membres depuis Brexit 2020." },
+    { q: "FEDER finance ?", o: ["L'agriculture", "Le développement régional", "La défense", "L'éducation"], a: 1, t: "Fonds Européen de Développement Régional : cohésion territoriale." },
+    { q: "Article 50 TUE concerne ?", o: ["L'adhésion", "Le retrait d'un État", "La défense", "Le budget"], a: 1, t: "Article 50 = procédure de retrait (utilisé pour Brexit)." },
+    { q: "La Commission compte ?", o: ["15 commissaires", "20 commissaires", "27 commissaires", "35 commissaires"], a: 2, t: "1 commissaire par État = 27. Seule à avoir l'initiative législative." },
+    { q: "PESC désigne ?", o: ["Politique Économique", "Politique Étrangère et Sécurité Commune", "Pacte Européen", "Programme Européen"], a: 1, t: "PESC = diplomatie/défense. Décisions à l'unanimité." }
+  ]},
+  education: { name: "Système éducatif", icon: "📚", questions: [
+    { q: "Choc des savoirs 2024 = ?", o: ["Suppression bac", "Groupes de niveau", "Nouveau diplôme", "Fin devoirs"], a: 1, t: "Groupes de niveau en français/maths 6ème-5ème. Mesure controversée." },
+    { q: "Bacheliers Parcoursup/an ?", o: ["300k", "500k", "660k", "900k"], a: 2, t: "~660 000 bacheliers pour 21 000 formations. 10 vœux max." },
+    { q: "Nombre d'académies ?", o: ["18", "26", "30", "36"], a: 2, t: "30 académies : 26 métropole + 4 outre-mer. 1 recteur chacune." },
+    { q: "PISA 2023 France ?", o: ["Amélioration", "Recul", "Stagnation", "1ère place"], a: 1, t: "Recul en maths et lecture. Inégalités sociales record." },
+    { q: "Instruction obligatoire de ?", o: ["3 à 16 ans", "6 à 16 ans", "3 à 18 ans", "6 à 18 ans"], a: 2, t: "3 ans (2019) → 18 ans (2020). Obligation de formation." },
+    { q: "Postes enseignants vacants ?", o: ["500", "1500", "4000", "10000"], a: 2, t: "~4000 postes/an. Crise attractivité : salaires, conditions." },
+    { q: "Qui nomme les recteurs ?", o: ["Ministre", "Président en Conseil ministres", "Premier ministre", "Élus"], a: 1, t: "Décret PRÉSIDENTIEL en Conseil des ministres." },
+    { q: "DNB 2024 devient ?", o: ["Facultatif", "Obligatoire pour lycée", "Supprimé", "Indicatif"], a: 1, t: "Sans brevet = pas de seconde GT. Redoublement ou voie pro." },
+    { q: "Le socle commun comprend ?", o: ["3 domaines", "5 domaines", "8 domaines", "10 domaines"], a: 1, t: "5 domaines : langages, méthodes, citoyenneté, systèmes, représentations." },
+    { q: "Qui dirige une académie ?", o: ["Préfet", "Recteur", "DASEN", "Maire"], a: 1, t: "RECTEUR = académie. DASEN = département." },
+    { q: "Réforme lycée pro 2023 ?", o: ["Moins de stages", "Plus de stages", "Fusion avec général", "Suppression"], a: 1, t: "Plus de stages, meilleure insertion, gratification obligatoire." },
+    { q: "Conseil supérieur des programmes ?", o: ["Vote les lois", "Définit les programmes scolaires", "Gère les budgets", "Recrute enseignants"], a: 1, t: "Instance qui élabore les programmes de l'école au lycée." }
+  ]},
+  services: { name: "Services publics", icon: "🔄", questions: [
+    { q: "La dématérialisation vise principalement à ?", o: ["Supprimer tous les guichets", "Simplifier l'accès aux services", "Réduire les fonctionnaires", "Augmenter les coûts"], a: 1, t: "Objectif : simplifier et accélérer l'accès aux services pour les usagers." },
+    { q: "Action Publique 2022 était ?", o: ["Un calendrier électoral", "Une réforme de l'action publique", "Un projet immobilier", "Une hausse d'impôts"], a: 1, t: "Programme de transformation de l'action publique pour plus d'efficience." },
+    { q: "Continuité du service public signifie ?", o: ["Ouverture 24h/24", "Fonctionnement sans interruption sauf force majeure", "Service en ligne", "Fermeture weekend"], a: 1, t: "Principe : service rendu sans interruption sauf cas de force majeure." },
+    { q: "France Services permet ?", o: ["Vendre produits français", "Regrouper services publics en un lieu", "Former agents", "Collecter impôts"], a: 1, t: "Guichet unique regroupant plusieurs services publics." },
+    { q: "Le droit à l'erreur (loi ESSOC) ?", o: ["Erreur agents sans sanction", "Tolérance usagers de bonne foi", "Abandon contrôles", "Suppression amendes"], a: 1, t: "Droit pour usagers de bonne foi de régulariser sans sanction." },
+    { q: "La qualité de service se mesure par ?", o: ["Nombre d'agents", "Satisfaction usagers et délais", "Coût uniquement", "Nombre de réclamations"], a: 1, t: "Critères : satisfaction, délais de traitement, accessibilité." },
+    { q: "Le télétravail dans la FP vise à ?", o: ["Fermer bureaux", "Améliorer qualité de vie et efficacité", "Réduire salaires", "Supprimer postes"], a: 1, t: "Objectif : concilier vie pro/perso et maintenir efficacité." },
+    { q: "Simplification administrative = ?", o: ["Suppression contrôles", "Réduction démarches inutiles", "Fermeture services", "Privatisation"], a: 1, t: "Éliminer formalités et démarches sans valeur ajoutée." },
+    { q: "Baromètre services publics mesure ?", o: ["Taille administrations", "Perception et satisfaction usagers", "Budget État", "Nombre fonctionnaires"], a: 1, t: "Enquête annuelle sur la perception des usagers." },
+    { q: "Évaluation des politiques publiques vise à ?", o: ["Sanctionner échecs", "Mesurer efficacité et améliorer", "Augmenter budgets", "Supprimer services"], a: 1, t: "Mesurer impact et améliorer l'action publique." },
+    { q: "Transformation numérique nécessite ?", o: ["Seulement des ordinateurs", "Formation agents et inclusion citoyens", "Fermeture guichets", "Hausse impôts"], a: 1, t: "Accompagnement agents ET usagers pour réussite de la transformation." },
+    { q: "Le principe d'égalité d'accès impose ?", o: ["Services payants", "Même accès pour tous", "Sélection des usagers", "Réservation"], a: 1, t: "Tous les usagers ont un droit égal d'accès aux services publics." }
+  ]},
+  methodo: { name: "Méthodologie", icon: "📝", questions: [
+    { q: "Structure imposée du rendu ?", o: ["1 note + 1 annexe", "1 note + 2 annexes", "2 notes", "1 dissertation"], a: 1, t: "Cas pratique = note argumentée (3-4 pages) + 2 annexes opérationnelles." },
+    { q: "Le jury sanctionne une copie qui ?", o: ["Cite les documents", "Se contente de synthétiser", "Propose des solutions", "Utilise un plan"], a: 1, t: "Le jury attend ANALYSE + propositions, pas un simple résumé." },
+    { q: "La rédaction doit montrer ?", o: ["Son savoir", "Une préoccupation opérationnelle", "Culture générale", "Style littéraire"], a: 1, t: "Préoccupation opérationnelle et NON montrer son savoir. Être utile au destinataire." },
+    { q: "Note éliminatoire ?", o: ["< 8/20", "< 5/20", "< 10/20", "< 6/20"], a: 1, t: "< 5/20 = élimination directe, même avec 20/20 à l'oral." },
+    { q: "Durée de l'épreuve ?", o: ["3h", "4h", "5h", "2h"], a: 1, t: "4 heures, coefficient 5 (le plus élevé). Gestion temps cruciale." },
+    { q: "Dossier documentaire max ?", o: ["20 pages", "30 pages", "40 pages", "25 pages"], a: 1, t: "30 pages max. Exploiter ET apporter connaissances hors dossier." },
+    { q: "Temps lecture recommandé ?", o: ["30min", "1h", "1h30", "2h30"], a: 2, t: "1h30 de lecture ACTIVE : surligner, noter, identifier enjeux." },
+    { q: "L'annexe doit être ?", o: ["Un résumé", "Opérationnelle", "Académique", "Longue"], a: 1, t: "DIRECTEMENT UTILISABLE. Rétroplanning avec dates réelles, courrier complet." },
+    { q: "Combien de critères dans la grille ?", o: ["5", "8", "10", "12"], a: 0, t: "5 critères officiels : rédaction, analyse, propositions, argumentation, annexes." },
+    { q: "La note doit être ?", o: ["Dépendante du dossier", "Autonome", "Sans référence", "Uniquement connaissances"], a: 1, t: "AUTONOME = compréhensible SANS le dossier. Intégrer infos dans argumentation." },
+    { q: "Le destinataire est ?", o: ["Le jury", "Le ministre", "Un supérieur fictif", "Le public"], a: 2, t: "Tu écris pour un directeur, préfet, recteur... Le jury évalue ta projection." },
+    { q: "Plan le plus adapté ?", o: ["Thèse/Antithèse", "Diagnostic/Propositions", "Chronologique", "Comparatif"], a: 1, t: "Plan en 2 parties : I. Diagnostic puis II. Propositions." }
+  ]}
+};
+
+const RESSOURCES = [
+  { icon: "📋", title: "Annales IRA", desc: "Tous les sujets officiels", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-annales-des-concours" },
+  { icon: "🏆", title: "Meilleures copies", desc: "Exemples notés et corrigés", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-meilleures-copies-et-corriges" },
+  { icon: "📊", title: "Rapports de jury", desc: "Conseils et attendus", url: "https://www.fonction-publique.gouv.fr/devenir-agent-public/les-rapports-de-jury" },
+  { icon: "📖", title: "Note de cadrage 2026", desc: "Méthodologie officielle (08/04/2026)", url: "https://ira-gestion.fonction-publique.gouv.fr/userfiles/promotion/13/note-de-cadrage-du-cas-pratique.pdf" },
+  { icon: "🖥️", title: "Mentor (Reuss'IRA)", desc: "Formation gratuite", url: "https://mentor.gouv.fr" },
+  { icon: "📰", title: "Vie Publique", desc: "Fiches thématiques", url: "https://www.vie-publique.fr" },
+  { icon: "🏛️", title: "IRA Nantes", desc: "Site officiel", url: "http://www.ira-nantes.gouv.fr" }
+];
+
+// ===== STATE =====
+let state = JSON.parse(localStorage.getItem('forge-ira-v7') || '{}');
+if (!state.scores) state.scores = {};
+if (!state.done) state.done = {};
+if (!state.read) state.read = {};
+if (!state.draft) state.draft = { note: '', doc1: '', doc2: '', annale: '', time: 0 };
+function save() { localStorage.setItem('forge-ira-v7', JSON.stringify(state)); }
+
+let currentView = 'methodo';
+let openFiche = null;
+let currentQuiz = null, quizQ = [], quizIdx = 0, quizScore = 0, quizAnswered = false;
+let simRunning = false, simTime = state.draft.time || 0, simInt = null;
+let simRendered = false; // Évite de re-rendre les éditeurs
+
+// ===== NAVIGATION =====
+function goTo(view) {
+  // Sauvegarder le brouillon avant de quitter le simulateur
+  if (currentView === 'simulateur') saveDraftSilent();
+  currentView = view;
+  simRendered = false;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + view).classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(view).classList.add('active');
+  render();
+}
+
+function render() {
+  if (currentView === 'methodo') renderMethodo();
+  if (currentView === 'quiz') renderQuiz();
+  if (currentView === 'simulateur') renderSimulateur();
+  if (currentView === 'ressources') renderRessources();
+}
+
+// ===== METHODOLOGIE =====
+function renderMethodo() {
+  let html = '';
+  FICHES.forEach(f => {
+    const isOpen = openFiche === f.id;
+    html += `<div class="fiche">
+      <div class="fiche-header" style="border-left-color:${f.color}" onclick="toggleFiche('${f.id}')">
+        <span class="fiche-icon">${f.icon}</span>
+        <div class="fiche-info"><div class="fiche-title">${f.title}</div><div class="fiche-subtitle">${f.subtitle}</div></div>
+        <span class="fiche-toggle">${isOpen ? '▲' : '▼'}</span>
+      </div>
+      <div class="fiche-body ${isOpen ? 'open' : ''}">
+        ${f.sections.map(s => `<h4 style="margin:16px 0 8px;color:var(--accent2)">${s.title}</h4><div class="fiche-content">${s.content}</div>`).join('')}
+        <button class="btn ${state.read[f.id] ? 'btn-success' : 'btn-primary'}" onclick="markRead('${f.id}')" style="margin-top:16px">${state.read[f.id] ? '✓ Lue' : 'Marquer lue'}</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('methodo').innerHTML = html;
+}
+
+function toggleFiche(id) { openFiche = openFiche === id ? null : id; renderMethodo(); }
+function markRead(id) { state.read[id] = true; save(); renderMethodo(); }
+
+// ===== QUIZ =====
+function renderQuiz() {
+  let html = `<div class="card"><div class="card-title">🎯 Quiz — 12 questions par thème</div>
+    <div class="card-subtitle">6 thèmes × 12 questions = 72 total</div><div class="phase-list">`;
+  Object.keys(QUIZ_DATA).forEach(k => {
+    const q = QUIZ_DATA[k], total = q.questions.length, score = state.scores[k] || 0, done = state.done[k];
+    const pct = done ? Math.round(score/total*100) : 0;
+    html += `<div class="phase-item ${done ? 'done' : ''}" onclick="startQuiz('${k}')">
+      <span class="phase-icon">${q.icon}</span>
+      <div class="phase-info"><div class="phase-name">${q.name}</div>
+      <div class="phase-desc">${done ? `${score}/${total} (${pct}%)` : `${total} questions`}</div></div>
+      <span>${done ? (pct >= 70 ? '✅' : '🔄') : '▶️'}</span>
+    </div>`;
+  });
+  html += '</div></div>';
+  document.getElementById('quiz').innerHTML = html;
+}
+
+function startQuiz(k) {
+  currentQuiz = k;
+  quizQ = [...QUIZ_DATA[k].questions].sort(() => Math.random() - 0.5);
+  quizIdx = quizScore = 0;
+  quizAnswered = false;
+  showQuestion();
+  document.getElementById('quizModal').classList.add('open');
+}
+
+function showQuestion() {
+  const q = quizQ[quizIdx];
+  document.getElementById('quizContent').innerHTML = `
+    <div class="quiz-header"><span class="quiz-progress">${quizIdx+1}/${quizQ.length}</span><span class="quiz-theme">${QUIZ_DATA[currentQuiz].name}</span></div>
+    <div class="quiz-question">${q.q}</div>
+    ${q.o.map((opt, i) => `<button class="quiz-opt" onclick="answer(${i})">${opt}</button>`).join('')}
+    <div id="feedback"></div>`;
+}
+
+function answer(i) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = quizQ[quizIdx];
+  document.querySelectorAll('.quiz-opt').forEach((b, j) => {
+    b.style.pointerEvents = 'none';
+    if (j === q.a) b.classList.add('correct');
+    if (j === i && i !== q.a) b.classList.add('wrong');
+  });
+  if (i === q.a) quizScore++;
+  document.getElementById('feedback').innerHTML = `
+    <div class="quiz-feedback ${i === q.a ? 'correct' : 'wrong'}">
+      <strong>${i === q.a ? '✓ Correct !' : '✗ Incorrect'}</strong><br>${q.t}
+    </div>
+    <button class="btn btn-primary" onclick="nextQ()" style="margin-top:12px">${quizIdx < quizQ.length - 1 ? 'Suivant →' : 'Résultat'}</button>`;
+}
+
+function nextQ() {
+  quizIdx++;
+  quizAnswered = false;
+  if (quizIdx >= quizQ.length) {
+    const total = quizQ.length, pct = Math.round(quizScore/total*100);
+    state.scores[currentQuiz] = quizScore;
+    state.done[currentQuiz] = true;
+    save();
+    document.getElementById('quizContent').innerHTML = `
+      <div class="result-card">
+        <div class="result-score ${pct >= 70 ? 'pass' : 'fail'}">${quizScore}/${total}</div>
+        <p style="color:var(--muted);margin:16px 0">${pct}% — ${pct >= 70 ? '✅ Validé !' : '70% recommandé'}</p>
+        <button class="btn btn-primary" onclick="closeQuiz()">Fermer</button>
+        ${pct < 70 ? `<button class="btn btn-outline" onclick="startQuiz('${currentQuiz}')">Réessayer</button>` : ''}
+      </div>`;
+  } else showQuestion();
+}
+
+function closeQuiz() { document.getElementById('quizModal').classList.remove('open'); renderQuiz(); }
+
+// ===== SIMULATEUR — VERSION CORRIGÉE =====
+// ✅ FIX : renderSimulateur() ne re-crée les éditeurs QU'UNE SEULE FOIS
+// ✅ FIX : Le timer met à jour seulement l'affichage (pas tout le DOM)
+// ✅ NOUVEAU : Sélecteur d'annale pour la correction
+// ✅ NOUVEAU : Export "Copier pour correction" au lieu de l'appel API bloqué
+
+function renderSimulateur() {
+  if (simRendered) {
+    // Juste mettre à jour le timer et les boutons — PAS les éditeurs
+    updateTimerDisplay();
+    updateTimerButtons();
+    return;
+  }
+
+  // Première fois : construire tout le HTML
+  const annaleOptions = ANNALES.map(a =>
+    `<option value="${a.value}" ${state.draft.annale === a.value ? 'selected' : ''}>${a.label}</option>`
+  ).join('');
+
+  let html = `
+  <div class="card">
+    <div class="card-title">✍️ Simulateur de Cas Pratique</div>
+    <div class="card-subtitle">Entraîne-toi en conditions réelles 4h</div>
+    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">📌 Annale choisie (pour la correction)</label>
+    <select class="annale-select" id="annaleSelect" onchange="saveAnnale()">
+      ${annaleOptions}
+    </select>
+  </div>
+
+  <div class="timer-box">
+    <div class="timer-label">Chronomètre — Limite : 4h</div>
+    <div class="timer-display" id="timerDisplay">00:00:00</div>
+    <div class="timer-controls" id="timerControls"></div>
+  </div>
+
+  <div class="editor-zone">
+    <label class="editor-label">📝 Note argumentée (3-4 pages)</label>
+    <textarea class="editor" id="noteEditor" placeholder="Introduction : Contexte, enjeux, problématique&#10;&#10;I. Diagnostic — Analyse de la situation&#10;&#10;II. Propositions — Solutions argumentées et hiérarchisées&#10;&#10;Conclusion">${escHtml(state.draft.note || '')}</textarea>
+    <div class="char-info"><span id="noteCount">${(state.draft.note||'').length}</span> caractères</div>
+  </div>
+
+  <div class="editor-zone">
+    <label class="editor-label">📋 Document annexe 1</label>
+    <textarea class="editor" id="doc1Editor" placeholder="Ex : rétroplanning, courrier officiel, plan d'actions...">${escHtml(state.draft.doc1 || '')}</textarea>
+    <div class="char-info"><span id="doc1Count">${(state.draft.doc1||'').length}</span> caractères</div>
+  </div>
+
+  <div class="editor-zone">
+    <label class="editor-label">📋 Document annexe 2</label>
+    <textarea class="editor" id="doc2Editor" placeholder="Ex : organigramme, budget, courriel, communiqué...">${escHtml(state.draft.doc2 || '')}</textarea>
+    <div class="char-info"><span id="doc2Count">${(state.draft.doc2||'').length}</span> caractères</div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title" style="font-size:13px;margin-bottom:8px">🤖 Correction par ymani (IA)</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+      Clique sur <strong>Copier pour correction</strong>, puis colle le texte dans le chat avec ymani.<br>
+      ymani corrigera ta note selon la grille officielle IRA.
+    </div>
+    <button class="btn btn-primary" onclick="copyForCorrection()">📋 Copier pour correction</button>
+    <button class="btn btn-outline" onclick="saveDraft()">💾 Sauvegarder brouillon</button>
+    <div class="copy-zone" id="copyZone" style="display:none">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">⬇️ Copie ce texte manuellement si le presse-papiers est bloqué :</div>
+      <textarea class="copy-textarea" id="copyTextarea" readonly></textarea>
+    </div>
+  </div>`;
+
+  document.getElementById('simulateur').innerHTML = html;
+  simRendered = true;
+
+  // Attacher les listeners
+  document.getElementById('noteEditor').addEventListener('input', updateCounts);
+  document.getElementById('doc1Editor').addEventListener('input', updateCounts);
+  document.getElementById('doc2Editor').addEventListener('input', updateCounts);
+
+  // Mettre à jour le timer et les boutons
+  updateTimerDisplay();
+  updateTimerButtons();
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ✅ Met à jour SEULEMENT l'affichage du timer
+function updateTimerDisplay() {
+  const h = Math.floor(simTime / 3600), m = Math.floor((simTime % 3600) / 60), s = simTime % 60;
+  const el = document.getElementById('timerDisplay');
+  if (el) {
+    el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    // Alerte couleur si >3h30
+    el.style.color = simTime >= 3.5*3600 ? 'var(--danger)' : simTime >= 3*3600 ? 'var(--warning)' : 'var(--text)';
+  }
+}
+
+// ✅ Met à jour seulement les boutons du timer
+function updateTimerButtons() {
+  const ctrl = document.getElementById('timerControls');
+  if (!ctrl) return;
+  if (!simRunning) {
+    ctrl.innerHTML = `<button class="timer-btn timer-start" onclick="startSim()">▶ Démarrer</button>
+      ${simTime > 0 ? `<button class="timer-btn" style="background:var(--danger);color:#fff" onclick="stopSim()">⏹ Réinitialiser</button>` : ''}`;
+  } else {
+    ctrl.innerHTML = `<button class="timer-btn timer-pause" onclick="pauseSim()">⏸ Pause</button>
+      <button class="timer-btn" style="background:var(--danger);color:#fff" onclick="stopSim()">⏹ Arrêter</button>`;
+  }
+}
+
+function startSim() {
+  simRunning = true;
+  simInt = setInterval(() => {
+    simTime++;
+    updateTimerDisplay(); // ✅ PAS renderSimulateur() !
+    if (simTime >= 4*60*60) {
+      pauseSim();
+      alert('⏰ 4h écoulées ! Temps écoulé.');
+    }
+  }, 1000);
+  updateTimerButtons();
+}
+
+function pauseSim() {
+  simRunning = false;
+  clearInterval(simInt);
+  saveDraftSilent(); // ✅ Sauvegarde silencieuse
+  updateTimerButtons();
+}
+
+function stopSim() {
+  simRunning = false;
+  clearInterval(simInt);
+  saveDraftSilent();
+  simTime = 0;
+  updateTimerDisplay();
+  updateTimerButtons();
+}
+
+function updateCounts() {
+  const n = document.getElementById('noteEditor');
+  const d1 = document.getElementById('doc1Editor');
+  const d2 = document.getElementById('doc2Editor');
+  if (n) document.getElementById('noteCount').textContent = n.value.length;
+  if (d1) document.getElementById('doc1Count').textContent = d1.value.length;
+  if (d2) document.getElementById('doc2Count').textContent = d2.value.length;
+}
+
+function saveAnnale() {
+  const sel = document.getElementById('annaleSelect');
+  if (sel) { state.draft.annale = sel.value; save(); }
+}
+
+// ✅ Sauvegarde silencieuse (sans alert)
+function saveDraftSilent() {
+  const n = document.getElementById('noteEditor');
+  const d1 = document.getElementById('doc1Editor');
+  const d2 = document.getElementById('doc2Editor');
+  const sel = document.getElementById('annaleSelect');
+  if (n) {
+    state.draft = {
+      note: n.value,
+      doc1: d1 ? d1.value : (state.draft.doc1 || ''),
+      doc2: d2 ? d2.value : (state.draft.doc2 || ''),
+      annale: sel ? sel.value : (state.draft.annale || ''),
+      time: simTime
+    };
+    save();
+  }
+}
+
+function saveDraft() {
+  saveDraftSilent();
+  const btn = document.querySelector('.btn-outline');
+  const orig = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = '✅ Sauvegardé !'; btn.style.background = 'var(--success)'; btn.style.color = '#fff'; }
+  setTimeout(() => { if (btn) { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; } }, 2000);
+}
+
+// ✅ NOUVEAU : Copier le texte formaté pour correction par ymani
+function copyForCorrection() {
+  const note = document.getElementById('noteEditor').value;
+  const doc1 = document.getElementById('doc1Editor').value;
+  const doc2 = document.getElementById('doc2Editor').value;
+  const sel = document.getElementById('annaleSelect');
+  const annale = sel ? sel.options[sel.selectedIndex].text : 'Annale non précisée';
+  const annaleVal = sel ? sel.value : '';
+
+  if (!note.trim()) { alert('❌ Ta note est vide ! Rédige ta note avant de demander une correction.'); return; }
+
+  saveDraftSilent();
+
+  const h = Math.floor(simTime / 3600), m = Math.floor((simTime % 3600) / 60);
+  const tempsRedaction = simTime > 0 ? `${h}h${String(m).padStart(2,'0')}` : 'Non chronométré';
+
+  const texte = `==== CORRECTION IRA — DEMANDE DE NOTATION ====
+📌 ANNALE : ${annaleVal || annale}
+⏱️ Temps de rédaction : ${tempsRedaction}
+
+------- NOTE ARGUMENTÉE -------
+${note}
+
+------- DOCUMENT ANNEXE 1 -------
+${doc1 || '(non rédigé)'}
+
+------- DOCUMENT ANNEXE 2 -------
+${doc2 || '(non rédigé)'}
+
+------- FIN DU DEVOIR -------
+Corrige ce devoir selon la grille officielle IRA (5 critères) :
+1. Qualités rédactionnelles /5
+2. Capacité d'analyse et de synthèse /5
+3. Pertinence des propositions /5
+4. Argumentation structurée /3
+5. Documents annexes opérationnels /2
+Note totale /20 + points forts + axes d'amélioration + conseils.`;
+
+  // Copie dans le presse-papiers
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(texte).then(() => {
+      showCopySuccess();
+    }).catch(() => {
+      showCopyFallback(texte);
+    });
+  } else {
+    showCopyFallback(texte);
+  }
+}
+
+function showCopySuccess() {
+  const zone = document.getElementById('copyZone');
+  if (zone) zone.style.display = 'none';
+  document.getElementById('correctionContent').innerHTML = `
+    <div style="text-align:center;padding:20px">
+      <div style="font-size:48px;margin-bottom:16px">✅</div>
+      <p style="font-size:16px;font-weight:700;margin-bottom:12px">Copié dans le presse-papiers !</p>
+      <div style="background:var(--card2);border-radius:12px;padding:16px;text-align:left;font-size:12px;line-height:1.8;color:var(--muted)">
+        <strong style="color:var(--accent2)">Comment obtenir la correction :</strong><br>
+        1️⃣ Va dans le chat avec <strong>ymani</strong><br>
+        2️⃣ Colle le texte (Cmd+V / Ctrl+V)<br>
+        3️⃣ Envoie le message<br>
+        4️⃣ ymani corrigera selon la grille officielle IRA
+      </div>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="closeCorrection()">Fermer</button>
+    </div>`;
+  document.getElementById('correctionModal').classList.add('open');
+}
+
+function showCopyFallback(texte) {
+  const zone = document.getElementById('copyZone');
+  const ta = document.getElementById('copyTextarea');
+  if (zone && ta) {
+    ta.value = texte;
+    zone.style.display = 'block';
+    ta.select();
+  }
+}
+
+function closeCorrection() { document.getElementById('correctionModal').classList.remove('open'); }
+
+// ===== RESSOURCES =====
+function renderRessources() {
+  let html = '<div class="card"><div class="card-title">🔗 Ressources officielles</div>';
+  RESSOURCES.forEach(r => {
+    html += `<a href="${r.url}" target="_blank" class="link-item">
+      <span class="link-icon">${r.icon}</span>
+      <div class="link-info"><div class="link-title">${r.title}</div><div class="link-desc">${r.desc}</div></div>
+      <span>→</span>
+    </a>`;
+  });
+  html += '</div>';
+
+  html += `<div class="card">
+    <div class="card-title">📞 Contact IRA Nantes</div>
+    <div style="font-size:12px;line-height:1.8">
+      <p>1 rue de la Bourgeonnière</p>
+      <p>BP 82234 – 44322 NANTES cedex 03</p>
+      <p>📞 02 51 86 05 51</p>
+      <p>✉️ concours@ira-nantes.gouv.fr</p>
+    </div>
+  </div>`;
+
+  html += `<div class="card"><div class="card-title">⚙️ Paramètres</div>
+    <button class="btn btn-danger" onclick="resetAll()">🔄 Réinitialiser progression</button>
+  </div>`;
+
+  document.getElementById('ressources').innerHTML = html;
+}
+
+function resetAll() {
+  if (confirm("Effacer toute ta progression et les brouillons ?")) {
+    localStorage.removeItem('forge-ira-v7');
+    location.reload();
+  }
+}
+
+// ===== INIT =====
+function init() {
+  const days = Math.ceil((new Date('2026-04-21T08:00:00') - new Date()) / (1000*60*60*24));
+  document.getElementById('daysLeft').textContent = days > 0 ? days : '0';
+  render();
+}
+init();
+</script>
+</body>
+</html>
